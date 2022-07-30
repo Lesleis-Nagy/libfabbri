@@ -82,22 +82,40 @@ std::function<T (const Vector3D<T>&)>
 new_Wf_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
 
     using std::array;
+    using std::function;
 
-    Vector3D<T> nf = triangle_normal(r1, r2, r3); // Face normal.
-    Vector3D<T> rf = triangle_center(r1, r2, r3); // Arbitrary point on the face;
+    // Face normal.
+    Vector3D<T> nf = triangle_normal(r1, r2, r3);
 
-    array<std::function<T(const Vector3D<T> &)>, 3> omega;
-    array<std::function<T(const Vector3D<T> &)>, 3> we;
+    // Arbitrary point on the face.
+    Vector3D<T> rf = triangle_center(r1, r2, r3);
 
-    // The first edge: r1 -> r2.
+    // Solid angle subtended by this triangle.
+    function<T(const Vector3D<T> &)> omega = new_omega_fun(r1, r2, r3);
 
-    // The second edge: r2 -> r3.
+    // We functions.
+    array<function<T(const Vector3D<T> &)>, 3> we;
 
-    // The third edge: r3 -> r1.
+    we[0] = new_we_fun(r1, r2);
+    we[1] = new_we_fun(r2, r3);
+    we[2] = new_we_fun(r3, r1);
 
-    return [nf, rf, we, omega] {
+    array<Vector3D<T>, 3> re;
+    re[0] = edge_center(r1, r2);
+    re[1] = edge_center(r2, r3);
+    re[2] = edge_center(r3, r1);
 
+    array<Vector3D<T>, 3> ue;
+    ue[0] = edge_orientation(r1, r2);
+    ue[1] = edge_orientation(r2, r3);
+    ue[2] = edge_orientation(r3, r1);
 
+    return [nf, rf, omega, re, ue, we] (const Vector3D<T> &r) {
+
+        return dot(cross(nf, re[0] - r), ue[0])*we[0](r)
+               + dot(cross(nf, re[1] - r), ue[1])*we[1](r)
+               + dot(cross(nf, re[2] - r), ue[2])*we[2](r)
+               - 3*dot(rf - r, nf)*omega(r);
 
     };
 
