@@ -1,0 +1,41 @@
+.. libfabbri documentation master file, created by
+   sphinx-quickstart on Sat Jul 30 09:23:08 2022.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to libfabbri's documentation!
+=====================================
+
+This library implements analytical calculations for :math:`\mathbf{B}` -- the
+magnetic field, :math:`\mathbf{W}` -- the scalar potential, and
+:math:`\mathbf{V}` -- the vector potential for uniformly and linearly
+magnetised tetrahedra based on Massimo Fabbri's 2008 and 2009 papers
+:cite:p:`fabbri:2008, fabbri:2009`. The library used for
+multiprecision calculations is :ref:`MPFR C++ <http://www.holoborodko.com/pavel/mpfr/>` :cite:p:`holoborodko:2010` which makes
+use of MPFR :cite:p:`fousse-et-al:2007`. For unit testing we use the Catch2
+library :cite:p:`catch2:2017`. 
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+C++ classes
+-----------
+
+.. doxygenclass:: Vector3D
+   :members:
+
+.. doxygenfunction:: operator+(const Vector3D<T> &u, const Vector3D<T> &v)
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
+Bibliography
+============
+
+.. bibliography::
