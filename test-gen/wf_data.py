@@ -1,0 +1,64 @@
+from sympy.vector import CoordSys3D
+from sympy import *
+
+init_printing()
+
+def d(r1, r2):
+    return sqrt((r1 - r2).dot(r1 - r2))
+
+def we_fun(r1, r2):
+    def we(r):
+        return log( ( d(r1, r) + d(r2, r) + d(r2, r1) ) / ( d(r1, r) + d(r2, r) - d(r2, r1) ) )
+    return we
+
+def main():
+
+    C = CoordSys3D("C")
+
+    r1 =  1*C.i + 0*C.j - 1/sqrt(2)*C.k
+    r2 = -1*C.i + 0*C.j - 1/sqrt(2)*C.k
+    r3 =  0*C.i + 1*C.j + 1/sqrt(2)*C.k
+    r  =  0*C.i - 1*C.j + 1/sqrt(2) *C.k
+
+    nf = ((r2 - r1).cross(r3 - r1)).normalize()
+    rf = (r1 + r2 + r3)/3
+    omega = 2*pi - 6*asin(sqrt( Rational(2,3), evaluate=False), evaluate=False)
+
+    we0 = we_fun(r1, r2)
+    we1 = we_fun(r2, r3)
+    we2 = we_fun(r3, r1)
+
+    re0 = (r1 + r2) / 2;
+    re1 = (r2 + r3) / 2;
+    re2 = (r3 + r1) / 2;
+
+    print("re0")
+    pprint(re0)
+    print("re1")
+    pprint(re1)
+    print("re2")
+    pprint(re2)
+
+    ue0 = (r2 - r1).normalize()
+    ue1 = (r3 - r2).normalize()
+    ue2 = (r1 - r3).normalize()
+
+    print("ue0")
+    pprint(ue0)
+    print("ue1")
+    pprint(ue1)
+    print("ue2")
+    pprint(ue2)
+
+    expr = nf.cross(re0 - r).dot(ue0)*we0(r) - (rf - r).dot(nf)*omega + \
+           nf.cross(re1 - r).dot(ue1)*we1(r) - (rf - r).dot(nf)*omega + \
+           nf.cross(re2 - r).dot(ue2)*we2(r) - (rf - r).dot(nf)*omega
+
+    pprint(expr)
+
+    print(N(expr, 50))
+
+
+if __name__ == "__main__":
+    main()
+
