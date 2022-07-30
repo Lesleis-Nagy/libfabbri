@@ -49,6 +49,13 @@ public:
     }
 
     /**
+     * Create a three dimensional zero-vector object.
+     */
+    Vector3D():
+        _x(0), _y(0), _z(0)
+    {}
+
+    /**
      * Create a three dimensional vector object with the given x, y & z components along
      * with a regularisation-epsilon value.
      * @param x the vector x component.
