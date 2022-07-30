@@ -69,7 +69,7 @@ new_we_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
 
 /**
  * Return a function that will calculate Fabbri's face potential function \f$W_\mathrm{f}\f$ eq. (17) for a triangular
- * face [1] with endpoints \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ with winding \f$r_1 \rightarrow r2\f$,
+ * face [1] with endpoints \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and winding \f$r_1 \rightarrow r2\f$,
  * \f$r_2 \rightarrow r_3\f$ & \f$r3 \rightarrow r1\f$.
  * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
  * @param r1 the first point of a triangle segment.
@@ -93,7 +93,7 @@ new_Wf_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) 
     // Solid angle subtended by this triangle.
     function<T(const Vector3D<T> &)> omega = new_omega_fun(r1, r2, r3);
 
-    // We functions.
+    // we functions.
     array<function<T(const Vector3D<T> &)>, 3> we;
 
     we[0] = new_we_fun(r1, r2);
@@ -116,6 +116,53 @@ new_Wf_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) 
                + dot(cross(nf, re[1] - r), ue[1])*we[1](r)
                + dot(cross(nf, re[2] - r), ue[2])*we[2](r)
                - 3*dot(rf - r, nf)*omega(r);
+
+    };
+
+
+
+}
+
+/**
+ * Return a function that will calculate the gradient of Fabbri's face potential function \f$\Delta W_\mathrm{f}\f$ eq.
+ * (25) for a triangular face [1] with endpoints \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and winding \f$r_1 \rightarrow r2\f$,
+ * \f$r_2 \rightarrow r_3\f$ & \f$r3 \rightarrow r1\f$.
+ * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @param r1 the first point of a triangle segment.
+ * @param r2 the second point of a triangle segment.
+ * @param r3 the third point of a triangle.
+ * @return a function that will calculate \f$\Delta W_\mathrm{f}\f$.
+ */
+template <typename T>
+std::function<Vector3D<T>(const Vector3D<T>&)>
+new_DWf_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
+
+    using std::array;
+    using std::function;
+
+    // Face normal.
+    Vector3D<T> nf = triangle_normal(r1, r2, r3);
+
+    // Solid angle subtended by this triangle.
+    function<T(const Vector3D<T> &)> omega = new_omega_fun(r1, r2, r3);
+
+    // we functions.
+    array<function<T(const Vector3D<T> &)>, 3> we;
+
+    we[0] = new_we_fun(r1, r2);
+    we[1] = new_we_fun(r2, r3);
+    we[2] = new_we_fun(r3, r1);
+
+    array<Vector3D<T>, 3> ue;
+    ue[0] = edge_orientation(r1, r2);
+    ue[1] = edge_orientation(r2, r3);
+    ue[2] = edge_orientation(r3, r1);
+
+    return [nf, omega, ue, we] (const Vector3D<T> &r) {
+
+        return cross(nf, ue[0])*we[0](r) + nf*omega(r)
+               + cross(nf, ue[1])*we[1](r) + nf*omega(r)
+               + cross(nf, ue[2])*we[2](r) + nf*omega(r);
 
     };
 

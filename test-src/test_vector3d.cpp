@@ -20,9 +20,9 @@ TEST_CASE("Test vector addition for 'double' type.", "Vector3D") {
     double eps = 1E-14;
     Vector3D<double> result = u + v;
 
-    REQUIRE( abs(result.x() - expected.x()) < eps );
-    REQUIRE( abs(result.y() - expected.y()) < eps );
-    REQUIRE( abs(result.z() - expected.z()) < eps );
+    REQUIRE( fabs(result.x() - expected.x()) < eps );
+    REQUIRE( fabs(result.y() - expected.y()) < eps );
+    REQUIRE( fabs(result.z() - expected.z()) < eps );
 
 }
 
@@ -56,9 +56,9 @@ TEST_CASE("Test vector subtraction for 'double' type.", "Vector3D") {
     double eps = 1E-14;
     Vector3D<double> result = v - u;
 
-    REQUIRE( abs(result.x() - expected.x()) < eps );
-    REQUIRE( abs(result.y() - expected.y()) < eps );
-    REQUIRE( abs(result.z() - expected.z()) < eps );
+    REQUIRE( fabs(result.x() - expected.x()) < eps );
+    REQUIRE( fabs(result.y() - expected.y()) < eps );
+    REQUIRE( fabs(result.z() - expected.z()) < eps );
 
 }
 
@@ -92,9 +92,9 @@ TEST_CASE("Test vector-scalar multiplication for 'double' type.", "Vector3D") {
     double eps = 1E-14;
     Vector3D<double> result = u * scalar;
 
-    REQUIRE( abs(result.x() - expected.x()) < eps );
-    REQUIRE( abs(result.y() - expected.y()) < eps );
-    REQUIRE( abs(result.z() - expected.z()) < eps );
+    REQUIRE( fabs(result.x() - expected.x()) < eps );
+    REQUIRE( fabs(result.y() - expected.y()) < eps );
+    REQUIRE( fabs(result.z() - expected.z()) < eps );
 
 }
 
@@ -128,9 +128,9 @@ TEST_CASE("Test scalar-vector multiplication for 'double' type.", "Vector3D") {
     double eps = 1E-14;
     Vector3D<double> result = scalar * u;
 
-    REQUIRE( abs(result.x() - expected.x()) < eps );
-    REQUIRE( abs(result.y() - expected.y()) < eps );
-    REQUIRE( abs(result.z() - expected.z()) < eps );
+    REQUIRE( fabs(result.x() - expected.x()) < eps );
+    REQUIRE( fabs(result.y() - expected.y()) < eps );
+    REQUIRE( fabs(result.z() - expected.z()) < eps );
 
 }
 
@@ -164,9 +164,9 @@ TEST_CASE("Test vector-scalar division for 'double' type.", "Vector3D") {
     double eps = 1E-14;
     Vector3D<double> result = u / scalar;
 
-    REQUIRE( abs(result.x() - expected.x()) < eps );
-    REQUIRE( abs(result.y() - expected.y()) < eps );
-    REQUIRE( abs(result.z() - expected.z()) < eps );
+    REQUIRE( fabs(result.x() - expected.x()) < eps );
+    REQUIRE( fabs(result.y() - expected.y()) < eps );
+    REQUIRE( fabs(result.z() - expected.z()) < eps );
 
 }
 
@@ -200,7 +200,7 @@ TEST_CASE("Test vector dot product for 'double' type.", "Vector3D") {
     double eps = 1E-14;
     double result = dot(u, v);
 
-    REQUIRE( abs(result - expected) < eps );
+    REQUIRE( fabs(result - expected) < eps );
 
 }
 
@@ -286,7 +286,7 @@ TEST_CASE("Test regularized norm for 'double' type.", "Vector3D") {
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
 #endif
 
-    REQUIRE( abs(norm(v) - expected) < eps );
+    REQUIRE( fabs(norm(v) - expected) < eps );
 
 }
 
@@ -352,9 +352,9 @@ TEST_CASE("Test normalised() function for 'double' type.", "Vector3D") {
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
 #endif
 
-    REQUIRE( abs(actual.x() - expected.x()) < eps );
-    REQUIRE( abs(actual.y() - expected.y()) < eps );
-    REQUIRE( abs(actual.z() - expected.z()) < eps );
+    REQUIRE( fabs(actual.x() - expected.x()) < eps );
+    REQUIRE( fabs(actual.y() - expected.y()) < eps );
+    REQUIRE( fabs(actual.z() - expected.z()) < eps );
 
 }
 
@@ -421,8 +421,8 @@ TEST_CASE("Test edge_length() function for 'double' type.", "Vector3D geometry")
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
 #endif
 
-    REQUIRE( abs(d1 - expected) < eps );
-    REQUIRE( abs(d2 - expected) < eps );
+    REQUIRE( fabs(d1 - expected) < eps );
+    REQUIRE( fabs(d2 - expected) < eps );
 
 }
 
@@ -471,9 +471,9 @@ TEST_CASE("Test edge_center() function for 'double' type.", "Vector3D geometry")
     Vector3D<double> actual = edge_center(r1, r2);
 
     double eps = 1E-14;
-    REQUIRE( abs(expected.x() - actual.x()) < eps );
-    REQUIRE( abs(expected.y() - actual.y()) < eps );
-    REQUIRE( abs(expected.z() - actual.z()) < eps );
+    REQUIRE( fabs(expected.x() - actual.x()) < eps );
+    REQUIRE( fabs(expected.y() - actual.y()) < eps );
+    REQUIRE( fabs(expected.z() - actual.z()) < eps );
 
 }
 
@@ -507,9 +507,9 @@ TEST_CASE("Test edge_orientation() function for 'double' type.", "Vector3D geome
     Vector3D<double> actual = edge_orientation(r1, r2);
 
     double eps = 1E-14;
-    REQUIRE( abs(expected.x() - actual.x()) < eps );
-    REQUIRE( abs(expected.y() - actual.y()) < eps );
-    REQUIRE( abs(expected.z() - actual.z()) < eps );
+    REQUIRE( fabs(expected.x() - actual.x()) < eps );
+    REQUIRE( fabs(expected.y() - actual.y()) < eps );
+    REQUIRE( fabs(expected.z() - actual.z()) < eps );
 
 }
 
@@ -544,9 +544,9 @@ TEST_CASE("Test triangle_normal() function for 'double' type.", "Vector3D geomet
     Vector3D<double> actual = triangle_normal(r1, r2, r3);
 
     double eps = 1E-14;
-    REQUIRE( abs(expected.x() - actual.x()) < eps );
-    REQUIRE( abs(expected.y() - actual.y()) < eps );
-    REQUIRE( abs(expected.z() - actual.z()) < eps );
+    REQUIRE( fabs(expected.x() - actual.x()) < eps );
+    REQUIRE( fabs(expected.y() - actual.y()) < eps );
+    REQUIRE( fabs(expected.z() - actual.z()) < eps );
 
 }
 
@@ -581,9 +581,9 @@ TEST_CASE("Test triangle_center() function for 'double' type.", "Vector3D geomet
     Vector3D<double> actual = triangle_center(r1, r2, r3);
 
     double eps = 1E-14;
-    REQUIRE( abs(expected.x() - actual.x()) < eps );
-    REQUIRE( abs(expected.y() - actual.y()) < eps );
-    REQUIRE( abs(expected.z() - actual.z()) < eps );
+    REQUIRE( fabs(expected.x() - actual.x()) < eps );
+    REQUIRE( fabs(expected.y() - actual.y()) < eps );
+    REQUIRE( fabs(expected.z() - actual.z()) < eps );
 }
 
 TEST_CASE("Test triangle_center() function for 'multiprecision' type.", "Vector3D geometry") {
