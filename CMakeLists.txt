@@ -42,8 +42,11 @@ if (${BUILD_UTILS})
 
     message(STATUS "Building utilities.")
 
-    find_package(HDF5 REQUIRED)
+    find_package(HDF5 COMPONENTS CXX REQUIRED)
     find_package(Curses REQUIRED)
+
+    message(STATUS "HDF5_LIBRARIES:     ${HDF5_LIBRARIES}")
+    message(STATUS "HDF5_CXX_LIBRARIES: ${HDF5_CXX_LIBRARIES}")
 
     set(ARGS_INCLUDE_DIR "${LIBFABBRI_THIRD_PARTY_DIR}/args-v6.3.0/include")
 

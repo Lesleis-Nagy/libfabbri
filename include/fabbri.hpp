@@ -203,7 +203,10 @@ new_uni_A_fun(const Vector3D<T> &M,
     Wf[3] = new_Wf_fun(r2, r4, r3);
 
     return [M, nf, Wf](const Vector3D<T> &r) {
-        return cross(M, nf[0]*Wf[0]) + cross(M, nf[1]*Wf[1]) + cross(M, nf[2]*Wf[2]) + cross(M, nf[3]*Wf[3]);
+        return cross(M, nf[0]*Wf[0](r))
+               + cross(M, nf[1]*Wf[1](r))
+               + cross(M, nf[2]*Wf[2](r))
+               + cross(M, nf[3]*Wf[3](r));
     };
 
 }

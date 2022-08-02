@@ -13,4 +13,5 @@ xml
 # Files
 *.db
 MANIFEST
+*.h5
 

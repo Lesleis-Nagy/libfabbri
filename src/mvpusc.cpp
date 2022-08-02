@@ -17,6 +17,7 @@
 
 #include "fabbri.hpp"
 #include "table.hpp"
+#include "file_io.hpp"
 
 using RealType = double;
 
@@ -205,7 +206,9 @@ void edit_model_table_value(int highlight_row, int highlight_col, T &table) {
 
 }
 
-void get_output_file() {
+std::string get_output_file() {
+
+    using std::string;
 
     WINDOW *win_output = newwin(5, 50, 10, 10);
     box(win_output, 0, 0);
@@ -223,11 +226,142 @@ void get_output_file() {
     wrefresh(win_output);
     delwin(win_output);
 
+    return {input};
+
+}
+
+void perform_calculation(Table<RealType, 3, 3> &sample_grid_table,
+                         Table<RealType, 5, 3> &model_table) {
+
+    using std::array;
+    using std::string;
+    using std::vector;
+
+    string output_file = get_output_file();
+
+    RealType start_x = sample_grid_table.data(0, 0).value();
+    RealType end_x = sample_grid_table.data(0, 1).value();
+    RealType n_x = sample_grid_table.data(0, 2).value();
+
+    RealType start_y = sample_grid_table.data(1, 0).value();
+    RealType end_y = sample_grid_table.data(1, 1).value();
+    RealType n_y = sample_grid_table.data(1, 2).value();
+
+    RealType start_z = sample_grid_table.data(2, 0).value();
+    RealType end_z = sample_grid_table.data(2, 1).value();
+    RealType n_z = sample_grid_table.data(2, 2).value();
+
+
+    Vector3D<RealType> m(model_table.data(0, 0).value(),
+                         model_table.data(0, 1).value(),
+                         model_table.data(0, 2).value());
+
+    Vector3D<RealType> r1(model_table.data(1, 0).value(),
+                          model_table.data(1, 1).value(),
+                          model_table.data(1, 2).value());
+
+    Vector3D<RealType> r2(model_table.data(2, 0).value(),
+                          model_table.data(2, 1).value(),
+                          model_table.data(2, 2).value());
+
+    Vector3D<RealType> r3(model_table.data(3, 0).value(),
+                          model_table.data(3, 1).value(),
+                          model_table.data(3, 2).value());
+
+    Vector3D<RealType> r4(model_table.data(4, 0).value(),
+                          model_table.data(4, 1).value(),
+                          model_table.data(4, 2).value());
+
+    array<array<RealType, 3>, 4> tetrahedron = {{
+                                                        {{r1.x(), r1.y(), r1.z()}},
+                                                        {{r2.x(), r2.y(), r2.z()}},
+                                                        {{r3.x(), r3.y(), r3.z()}},
+                                                        {{r4.x(), r4.y(), r4.z()}}
+                                                }};
+
+    RealType dx = (end_x - start_x) / n_x;
+    RealType dy = (end_y - start_y) / n_y;
+    RealType dz = (end_z - start_z) / n_z;
+
+    auto model_fun = new_uni_A_fun(m, r1, r2, r3, r4);
+
+    std::vector<std::array<RealType, 3>> field_vertices;
+    std::vector<std::array<RealType, 3>> field_vectors;
+    for (int i = 0; i < (int)n_x; ++i) {
+
+        for (int j = 0; j < (int)n_y; ++j) {
+
+            for (int k = 0; k < (int)n_z; ++k) {
+
+                Vector3D<RealType> r(start_x + (double)i * dx,
+                                     start_y + (double)j * dy,
+                                     start_z + (double)k * dz);
+                auto A = model_fun(r);
+
+                field_vertices.push_back({r.x(), r.y(), r.z()});
+                field_vectors.push_back({A.x(), A.y(), A.z()});
+
+            }
+
+        }
+
+    }
+
+    write_h5_file(output_file, field_vertices, field_vectors, tetrahedron);
+
+    display_message("Data written.");
+
 }
 
 enum ActiveTable {
     MODEL_TABLE, SAMPLE_GRID_TABLE
 };
+
+void set_default_model_table_values(Table<RealType, 5, 3> &model_table) {
+
+    // Magnetisation.
+    model_table.set_data(0, 0, 1.0);
+    model_table.set_data(0, 1, 0.0);
+    model_table.set_data(0, 2, 0.0);
+
+    // r1
+    model_table.set_data(1, 0, 0.0);
+    model_table.set_data(1, 1, 0.0);
+    model_table.set_data(1, 2, 0.0);
+
+    // r2
+    model_table.set_data(2, 0, 1.0);
+    model_table.set_data(2, 1, 0.0);
+    model_table.set_data(2, 2, 0.0);
+
+    // r3
+    model_table.set_data(3, 0, 0.0);
+    model_table.set_data(3, 1, 1.0);
+    model_table.set_data(3, 2, 0.0);
+
+    // r3
+    model_table.set_data(4, 0, 0.0);
+    model_table.set_data(4, 1, 0.0);
+    model_table.set_data(4, 2, 1.0);
+
+}
+
+
+void set_default_grid_table_values(Table<RealType, 3, 3> &sample_grid_table) {
+
+    sample_grid_table.set_data(0, 0, -1.0);
+    sample_grid_table.set_data(0, 1,  1.0);
+    sample_grid_table.set_data(0, 2,  10);
+
+    sample_grid_table.set_data(1, 0, -1.0);
+    sample_grid_table.set_data(1, 1,  1.0);
+    sample_grid_table.set_data(1, 2,  10);
+
+    sample_grid_table.set_data(2, 0, -1.0);
+    sample_grid_table.set_data(2, 1,  1.0);
+    sample_grid_table.set_data(2, 2,  10);
+
+}
 
 int main(int argc, char *argv[]) {
 
@@ -240,18 +374,8 @@ int main(int argc, char *argv[]) {
     Table<RealType, 5, 3> model_table;
     Table<RealType, 3, 3> sample_grid_table;
 
-    // Default values for sample_grid_table.
-    sample_grid_table.set_data(0, 0, -1.0);
-    sample_grid_table.set_data(0, 1,  1.0);
-    sample_grid_table.set_data(0, 2,  10);
-
-    sample_grid_table.set_data(1, 0, -1.0);
-    sample_grid_table.set_data(1, 1,  1.0);
-    sample_grid_table.set_data(1, 2,  10);
-
-    sample_grid_table.set_data(2, 0, -1.0);
-    sample_grid_table.set_data(2, 1,  1.0);
-    sample_grid_table.set_data(2, 2,  10);
+    set_default_model_table_values(model_table);
+    set_default_grid_table_values(sample_grid_table);
 
     int model_table_highlight_row = 0, model_table_highlight_col = 0;
     int sample_grid_table_highlight_row = 0, sample_grid_table_highlight_col = 0;
@@ -376,7 +500,7 @@ int main(int argc, char *argv[]) {
                 break;
 
             case (int)'c':
-                get_output_file();
+                perform_calculation(sample_grid_table, model_table);
                 break;
 
             default:

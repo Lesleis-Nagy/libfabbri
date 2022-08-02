@@ -6,4 +6,6 @@ target_include_directories(mvpusc
                 ${ARGS_INCLUDE_DIR})
 target_link_libraries(mvpusc
         ${CURSES_LIBRARIES}
-        ${MPFR_LIBRARIES})
+        ${MPFR_LIBRARIES}
+        ${HDF5_LIBRARIES}
+        ${HDF5_CXX_LIBRARIES})
