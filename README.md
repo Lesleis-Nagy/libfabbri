@@ -11,7 +11,7 @@ Some useful flags for CMake
 
 * `-DMULTIPRECISION=ON`, switches multiprecision functionality on by linking against MPFR libraries (this also makes use of Pavel Holoborodko's MPFR C++ library),
 * `-DBUILD_TESTS=ON`, if this is on, then unit tests will be built,
-* `-DBUILD_UTILITIES=ON`, if this is on, then libfabbri utilities will be built.
+* `-DBUILD_UTILS=ON`, if this is on, then libfabbri utilities will be built **WARNING** this requires ncurses of user interaction and HDF5 for output.
 
 # Bibliography
 [1] Fabbri, M. Magnetic Flux Density and Vector3D Potential of Uniform Polyhedral Sources. Ieee T Magn 44, 32–36 (2008).
