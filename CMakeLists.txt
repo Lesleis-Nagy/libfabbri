@@ -48,7 +48,11 @@ if (${BUILD_UTILS})
     message(STATUS "HDF5_LIBRARIES:     ${HDF5_LIBRARIES}")
     message(STATUS "HDF5_CXX_LIBRARIES: ${HDF5_CXX_LIBRARIES}")
 
-    set(ARGS_INCLUDE_DIR "${LIBFABBRI_THIRD_PARTY_DIR}/args-v6.3.0/include")
+    set(ARGS_INCLUDE_DIR     "${LIBFABBRI_THIRD_PARTY_DIR}/args-v6.3.0/include")
+    message(STATUS "ARGS_INCLUDE_DIR:     ${ARGS_INCLUDE_DIR}")
+
+    set(RAPIDXML_INClUDE_DIR "${LIBFABBRI_THIRD_PARTY_DIR}/rapidxml-v1.13/include")
+    message(STATUS "RAPIDXML_INClUDE_DIR: ${RAPIDXML_INClUDE_DIR}")
 
     add_subdirectory(${LIBFABBRI_SRC_DIR})
 

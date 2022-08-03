@@ -67,7 +67,7 @@ void display_help_message() {
     mvprintw(2, 0, "          <e>          - edit");
     mvprintw(3, 0, "          <c>          - compute and write output file");
     mvprintw(4, 0, "          <t>          - toggle edit table");
-    mvprintw(5, 0, "          <arrow keys> - select value in edit table (vim directional keys are also recognised).");
+    mvprintw(5, 0, "          <arrow keys> - select value in edit table");
 
 }
 
@@ -308,6 +308,7 @@ void perform_calculation(Table<RealType, 3, 3> &sample_grid_table,
     }
 
     write_h5_file(output_file, field_vertices, field_vectors, tetrahedron);
+    write_xdmf2_file(output_file, field_vertices, field_vectors, tetrahedron);
 
     display_message("Data written.");
 
