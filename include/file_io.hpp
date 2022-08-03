@@ -12,10 +12,7 @@
 #include <vector>
 
 #include <H5Cpp.h>
-/**
-#include <rapidxml.hpp>
-#include <rapidxml_print.hpp>
- **/
+
 #include <rapidxml_ext.hpp>
 
 #include "fabbri.hpp"
@@ -82,25 +79,28 @@ void write_xdmf2_file(const std::string &file_root,
     string hdf5_file_name = file_root + ".h5";
 
     // XML declaration.
-    //xml_node<> *declaration = doc.allocate_node(node_declaration);
-    //declaration->append_attribute(doc.allocate_attribute("version", "1.0"));
-    //declaration->append_attribute(doc.allocate_attribute("encoding", "utf-8"));
-    //doc.append_node(declaration);
+    xml_node<> *declaration = doc.allocate_node(node_declaration);
+    declaration->append_attribute(doc.allocate_attribute("version", "1.0"));
+    doc.append_node(declaration);
 
     // XDMF doctype
-    //xml_node<> *doc_type = doc.allocate_node(node_doctype);
-    //doc_type->value(R"(Xdmf SYSTEM "Xdmf.dtd" [])");
-    //doc.append_node(doc_type);
+    xml_node<> *doc_type = doc.allocate_node(node_doctype);
+    doc_type->value(R"(Xdmf SYSTEM "Xdmf.dtd" [])");
+    doc.append_node(doc_type);
 
     // The root node.
     xml_node<> *xdmf = doc.allocate_node(node_element, "Xdmf");
-    //xdmf->append_attribute(doc.allocate_attribute("xmlns:xi", R"(http://www.w3.org/2003/XInclude)"));
     xdmf->append_attribute(doc.allocate_attribute("Version", "3.0"));
+    xdmf->append_attribute(doc.allocate_attribute("xmlns:xi", R"(http://www.w3.org/2003/XInclude)"));
     doc.append_node(xdmf);
 
     // The domain node.
     xml_node<> *domain = doc.allocate_node(node_element, "Domain");
     xdmf->append_node(domain);
+
+    //***************************************************************************************************************//
+    //* Tetrahedral grid                                                                                            *//
+    //***************************************************************************************************************//
 
     // The tetrahedron (Grid) node.
     xml_node<> *grid_tetrahedron = doc.allocate_node(node_element, "Grid");
@@ -117,11 +117,8 @@ void write_xdmf2_file(const std::string &file_root,
 
     // Tetrahedron connectivity data item.
     xml_node<> *di_conn_tetrahedron = doc.allocate_node(node_element, "DataItem");
-    //di_conn_tetrahedron->append_attribute(doc.allocate_attribute("ItemType", "Uniform"));
-    di_conn_tetrahedron->append_attribute(doc.allocate_attribute("Format", "HDF"));
-    di_conn_tetrahedron->append_attribute(doc.allocate_attribute("NumberType", "UInt"));
-    //di_conn_tetrahedron->append_attribute(doc.allocate_attribute("Precision", "8"));
     di_conn_tetrahedron->append_attribute(doc.allocate_attribute("Dimensions", "1 4"));
+    di_conn_tetrahedron->append_attribute(doc.allocate_attribute("Format", "HDF"));
     string di_conn_tetrahedron_h5 = hdf5_file_name + ":/tetrahedron-conn";
     di_conn_tetrahedron->value(di_conn_tetrahedron_h5.c_str());
     topology_tetrahedron->append_node(di_conn_tetrahedron);
@@ -133,15 +130,21 @@ void write_xdmf2_file(const std::string &file_root,
 
     // Tetrahedron geometry data item.
     xml_node<> *di_geom_tetrahedron = doc.allocate_node(node_element, "DataItem");
-    //di_geom_tetrahedron->append_attribute(doc.allocate_attribute("ItemType", "Uniform"));
-    //di_geom_tetrahedron->append_attribute(doc.allocate_attribute("Rank", "2"));
+    di_geom_tetrahedron->append_attribute(doc.allocate_attribute("Dimensions", "4 3"));
     di_geom_tetrahedron->append_attribute(doc.allocate_attribute("Format", "HDF"));
-    //di_geom_tetrahedron->append_attribute(doc.allocate_attribute("NumberType", "Float"));
-    //di_geom_tetrahedron->append_attribute(doc.allocate_attribute("Precision", "8"));
-    di_geom_tetrahedron->append_attribute(doc.allocate_attribute("Dimension", "4 3"));
     string di_geom_tetrahedron_h5 = hdf5_file_name + ":/tetrahedron-vert";
     di_geom_tetrahedron->value(di_geom_tetrahedron_h5.c_str());
     geometry_tetrahedron->append_node(di_geom_tetrahedron);
+
+    //***************************************************************************************************************//
+    //* Vector field regular grid.                                                                                  *//
+    //***************************************************************************************************************//
+
+    // The tetrahedron (Grid) node.
+    xml_node<> *grid_field = doc.allocate_node(node_element, "");
+    grid_field->append_attribute(doc.allocate_attribute("Name", "grid"));
+    grid_field->append_attribute(doc.allocate_attribute("GridType", "Uniform"));
+    domain->append_node(grid_field);
 
     string output_file = file_root + ".xdmf";
     ofstream fout(output_file);

@@ -45,6 +45,7 @@ if (${BUILD_UTILS})
     find_package(HDF5 COMPONENTS CXX REQUIRED)
     find_package(Curses REQUIRED)
 
+    message(STATUS "HDF5_INCLUDE_DIR    ${HDF5_INCLUDE_DIR}")
     message(STATUS "HDF5_LIBRARIES:     ${HDF5_LIBRARIES}")
     message(STATUS "HDF5_CXX_LIBRARIES: ${HDF5_CXX_LIBRARIES}")
 

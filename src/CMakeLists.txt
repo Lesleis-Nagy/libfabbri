@@ -5,7 +5,8 @@ target_include_directories(mvpusc
                 ${MPFR_INCLUDES}
                 ${MPREAL_INCLUDE_DIR}
                 ${ARGS_INCLUDE_DIR}
-                ${RAPIDXML_INClUDE_DIR})
+                ${RAPIDXML_INClUDE_DIR}
+                ${HDF5_INCLUDE_DIR})
 target_link_libraries(mvpusc
         ${CURSES_LIBRARIES}
         ${MPFR_LIBRARIES}
