@@ -12,6 +12,10 @@
 
 #include "mpreal.h"
 
+/**
+ * An implementation of a three dimensional cartesian vector.
+ * @tparam T the underlying data type for the calculation - usually ‘double’ or ‘mpreal’.
+ */
 template <typename T>
 class Vector3D {
 

@@ -18,6 +18,7 @@
 #include "fabbri.hpp"
 #include "table.hpp"
 #include "file_io.hpp"
+#include "regular_grid.hpp"
 
 using RealType = double;
 
@@ -279,14 +280,16 @@ void perform_calculation(Table<RealType, 3, 3> &sample_grid_table,
                                                         {{r4.x(), r4.y(), r4.z()}}
                                                 }};
 
-    RealType dx = (end_x - start_x) / n_x;
-    RealType dy = (end_y - start_y) / n_y;
-    RealType dz = (end_z - start_z) / n_z;
+    RealType dx = (end_x - start_x) / (n_x - 1.0);
+    RealType dy = (end_y - start_y) / (n_y - 1.0);
+    RealType dz = (end_z - start_z) / (n_z - 1.0);
 
     auto model_fun = new_uni_A_fun(m, r1, r2, r3, r4);
 
     std::vector<std::array<RealType, 3>> field_vertices;
+    std::vector<std::array<unsigned long, 8>> field_connect;
     std::vector<std::array<RealType, 3>> field_vectors;
+    RectangularRGridIndexing<unsigned long> grid_connect((unsigned long)n_x, (unsigned long)n_y, (unsigned long)n_z);
     for (int i = 0; i < (int)n_x; ++i) {
 
         for (int j = 0; j < (int)n_y; ++j) {
@@ -307,8 +310,12 @@ void perform_calculation(Table<RealType, 3, 3> &sample_grid_table,
 
     }
 
-    write_h5_file(output_file, field_vertices, field_vectors, tetrahedron);
-    write_xdmf2_file(output_file, field_vertices, field_vectors, tetrahedron);
+    for (unsigned long i = 0; i < grid_connect.no_of_elements(); ++i) {
+        field_connect.push_back(grid_connect(i));
+    }
+
+    H5Writer<double, unsigned long> file_writer;
+    file_writer.write(output_file, field_vertices, field_connect, field_vectors, tetrahedron);
 
     display_message("Data written.");
 

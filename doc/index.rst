@@ -18,7 +18,7 @@ library :cite:p:`catch2:2017`.
    :maxdepth: 2
    :caption: Contents:
 
-   classes
+   libfabbri_library
    bibliography
 
 Indices and tables

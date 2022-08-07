@@ -1,5 +1,5 @@
 # mvpusc - executable
-add_executable(mvpusc mvpusc.cpp ../third-party/rapidxml-v1.13/include/rapidxml_ext.hpp)
+add_executable(mvpusc mvpusc.cpp)
 target_include_directories(mvpusc
         PRIVATE ${LIBFABBRI_INCLUDE_DIR}
                 ${MPFR_INCLUDES}

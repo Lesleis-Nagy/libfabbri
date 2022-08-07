@@ -18,3 +18,13 @@ target_include_directories(test_fabbri
         ${MPREAL_INCLUDE_DIR})
 target_link_libraries(test_fabbri
         ${MPFR_LIBRARIES})
+
+# Test regular_grid.hpp
+add_executable(test_regular_grid test_regular_grid.cpp)
+target_include_directories(test_regular_grid
+        PRIVATE ${LIBFABBRI_INCLUDE_DIR}
+        ${MPFR_INCLUDES}
+        ${CATCH_INCLUDE_DIR}
+        ${MPREAL_INCLUDE_DIR})
+target_link_libraries(test_regular_grid
+        ${MPFR_LIBRARIES})

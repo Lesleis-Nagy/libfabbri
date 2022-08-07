@@ -17,140 +17,282 @@
 
 #include "fabbri.hpp"
 
-template <typename T>
-void write_h5_file(const std::string &file_root,
-                   const std::vector<std::array<T, 3>> &field_vertices,
-                   const std::vector<std::array<T, 3>> &field_vectors,
-                   const std::array<std::array<T, 3>, 4> &tetra_vert) {
+template<typename RealType, typename IntegralType>
+class H5Writer {
 
-    using std::string;
-    using H5::H5File;
-    using H5::DataSpace;
-    using H5::DataSet;
-    using H5::PredType;
+public:
 
-    string output_file = file_root + ".h5";
-    H5File fout(output_file.c_str(), H5F_ACC_TRUNC);
+    H5Writer() : _nodes_per_element("8"), _cartesian_vector_components("3") {}
 
-    hsize_t field_dims[2] = {field_vertices.size(), 3};
-    DataSpace dsp_field(2, field_dims);
+    void write(const std::string &file_root,
+               const std::vector<std::array<RealType, 3>> &field_vertices,
+               const std::vector<std::array<IntegralType, 8>> &field_connect,
+               const std::vector<std::array<RealType, 3>> &field_vectors,
+               const std::array<std::array<RealType, 3>, 4> &tetra_vert) {
 
-    hsize_t tetra_vert_dims[2] = {4, 3};
-    hsize_t tetra_conn_dims[2] = {1, 4};
-    DataSpace dsp_tetra_vert_dims(2, tetra_vert_dims);
-    DataSpace dsp_tetra_conn_dims(2, tetra_conn_dims);
-    const std::array<std::array<int, 4>, 1> tetra_conn = {{0, 1, 2, 3}};
+        _hdf_file_name = file_root + ".h5";
+        _xdmf_file_name = file_root + ".xdmf";
 
-    // Write the field vertices.
-    DataSet ds_vertices = fout.createDataSet("field-vertices", PredType::NATIVE_DOUBLE, dsp_field);
-    ds_vertices.write(field_vertices.data(), PredType::NATIVE_DOUBLE);
+        _hdf_tetrahedron_connect_path = _hdf_file_name + ":/tetrahedron/connect";
+        _hdf_tetrahedron_vertices_path = _hdf_file_name + ":/tetrahedron/vertices";
 
-    // Write the field vectors.
-    DataSet ds_vectors = fout.createDataSet("field-vectors", PredType::NATIVE_DOUBLE, dsp_field);
-    ds_vectors.write(field_vectors.data(), PredType::NATIVE_DOUBLE);
+        _hdf_field_grid_connect_size = std::to_string(field_connect.size());
+        _hdf_field_grid_connect_path = _hdf_file_name + ":/field/grid/connect";
+        _hdf_field_grid_connect_dims = std::to_string(field_connect.size()) + " " + _nodes_per_element;
 
-    // Write the tetrahedron.
-    DataSet ds_tetra_vert = fout.createDataSet("tetrahedron-vert", PredType::NATIVE_DOUBLE, dsp_tetra_vert_dims);
-    DataSet ds_tetra_conn = fout.createDataSet("tetrahedron-conn", PredType::NATIVE_UINT64, dsp_tetra_conn_dims);
-    ds_tetra_vert.write(tetra_vert.data(), PredType::NATIVE_DOUBLE);
-    ds_tetra_conn.write(tetra_conn.data(), PredType::NATIVE_INT);
+        _hdf_field_grid_vertices_path = _hdf_file_name + ":/field/grid/vertices";
+        _hdf_field_grid_vertices_dims = std::to_string(field_vertices.size()) + " " + _cartesian_vector_components;
 
-    fout.close();
+        _hdf_field_vectors_path = _hdf_file_name + ":/field/vectors/0";
+        _hdf_field_vectors_dims = std::to_string(field_vectors.size()) + " " + _cartesian_vector_components;
 
-}
+        write_h5_file(field_vertices, field_connect, field_vectors, tetra_vert);
+        write_xdmf2_file();
 
-template <typename T>
-void write_xdmf2_file(const std::string &file_root,
-                      const std::vector<std::array<T, 3>> &field_vertices,
-                      const std::vector<std::array<T, 3>> &field_vectors,
-                      const std::array<std::array<T, 3>, 4> &tetra_vert) {
+    }
 
-    using std::ofstream;
-    using std::string;
-    using std::stringstream;
-    using rapidxml::xml_document;
-    using rapidxml::xml_node;
-    using rapidxml::node_declaration;
-    using rapidxml::node_doctype;
-    using rapidxml::node_element;
+private:
 
-    xml_document<> doc;
+    std::string _nodes_per_element;
+    std::string _cartesian_vector_components;
+    std::string _hdf_file_name;
+    std::string _xdmf_file_name;
+    std::string _hdf_tetrahedron_connect_path;
+    std::string _hdf_tetrahedron_vertices_path;
 
-    string hdf5_file_name = file_root + ".h5";
+    std::string _hdf_field_grid_connect_size;
+    std::string _hdf_field_grid_connect_path;
+    std::string _hdf_field_grid_connect_dims;
+    std::string _hdf_field_grid_vertices_path;
+    std::string _hdf_field_grid_vertices_dims;
+    std::string _hdf_field_vectors_path;
+    std::string _hdf_field_vectors_dims;
 
-    // XML declaration.
-    xml_node<> *declaration = doc.allocate_node(node_declaration);
-    declaration->append_attribute(doc.allocate_attribute("version", "1.0"));
-    doc.append_node(declaration);
+    void write_h5_file(const std::vector<std::array<RealType, 3>> &field_vertices,
+                       const std::vector<std::array<IntegralType, 8>> &field_connect,
+                       const std::vector<std::array<RealType, 3>> &field_vectors,
+                       const std::array<std::array<RealType, 3>, 4> &tetra_vert) {
 
-    // XDMF doctype
-    xml_node<> *doc_type = doc.allocate_node(node_doctype);
-    doc_type->value(R"(Xdmf SYSTEM "Xdmf.dtd" [])");
-    doc.append_node(doc_type);
+        using std::string;
+        using H5::H5File;
+        using H5::DataSpace;
+        using H5::DataSet;
+        using H5::Group;
+        using H5::PredType;
 
-    // The root node.
-    xml_node<> *xdmf = doc.allocate_node(node_element, "Xdmf");
-    xdmf->append_attribute(doc.allocate_attribute("Version", "3.0"));
-    xdmf->append_attribute(doc.allocate_attribute("xmlns:xi", R"(http://www.w3.org/2003/XInclude)"));
-    doc.append_node(xdmf);
+        H5File fout(_hdf_file_name.c_str(), H5F_ACC_TRUNC);
 
-    // The domain node.
-    xml_node<> *domain = doc.allocate_node(node_element, "Domain");
-    xdmf->append_node(domain);
+        hsize_t field_dims[2] = {field_vertices.size(), 3};
+        hsize_t conn_dims[2] = {field_connect.size(), 8};
+        DataSpace dsp_field(2, field_dims);
+        DataSpace dsp_conn(2, conn_dims);
 
-    //***************************************************************************************************************//
-    //* Tetrahedral grid                                                                                            *//
-    //***************************************************************************************************************//
+        hsize_t tetra_vert_dims[2] = {4, 3};
+        hsize_t tetra_conn_dims[2] = {1, 4};
+        DataSpace dsp_tetra_vert_dims(2, tetra_vert_dims);
+        DataSpace dsp_tetra_conn_dims(2, tetra_conn_dims);
+        const std::array<std::array<int, 4>, 1> tetra_conn = {{0, 1, 2, 3}};
 
-    // The tetrahedron (Grid) node.
-    xml_node<> *grid_tetrahedron = doc.allocate_node(node_element, "Grid");
-    grid_tetrahedron->append_attribute(doc.allocate_attribute("Name", "tetrahedron"));
-    grid_tetrahedron->append_attribute(doc.allocate_attribute("GridType", "Uniform"));
-    domain->append_node(grid_tetrahedron);
+        // Write the field vertices.
+        Group grp_field = fout.createGroup("field");
+        Group grp_grid = grp_field.createGroup("grid");
 
-    // Tetrahedron topology node.
-    xml_node<> * topology_tetrahedron = doc.allocate_node(node_element, "Topology");
-    topology_tetrahedron->append_attribute(doc.allocate_attribute("TopologyType", "Tetrahedron"));
-    topology_tetrahedron->append_attribute(doc.allocate_attribute("NumberOfElements", "1"));
-    topology_tetrahedron->append_attribute(doc.allocate_attribute("NodesPerElement", "4"));
-    grid_tetrahedron->append_node(topology_tetrahedron);
+        DataSet ds_vertices = grp_grid.createDataSet("vertices", PredType::NATIVE_DOUBLE, dsp_field);
+        ds_vertices.write(field_vertices.data(), PredType::NATIVE_DOUBLE);
 
-    // Tetrahedron connectivity data item.
-    xml_node<> *di_conn_tetrahedron = doc.allocate_node(node_element, "DataItem");
-    di_conn_tetrahedron->append_attribute(doc.allocate_attribute("Dimensions", "1 4"));
-    di_conn_tetrahedron->append_attribute(doc.allocate_attribute("Format", "HDF"));
-    string di_conn_tetrahedron_h5 = hdf5_file_name + ":/tetrahedron-conn";
-    di_conn_tetrahedron->value(di_conn_tetrahedron_h5.c_str());
-    topology_tetrahedron->append_node(di_conn_tetrahedron);
+        DataSet ds_connect = grp_grid.createDataSet("connect", PredType::NATIVE_INT, dsp_conn);
+        ds_connect.write(field_connect.data(), PredType::NATIVE_UINT64);
 
-    // Tetrahedron geometry node.
-    xml_node<> *geometry_tetrahedron = doc.allocate_node(node_element, "Geometry");
-    geometry_tetrahedron->append_attribute(doc.allocate_attribute("GeometryType", "XYZ"));
-    grid_tetrahedron->append_node(geometry_tetrahedron);
+        // Write the field vectors.
+        Group grp_vectors = grp_field.createGroup("vectors");
+        DataSet ds_vectors = grp_vectors.createDataSet("0", PredType::NATIVE_DOUBLE, dsp_field);
+        ds_vectors.write(field_vectors.data(), PredType::NATIVE_DOUBLE);
 
-    // Tetrahedron geometry data item.
-    xml_node<> *di_geom_tetrahedron = doc.allocate_node(node_element, "DataItem");
-    di_geom_tetrahedron->append_attribute(doc.allocate_attribute("Dimensions", "4 3"));
-    di_geom_tetrahedron->append_attribute(doc.allocate_attribute("Format", "HDF"));
-    string di_geom_tetrahedron_h5 = hdf5_file_name + ":/tetrahedron-vert";
-    di_geom_tetrahedron->value(di_geom_tetrahedron_h5.c_str());
-    geometry_tetrahedron->append_node(di_geom_tetrahedron);
+        // Write the tetrahedron.
+        Group grp_tetrahedron = fout.createGroup("tetrahedron");
+        DataSet ds_tetra_vert = grp_tetrahedron.createDataSet("vertices", PredType::NATIVE_DOUBLE, dsp_tetra_vert_dims);
+        DataSet ds_tetra_conn = grp_tetrahedron.createDataSet("connect", PredType::NATIVE_UINT64, dsp_tetra_conn_dims);
+        ds_tetra_vert.write(tetra_vert.data(), PredType::NATIVE_DOUBLE);
+        ds_tetra_conn.write(tetra_conn.data(), PredType::NATIVE_INT);
 
-    //***************************************************************************************************************//
-    //* Vector field regular grid.                                                                                  *//
-    //***************************************************************************************************************//
+        fout.close();
 
-    // The tetrahedron (Grid) node.
-    xml_node<> *grid_field = doc.allocate_node(node_element, "");
-    grid_field->append_attribute(doc.allocate_attribute("Name", "grid"));
-    grid_field->append_attribute(doc.allocate_attribute("GridType", "Uniform"));
-    domain->append_node(grid_field);
+    }
 
-    string output_file = file_root + ".xdmf";
-    ofstream fout(output_file);
-    fout << doc;
-    fout.close();
+    void write_xdmf2_file() {
 
-}
+        using std::ofstream;
+        using std::string;
+        using std::stringstream;
+        using rapidxml::xml_document;
+        using rapidxml::xml_node;
+        using rapidxml::node_declaration;
+        using rapidxml::node_doctype;
+        using rapidxml::node_element;
+
+        xml_document<> doc;
+
+        // XML declaration.
+        xml_node<> *declaration = doc.allocate_node(node_declaration);
+        declaration->append_attribute(doc.allocate_attribute("version", "1.0"));
+        doc.append_node(declaration);
+
+        // XDMF doctype
+        xml_node<> *doc_type = doc.allocate_node(node_doctype);
+        doc_type->value(R"(Xdmf SYSTEM "Xdmf.dtd" [])");
+        doc.append_node(doc_type);
+
+        // The root node.
+        xml_node<> *xdmf = doc.allocate_node(node_element, "Xdmf");
+        xdmf->append_attribute(doc.allocate_attribute("Version", "3.0"));
+        xdmf->append_attribute(doc.allocate_attribute("xmlns:xi", R"(http://www.w3.org/2003/XInclude)"));
+        doc.append_node(xdmf);
+
+        // The domain node.
+        xml_node<> *domain = doc.allocate_node(node_element, "Domain");
+        xdmf->append_node(domain);
+
+        string field_name = "A";
+        xml_node<> *tetrahedron_node = tetrahedron_grid(doc);
+        xml_node<> *field_grid_node = field_grid(doc);
+        xml_node<> *field_vectors_node = field_vectors(doc, field_name);
+
+        domain->append_node(tetrahedron_node);
+        domain->append_node(field_grid_node);
+        domain->append_node(field_vectors_node);
+
+        ofstream fout(_xdmf_file_name);
+        fout << doc;
+        fout.close();
+
+    }
+
+    rapidxml::xml_node<> *tetrahedron_grid(rapidxml::xml_document<> &doc) {
+
+        using std::string;
+        using rapidxml::xml_node;
+        using rapidxml::node_element;
+
+        // The tetrahedron (Grid) node.
+        xml_node<> *grid_node = doc.allocate_node(node_element, "Grid");
+        grid_node->append_attribute(doc.allocate_attribute("Name", "tetrahedron"));
+        grid_node->append_attribute(doc.allocate_attribute("GridType", "Uniform"));
+
+        // Tetrahedron topology node.
+        xml_node<> *topology_node = doc.allocate_node(node_element, "Topology");
+        topology_node->append_attribute(doc.allocate_attribute("TopologyType", "Tetrahedron"));
+        topology_node->append_attribute(doc.allocate_attribute("NumberOfElements", "1"));
+        topology_node->append_attribute(doc.allocate_attribute("NodesPerElement", "4"));
+        grid_node->append_node(topology_node);
+
+        // Tetrahedron connectivity data item.
+        xml_node<> *connect_data_item_node = doc.allocate_node(node_element, "DataItem");
+        connect_data_item_node->append_attribute(doc.allocate_attribute("Dimensions", "1 4"));
+        connect_data_item_node->append_attribute(doc.allocate_attribute("Format", "HDF"));
+        connect_data_item_node->value(_hdf_tetrahedron_connect_path.c_str());
+        topology_node->append_node(connect_data_item_node);
+
+        // Tetrahedron geometry node.
+        xml_node<> *geometry_node = doc.allocate_node(node_element, "Geometry");
+        geometry_node->append_attribute(doc.allocate_attribute("GeometryType", "XYZ"));
+        grid_node->append_node(geometry_node);
+
+        // Tetrahedron geometry data item.
+        xml_node<> *geometry_data_item_node = doc.allocate_node(node_element, "DataItem");
+        geometry_data_item_node->append_attribute(doc.allocate_attribute("Dimensions", "4 3"));
+        geometry_data_item_node->append_attribute(doc.allocate_attribute("Format", "HDF"));
+        geometry_data_item_node->value(_hdf_tetrahedron_vertices_path.c_str());
+        geometry_node->append_node(geometry_data_item_node);
+
+        return grid_node;
+
+    }
+
+    rapidxml::xml_node<> *
+    field_grid(rapidxml::xml_document<> &doc) {
+
+        using rapidxml::xml_node;
+        using rapidxml::node_element;
+
+        // The field (Grid) node.
+        xml_node<> *grid_node = doc.allocate_node(node_element, "Grid");
+        grid_node->append_attribute(doc.allocate_attribute("Name", "grid"));
+        grid_node->append_attribute(doc.allocate_attribute("GridType", "Uniform"));
+
+        // Field topology node.
+        xml_node<> *topology_node = doc.allocate_node(node_element, "Topology");
+        topology_node->append_attribute(doc.allocate_attribute("TopologyType", "Hexahedron"));
+        topology_node->append_attribute(
+                doc.allocate_attribute("NumberOfElements", _hdf_field_grid_connect_size.c_str()));
+        topology_node->append_attribute(
+                doc.allocate_attribute("NodesPerElement", _nodes_per_element.c_str()));
+        grid_node->append_node(topology_node);
+
+        // Field topology data item.
+        xml_node<> *topology_data_item_node = doc.allocate_node(node_element, "DataItem");
+        topology_data_item_node->append_attribute(
+                doc.allocate_attribute("Dimensions", _hdf_field_grid_connect_dims.c_str()));
+        topology_data_item_node->append_attribute(doc.allocate_attribute("Format", "HDF"));
+        topology_data_item_node->value(_hdf_field_grid_connect_path.c_str());
+        topology_node->append_node(topology_data_item_node);
+
+        // Field grid node.
+        xml_node<> *geometry_node = doc.allocate_node(node_element, "Geometry");
+        geometry_node->append_attribute(doc.allocate_attribute("GeometryType", "XYZ"));
+        grid_node->append_node(geometry_node);
+
+        // Field grid data item.
+        xml_node<> *vertices_data_item_node = doc.allocate_node(node_element, "DataItem");
+        vertices_data_item_node->append_attribute(
+                doc.allocate_attribute("Dimensions", _hdf_field_grid_vertices_dims.c_str()));
+        vertices_data_item_node->append_attribute(doc.allocate_attribute("Format", "HDF"));
+        vertices_data_item_node->value(_hdf_field_grid_vertices_path.c_str());
+        geometry_node->append_node(vertices_data_item_node);
+
+        return grid_node;
+
+    }
+
+    rapidxml::xml_node<> *field_vectors(rapidxml::xml_document<> &doc, const std::string& name) {
+
+        using rapidxml::xml_node;
+        using rapidxml::node_element;
+
+        xml_node<> *temporal_grid_node = doc.allocate_node(node_element, "Grid");
+        temporal_grid_node->append_attribute(doc.allocate_attribute("Name", name.c_str()));
+        temporal_grid_node->append_attribute(doc.allocate_attribute("GridType", "Collection"));
+        temporal_grid_node->append_attribute(doc.allocate_attribute("CollectionType", "Temporal"));
+
+        xml_node<> *grid_node = doc.allocate_node(node_element, "Grid");
+        grid_node->append_attribute(doc.allocate_attribute("Name", name.c_str()));
+        grid_node->append_attribute(doc.allocate_attribute("GridType", "Uniform"));
+        temporal_grid_node->append_node(grid_node);
+
+        xml_node<> *grid_pointer_node = doc.allocate_node(node_element, "xi:include");
+        grid_pointer_node->append_attribute(doc.allocate_attribute("xpointer", "xpointer(/Xdmf/Domain/Grid[@Name='grid'][1]/*[self::Topology or self::Geometry])"));
+        grid_node->append_node(grid_pointer_node);
+
+        xml_node<> *time_node = doc.allocate_node(node_element, "Time");
+        time_node->append_attribute(doc.allocate_attribute("Value", "0"));
+        grid_node->append_node(time_node);
+
+        xml_node<> *attribute_node = doc.allocate_node(node_element, "Attribute");
+        attribute_node->append_attribute(doc.allocate_attribute("Name", name.c_str()));
+        attribute_node->append_attribute(doc.allocate_attribute("AttributeType", "Vector"));
+        attribute_node->append_attribute(doc.allocate_attribute("Center", "Node"));
+        grid_node->append_node(attribute_node);
+
+        xml_node<> *data_item_node = doc.allocate_node(node_element, "DataItem");
+        data_item_node->append_attribute(doc.allocate_attribute("Dimensions", _hdf_field_vectors_dims.c_str()));
+        data_item_node->append_attribute(doc.allocate_attribute("Format", "HDF"));
+        data_item_node->value(_hdf_field_vectors_path.c_str());
+        attribute_node->append_node(data_item_node);
+
+        return temporal_grid_node;
+
+    }
+
+};
+
 
 #endif //LIBFABBRI_FILE_IO_HPP
