@@ -30,6 +30,11 @@ if (${BUILD_TESTS})
 
     message(STATUS "Building tests.")
 
+    if (TEST_DEBUG_MESSAGES)
+        message(STATUS "Building tests with test messages")
+        add_compile_definitions(TEST_DEBUG_MESSAGES=1)
+    endif()
+
     set(LIBFABBRI_TEST_SRC_DIR     "${CMAKE_SOURCE_DIR}/test-src")
     set(LIBFABBRI_TEST_INCLUDE_DIR "${CMAKE_SOURCE_DIR/test-include}")
     set(CATCH_INCLUDE_DIR          "${LIBFABBRI_THIRD_PARTY_DIR}/catch2-v2.13.9/include")

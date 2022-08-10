@@ -5,7 +5,6 @@ target_include_directories(test_vector3d
                 ${MPFR_INCLUDES}
                 ${CATCH_INCLUDE_DIR}
                 ${MPREAL_INCLUDE_DIR})
-
 target_link_libraries(test_vector3d
         ${MPFR_LIBRARIES})
 
