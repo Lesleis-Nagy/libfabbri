@@ -37,7 +37,7 @@ TEST_CASE("Test vector addition for 'double' type.", "Vector3D") {
     std::cout << "| expected z      | " << expected.z()                << string(55, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string(55, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE(fabs(actual.x() - expected.x()) < eps );
     REQUIRE(fabs(actual.y() - expected.y()) < eps );
@@ -76,7 +76,7 @@ TEST_CASE("Test vector addition for 'multiprecision' type.", "Vector3D") {
     std::cout << "| expected z      | " << expected.z()                << string(55, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string(55, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( mpfr::abs(actual.x() - expected.x()) < eps );
     REQUIRE( mpfr::abs(actual.y() - expected.y()) < eps );
@@ -111,7 +111,7 @@ TEST_CASE("Test vector subtraction for 'double' type.", "Vector3D") {
     std::cout << "| expected z      | " << expected.z()                << string(55, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string(55, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(actual.x() - expected.x()) < eps );
     REQUIRE( fabs(actual.y() - expected.y()) < eps );
@@ -150,7 +150,7 @@ TEST_CASE("Test vector subtraction for 'multiprecision' type.", "Vector3D") {
     std::cout << "| expected z      | " << expected.z()                << string(55, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string(55, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( mpfr::abs(actual.x() - expected.x()) < eps );
     REQUIRE( mpfr::abs(actual.y() - expected.y()) < eps );
@@ -185,7 +185,7 @@ TEST_CASE("Test vector-scalar multiplication for 'double' type.", "Vector3D") {
     std::cout << "| expected z      | " << expected.z()                << string(55, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string(55, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(actual.x() - expected.x()) < eps );
     REQUIRE( fabs(actual.y() - expected.y()) < eps );
@@ -224,7 +224,7 @@ TEST_CASE("Test vector-scalar multiplication for 'multiprecision' type.", "Vecto
     std::cout << "| expected z      | " << expected.z()                << string(55, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string(55, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( mpfr::abs(actual.x() - expected.x()) < eps );
     REQUIRE( mpfr::abs(actual.y() - expected.y()) < eps );
@@ -259,7 +259,7 @@ TEST_CASE("Test scalar-vector multiplication for 'double' type.", "Vector3D") {
     std::cout << "| expected z      | " << expected.z()                << string(55, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string(55, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(actual.x() - expected.x()) < eps );
     REQUIRE( fabs(actual.y() - expected.y()) < eps );
@@ -298,7 +298,7 @@ TEST_CASE("Test scalar-vector multiplication for 'multiprecision' type.", "Vecto
     std::cout << "| expected z      | " << expected.z()                << string(55, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string(55, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( mpfr::abs(actual.x() - expected.x()) < eps );
     REQUIRE( mpfr::abs(actual.y() - expected.y()) < eps );
@@ -333,7 +333,7 @@ TEST_CASE("Test vector-scalar division for 'double' type.", "Vector3D") {
     std::cout << "| expected z      | " << expected.z()                << string(53, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string(53, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(actual.x() - expected.x()) < eps );
     REQUIRE( fabs(actual.y() - expected.y()) < eps );
@@ -372,7 +372,7 @@ TEST_CASE("Test vector-scalar division for 'multiprecision' type.", "Vector3D") 
     std::cout << "| expected z      | " << expected.z()                << string(53, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string(53, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( mpfr::abs(actual.x() - expected.x()) < eps );
     REQUIRE( mpfr::abs(actual.y() - expected.y()) < eps );
@@ -403,7 +403,7 @@ TEST_CASE("Test vector dot product for 'double' type.", "Vector3D") {
     std::cout << "| expected        | " << expected                    << string(54, ' ') << "|" << std::endl;
     std::cout << "| actual          | " << actual                      << string(54, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(actual - expected) < eps );
 
@@ -436,7 +436,7 @@ TEST_CASE("Test vector dot product for 'multiprecision' type.", "Vector3D") {
     std::cout << "| expected        | " << expected                    << string(54, ' ') << "|" << std::endl;
     std::cout << "| actual          | " << actual                      << string(54, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( mpfr::abs(actual - expected) < eps );
 
@@ -469,7 +469,7 @@ TEST_CASE("Test vector cross product for 'double' type.", "Vector3D") {
     std::cout << "| expected z      | " << expected.z()                << string(54, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string(54, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( mpfr::abs(actual.x() - expected.x()) < eps );
     REQUIRE( mpfr::abs(actual.y() - expected.y()) < eps );
@@ -508,7 +508,7 @@ TEST_CASE("Test vector cross product for 'multiprecision' type.", "Vector3D") {
     std::cout << "| expected z      | " << expected.z()                << string(54, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string(54, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( mpfr::abs(actual.x() - expected.x()) < eps );
     REQUIRE( mpfr::abs(actual.y() - expected.y()) < eps );
@@ -546,7 +546,7 @@ TEST_CASE("Test regularized norm for 'double' type.", "Vector3D") {
     std::cout << "| reg-eps         | " << Vec3D::eps()                << string( 1, ' ') << "|" << std::endl;
     std::cout << "| reg-eps squared | " << Vec3D::eps_squared()        << string( 1, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(norm(v) - expected) < eps );
 
@@ -584,7 +584,7 @@ TEST_CASE("Test regularized norm for 'multiprecision' type.", "Vector3D") {
     std::cout << "| reg-eps         | " << Vec3D::eps()                << string( 1, ' ') << "|" << std::endl;
     std::cout << "| reg-eps squared | " << Vec3D::eps_squared()        << string( 1, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE (mpfr::abs(actual - expected) < eps);
 
@@ -612,7 +612,7 @@ TEST_CASE("Test norm-squared for 'double' type.", "Vector3D") {
     std::cout << "| expected        | " << expected                    << string(54, ' ') << "|" << std::endl;
     std::cout << "| actual          | " << actual                      << string(54, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(actual - expected) < eps );
 
@@ -644,7 +644,7 @@ TEST_CASE("Test norm-squared for 'multiprecision' type.", "Vector3D") {
     std::cout << "| expected        | " << expected                    << string(54, ' ') << "|" << std::endl;
     std::cout << "| actual          | " << actual                      << string(54, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE (mpfr::abs(actual - expected) < eps);
 
@@ -678,7 +678,7 @@ TEST_CASE("Test normalised() function for 'double' type.", "Vector3D") {
     std::cout << "| reg-eps         | " << Vec3D::eps()                << string( 1, ' ') << "|" << std::endl;
     std::cout << "| reg-eps squared | " << Vec3D::eps_squared()        << string( 1, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(actual.x() - expected.x()) < eps );
     REQUIRE( fabs(actual.y() - expected.y()) < eps );
@@ -718,7 +718,7 @@ TEST_CASE("Test normalised() function for 'multiprecision' type.", "Vector3D") {
     std::cout << "| reg-eps         | " << Vec3D::eps()                << string( 1, ' ') << "|" << std::endl;
     std::cout << "| reg-eps squared | " << Vec3D::eps_squared()        << string( 1, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( abs(actual.x() - expected.x()) < eps );
     REQUIRE( abs(actual.y() - expected.y()) < eps );
@@ -753,7 +753,7 @@ TEST_CASE("Test edge_length() function for 'double' type.", "Vector3D geometry")
     std::cout << "| reg-eps         | " << Vec3D::eps()                << string( 1, ' ') << "|" << std::endl;
     std::cout << "| reg-eps squared | " << Vec3D::eps_squared()        << string( 1, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE(fabs(actual_d1 - expected) < eps );
     REQUIRE(fabs(actual_d2 - expected) < eps );
@@ -791,7 +791,7 @@ TEST_CASE("Test edge_length() function for 'multiprecision' type.", "Vector3D ge
     std::cout << "| reg-eps         | " << Vec3D::eps()                << string( 1, ' ') << "|" << std::endl;
     std::cout << "| reg-eps squared | " << Vec3D::eps_squared()        << string( 1, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE(abs(actual_d1 - expected) < eps );
     REQUIRE(abs(actual_d2 - expected) < eps );
@@ -826,7 +826,7 @@ TEST_CASE("Test edge_center() function for 'double' type.", "Vector3D geometry")
     std::cout << "| expected z      | " << expected.z()                << string(53, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string(53, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(expected.x() - actual.x()) < eps );
     REQUIRE( fabs(expected.y() - actual.y()) < eps );
@@ -866,7 +866,7 @@ TEST_CASE("Test edge_center() function for 'multiprecision' type.", "Vector3D ge
     std::cout << "| expected z      | " << expected.z()                << string(53, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string(53, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( abs(expected.x() - actual.x()) < eps );
     REQUIRE( abs(expected.y() - actual.y()) < eps );
@@ -902,7 +902,7 @@ TEST_CASE("Test edge_orientation() function for 'double' type.", "Vector3D geome
     std::cout << "| expected z      | " << expected.z()                << string( 4, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string( 4, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(expected.x() - actual.x()) < eps );
     REQUIRE( fabs(expected.y() - actual.y()) < eps );
@@ -942,7 +942,7 @@ TEST_CASE("Test edge_orientation() function for 'multiprecision' type.", "Vector
     std::cout << "| expected z      | " << expected.z()                << string( 4, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string( 4, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( abs(expected.x() - actual.x()) < eps );
     REQUIRE( abs(expected.y() - actual.y()) < eps );
@@ -979,7 +979,7 @@ TEST_CASE("Test triangle_normal() function for 'double' type.", "Vector3D geomet
     std::cout << "| expected z      | " << expected.z()                << string( 4, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string( 4, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(expected.x() - actual.x()) < eps );
     REQUIRE( fabs(expected.y() - actual.y()) < eps );
@@ -1019,7 +1019,7 @@ TEST_CASE("Test triangle_normal() function for 'multiprecision' type.", "Vector3
     std::cout << "| expected z      | " << expected.z()                << string( 4, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string( 4, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( abs(expected.x() - actual.x()) < eps );
     REQUIRE( abs(expected.y() - actual.y()) < eps );
@@ -1056,7 +1056,7 @@ TEST_CASE("Test triangle_center() function for 'double' type.", "Vector3D geomet
     std::cout << "| expected z      | " << expected.z()                << string( 4, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string( 4, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(expected.x() - actual.x()) < eps );
     REQUIRE( fabs(expected.y() - actual.y()) < eps );
@@ -1096,7 +1096,7 @@ TEST_CASE("Test triangle_center() function for 'multiprecision' type.", "Vector3
     std::cout << "| expected z      | " << expected.z()                << string( 4, ' ') << "|" << std::endl;
     std::cout << "| actual z        | " << actual.z()                  << string( 4, ' ') << "|" << std::endl;
     std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( abs(expected.x() - actual.x()) < eps );
     REQUIRE( abs(expected.y() - actual.y()) < eps );

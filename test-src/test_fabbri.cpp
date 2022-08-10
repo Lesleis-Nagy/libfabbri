@@ -26,9 +26,11 @@ TEST_CASE("double precision omega function", "fabbri") {
 
     double eps = 1E-14;
 
+#ifdef TEST_DEBUG_MESSAGES
     std::cout.precision(50);
     std::cout << "Expected (double precision) solid angle at test point: " << expected << std::endl;
-    std::cout << "Actual (double precision) solid angle at test point:    " << omega(r) << std::endl;
+    std::cout << "Actual   (double precision) solid angle at test point: " << omega(r) << std::endl;
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(omega(r) - expected) < eps );
 
@@ -52,9 +54,11 @@ TEST_CASE("multiprecision omega function", "fabbri") {
 
     mpreal eps = 1E-40;
 
+#ifdef TEST_DEBUG_MESSAGES
     std::cout.precision(digits);
-    std::cout << "Expected (multiprecision) solid angle at test point:   " << expected << std::endl;
-    std::cout << "Actual (multiprecision) solid angle at test point:      " << omega(r) << std::endl;
+    std::cout << "Expected (multiprecision) solid angle at test point: " << expected << std::endl;
+    std::cout << "Actual   (multiprecision) solid angle at test point: " << omega(r) << std::endl;
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( abs(omega(r) - expected) < eps );
 
@@ -76,9 +80,11 @@ TEST_CASE("double precision we function", "fabbri") {
 
     double expected = log(3.0);
 
+#ifdef TEST_DEBUG_MESSAGES
     std::cout.precision(50);
-    std::cout << "Expected (double precision) we at test point:          " << expected << std::endl;
-    std::cout << "Actual (double precision) we at test point:             " << we(r)    << std::endl;
+    std::cout << "Expected (double precision) we at test point: " << expected << std::endl;
+    std::cout << "Actual   (double precision) we at test point: " << we(r)    << std::endl;
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(we(r) - expected) < eps );
 
@@ -102,9 +108,11 @@ TEST_CASE("multiprecision we function", "fabbri") {
 
     mpreal expected = mpfr::log(3.0);
 
+#ifdef TEST_DEBUG_MESSAGES
     std::cout.precision(digits);
-    std::cout << "Expected (multiprecision) we at test point:            " << expected << std::endl;
-    std::cout << "Actual (multiprecision) we at test point:               " << we(r)    << std::endl;
+    std::cout << "Expected (multiprecision) we at test point: " << expected << std::endl;
+    std::cout << "Actual   (multiprecision) we at test point: " << we(r)    << std::endl;
+#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( abs(we(r) - expected) < eps );
 
