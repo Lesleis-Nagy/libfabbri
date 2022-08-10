@@ -21,6 +21,7 @@
 #include "regular_grid.hpp"
 
 using RealType = double;
+using IntegralType = unsigned long;
 
 class RealTypeValidator {
 
@@ -284,25 +285,29 @@ void perform_calculation(Table<RealType, 3, 3> &sample_grid_table,
     RealType dy = (end_y - start_y) / (n_y - 1.0);
     RealType dz = (end_z - start_z) / (n_z - 1.0);
 
-    auto model_fun = new_uni_A_fun(m, r1, r2, r3, r4);
+    auto A_fun = new_uni_A_fun(m, r1, r2, r3, r4);
+    auto B_fun = new_uni_B_fun(m, r1, r2, r3, r4);
 
     std::vector<std::array<RealType, 3>> field_vertices;
-    std::vector<std::array<unsigned long, 8>> field_connect;
-    std::vector<std::array<RealType, 3>> field_vectors;
-    RectangularRGridIndexing<unsigned long> grid_connect((unsigned long)n_x, (unsigned long)n_y, (unsigned long)n_z);
+    std::vector<std::array<IntegralType, 8>> field_connect;
+    std::vector<std::array<RealType, 3>> A_field_vectors;
+    std::vector<std::array<RealType, 3>> B_field_vectors;
+    RectangularRGridIndexing<IntegralType> grid_connect((IntegralType)n_x, (IntegralType)n_y, (IntegralType)n_z);
     for (int i = 0; i < (int)n_x; ++i) {
 
         for (int j = 0; j < (int)n_y; ++j) {
 
             for (int k = 0; k < (int)n_z; ++k) {
 
-                Vector3D<RealType> r(start_x + (double)i * dx,
-                                     start_y + (double)j * dy,
-                                     start_z + (double)k * dz);
-                auto A = model_fun(r);
+                Vector3D<RealType> r(start_x + (RealType)i * dx,
+                                     start_y + (RealType)j * dy,
+                                     start_z + (RealType)k * dz);
+                auto A = A_fun(r);
+                auto B = B_fun(r);
 
                 field_vertices.push_back({r.x(), r.y(), r.z()});
-                field_vectors.push_back({A.x(), A.y(), A.z()});
+                A_field_vectors.push_back({A.x(), A.y(), A.z()});
+                B_field_vectors.push_back({B.x(), B.y(), B.z()});
 
             }
 
@@ -310,12 +315,12 @@ void perform_calculation(Table<RealType, 3, 3> &sample_grid_table,
 
     }
 
-    for (unsigned long i = 0; i < grid_connect.no_of_elements(); ++i) {
+    for (IntegralType i = 0; i < grid_connect.no_of_elements(); ++i) {
         field_connect.push_back(grid_connect(i));
     }
 
-    H5Writer<double, unsigned long> file_writer;
-    file_writer.write(output_file, field_vertices, field_connect, field_vectors, tetrahedron);
+    H5Writer<RealType, IntegralType> file_writer;
+    file_writer.write(output_file, field_vertices, field_connect, A_field_vectors, B_field_vectors, tetrahedron);
 
     display_message("Data written.");
 
@@ -374,6 +379,10 @@ void set_default_grid_table_values(Table<RealType, 3, 3> &sample_grid_table) {
 int main(int argc, char *argv[]) {
 
     using namespace std;
+
+    using mpfr::mpreal;
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
 
     initscr();
     cbreak();

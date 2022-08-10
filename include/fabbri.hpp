@@ -36,8 +36,8 @@ new_omega_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r
         T d2 = norm(v2);
         T d3 = norm(v3);
 
-        return atan2(dot(v1, cross(v2, v3)), d1 * d2 * d3 + d3 * dot(v1, v2) + d2 * dot(v1, v3) + d1 * dot(v2, v3)) *
-               2.0;
+        return 2.0 * atan2(dot(v1, cross(v2, v3)),
+                           d1 * d2 * d3 + d3 * dot(v1, v2) + d2 * dot(v1, v3) + d1 * dot(v2, v3));
 
     };
 
@@ -116,7 +116,7 @@ new_Wf_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) 
         return dot(cross(nf, re[0] - r), ue[0]) * we[0](r)
                + dot(cross(nf, re[1] - r), ue[1]) * we[1](r)
                + dot(cross(nf, re[2] - r), ue[2]) * we[2](r)
-               - 3 * dot(rf - r, nf) * omega(r);
+               - dot(rf - r, nf) * omega(r);
 
     };
 
@@ -160,9 +160,10 @@ new_DWf_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3)
 
     return [nf, omega, ue, we](const Vector3D<T> &r) {
 
-        return cross(nf, ue[0]) * we[0](r) + nf * omega(r)
-               + cross(nf, ue[1]) * we[1](r) + nf * omega(r)
-               + cross(nf, ue[2]) * we[2](r) + nf * omega(r);
+        return cross(nf, ue[0]) * we[0](r)
+               + cross(nf, ue[1]) * we[1](r)
+               + cross(nf, ue[2]) * we[2](r)
+               + nf * omega(r);
 
     };
 
@@ -203,13 +204,45 @@ new_uni_A_fun(const Vector3D<T> &M,
     Wf[3] = new_Wf_fun(r2, r4, r3);
 
     return [M, nf, Wf](const Vector3D<T> &r) {
-        return cross(M, nf[0]*Wf[0](r))
-               + cross(M, nf[1]*Wf[1](r))
-               + cross(M, nf[2]*Wf[2](r))
-               + cross(M, nf[3]*Wf[3](r));
+        return cross(M, nf[0]) * Wf[0](r)
+               + cross(M, nf[1]) * Wf[1](r)
+               + cross(M, nf[2]) * Wf[2](r)
+               + cross(M, nf[3]) * Wf[3](r);
     };
 
 }
+
+template<typename T>
+std::function<Vector3D<T>(const Vector3D<T> &)>
+new_uni_B_fun(const Vector3D<T> &M,
+              const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3, const Vector3D<T> &r4) {
+
+    using std::array;
+    using std::function;
+
+    // Face normals.
+    array<Vector3D<T>, 4> nf;
+    nf[0] = triangle_normal(r1, r2, r3);
+    nf[1] = triangle_normal(r1, r3, r4);
+    nf[2] = triangle_normal(r1, r4, r2);
+    nf[3] = triangle_normal(r2, r4, r3);
+
+    // DWf functions.
+    array<function<Vector3D<T>(const Vector3D<T> &)>, 4> DWf;
+    DWf[0] = new_DWf_fun(r1, r2, r3);
+    DWf[1] = new_DWf_fun(r1, r3, r4);
+    DWf[2] = new_DWf_fun(r1, r4, r2);
+    DWf[3] = new_DWf_fun(r2, r4, r3);
+
+    return [M, nf, DWf](const Vector3D<T> &r) {
+        return cross(cross(M, nf[0]), DWf[0](r))
+               + cross(cross(M, nf[1]), DWf[1](r))
+               + cross(cross(M, nf[2]), DWf[2](r))
+               + cross(cross(M, nf[3]), DWf[3](r));
+    };
+
+}
+
 
 /*
  * References

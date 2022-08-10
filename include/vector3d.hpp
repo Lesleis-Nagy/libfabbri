@@ -230,7 +230,20 @@ Vector3D<T> cross(const Vector3D<T> &u, const Vector3D<T> &v)  {
 template <typename T>
 T norm(const Vector3D<T> &v) {
 
-    return sqrt(v.x()*v.x() + v.y()*v.y() + v.z()*v.z() + Vector3D<T>::eps_squared());
+    return sqrt(dot(v, v) + Vector3D<T>::eps_squared());
+
+}
+
+/**
+ * The norm squared of a vector.
+ * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @param v the vector for which we seek the norm-squared.
+ * @return the norm-squared of the input vector.
+ */
+template <typename T>
+T norm_squared(const Vector3D<T> &v) {
+
+    return dot(v, v);
 
 }
 
