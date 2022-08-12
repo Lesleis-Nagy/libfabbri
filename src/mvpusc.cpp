@@ -285,8 +285,8 @@ void perform_calculation(Table<RealType, 3, 3> &sample_grid_table,
     RealType dy = (end_y - start_y) / (n_y - 1.0);
     RealType dz = (end_z - start_z) / (n_z - 1.0);
 
-    auto A_fun = new_uni_A_fun(m, r1, r2, r3, r4);
-    auto B_fun = new_uni_B_fun(m, r1, r2, r3, r4);
+    auto A_fun = new_uni_tet_A_fun(m, r1, r2, r3, r4);
+    auto B_fun = new_uni_tet_B_fun(m, r1, r2, r3, r4);
 
     std::vector<std::array<RealType, 3>> field_vertices;
     std::vector<std::array<IntegralType, 8>> field_connect;

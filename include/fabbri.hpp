@@ -24,7 +24,7 @@
  */
 template<typename T>
 std::function<T(const Vector3D<T> &)>
-new_omega_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
+new_omega_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
 
     return [r1, r2, r3](const Vector3D<T> &r) {
 
@@ -44,7 +44,7 @@ new_omega_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r
 }
 
 /**
- * Return a function that will calculate Fabbri's edge potential function \f$w_\mathrm{e}\f$ eq. (18) for a line segment
+ * Return a function that will calculate the edge potential function \f$w_\mathrm{e}\f$ eq. (18) for a line segment
  * with endpoints \f$r1\f$ & \f$r2\f$ [1].
  * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
  * @param r1 the first point of a line segment.
@@ -69,9 +69,9 @@ new_we_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
 }
 
 /**
- * Return a function that will calculate Fabbri's face potential function \f$W_\mathrm{f}\f$ eq. (17) for a triangular
- * face [1] with endpoints \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and winding \f$r_1 \rightarrow r2\f$,
- * \f$r_2 \rightarrow r_3\f$ & \f$r3 \rightarrow r1\f$.
+ * Return a function that will calculate the face-potential function \f$W_\mathrm{f}\f$ eq. (17) for a triangular
+ * polyhedron [1] with endpoints \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and counter-clockwise winding
+ * \f$r_1 \rightarrow r2\f$, \f$r_2 \rightarrow r_3\f$ & \f$r3 \rightarrow r1\f$.
  * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
  * @param r1 the first point of a triangle segment.
  * @param r2 the second point of a triangle segment.
@@ -80,7 +80,7 @@ new_we_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
  */
 template<typename T>
 std::function<T(const Vector3D<T> &)>
-new_Wf_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
+new_Wf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
 
     using std::array;
     using std::function;
@@ -92,7 +92,7 @@ new_Wf_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) 
     Vector3D<T> rf = triangle_center(r1, r2, r3);
 
     // Solid angle subtended by this triangle.
-    function<T(const Vector3D<T> &)> omega = new_omega_fun(r1, r2, r3);
+    function<T(const Vector3D<T> &)> omega = new_omega_tri_fun(r1, r2, r3);
 
     // we functions.
     array<function<T(const Vector3D<T> &)>, 3> we;
@@ -125,7 +125,7 @@ new_Wf_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) 
 
 /**
  * Return a function that will calculate the gradient of Fabbri's face potential function \f$\Delta W_\mathrm{f}\f$ eq.
- * (25) for a triangular face [1] with endpoints \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and winding \f$r_1 \rightarrow r2\f$,
+ * (25) for a triangular polyhedron [1] with endpoints \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and winding \f$r_1 \rightarrow r2\f$,
  * \f$r_2 \rightarrow r_3\f$ & \f$r3 \rightarrow r1\f$.
  * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
  * @param r1 the first point of a triangle segment.
@@ -135,7 +135,7 @@ new_Wf_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) 
  */
 template<typename T>
 std::function<Vector3D<T>(const Vector3D<T> &)>
-new_DWf_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
+new_DWf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
 
     using std::array;
     using std::function;
@@ -144,7 +144,7 @@ new_DWf_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3)
     Vector3D<T> nf = triangle_normal(r1, r2, r3);
 
     // Solid angle subtended by this triangle.
-    function<T(const Vector3D<T> &)> omega = new_omega_fun(r1, r2, r3);
+    function<T(const Vector3D<T> &)> omega = new_omega_tri_fun(r1, r2, r3);
 
     // we functions.
     array<function<T(const Vector3D<T> &)>, 3> we;
@@ -170,21 +170,25 @@ new_DWf_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3)
 }
 
 /**
- * Return a function that will calculate the magnetic vector potential \f$\mathbf{A}\f$ for a uniformly magnetised
- * tetrahedron using eq. (11) [1].
+ * Return a function that will calculate the magnetic scalar potential \f$\mathbf{A}\f$ for a uniformly magnetised
+ * tetrahedron using eq. (11) [1]. The input tetrahedron assumes the following winding for each triangular face:
+ * - \f$r_1 \rightarrow r_2 \rightarrow r_3\f$,
+ * - \f$r_1 \rightarrow r_3 \rightarrow r_4\f$,
+ * - \f$r_1 \rightarrow r_4 \rightarrow r_2\f$,
+ * - \f$r_2 \rightarrow r_4 \rightarrow r_3\f$.
  * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
  * @param M the (uniform) magnetisation of the tetrahedron.
  * @param r1 the first vertex of the tetrahedron.
  * @param r2 the second vertex of the tetrahedron.
  * @param r3 the third vertex of the tetrahedron.
  * @param r4 the fourth vertex of the tetrahedron.
- * @return a function that will calculate the vector potential at any point in space due to the uniformly magnetised
+ * @return a function that will calculate the scalar potential at any point in space due to the uniformly magnetised
  *         tetrahedron defined by the inputs.
  */
 template<typename T>
-std::function<Vector3D<T>(const Vector3D<T> &)>
-new_uni_A_fun(const Vector3D<T> &M,
-              const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3, const Vector3D<T> &r4) {
+std::function<T(const Vector3D<T> &)> new_uni_tet_phi_fun(const Vector3D<T> &M,
+                                                          const Vector3D<T> &r1, const Vector3D<T> &r2,
+                                                          const Vector3D<T> &r3, const Vector3D<T> &r4) {
 
     using std::array;
     using std::function;
@@ -198,10 +202,57 @@ new_uni_A_fun(const Vector3D<T> &M,
 
     // Wf functions.
     array<function<T(const Vector3D<T> &)>, 4> Wf;
-    Wf[0] = new_Wf_fun(r1, r2, r3);
-    Wf[1] = new_Wf_fun(r1, r3, r4);
-    Wf[2] = new_Wf_fun(r1, r4, r2);
-    Wf[3] = new_Wf_fun(r2, r4, r3);
+    Wf[0] = new_Wf_tri_fun(r1, r2, r3);
+    Wf[1] = new_Wf_tri_fun(r1, r3, r4);
+    Wf[2] = new_Wf_tri_fun(r1, r4, r2);
+    Wf[3] = new_Wf_tri_fun(r2, r4, r3);
+
+    return [M, nf, Wf](const Vector3D<T> &r) {
+        return dot(M, nf[0]) * Wf[0](r)
+               + dot(M, nf[1]) * Wf[1](r)
+               + dot(M, nf[2]) * Wf[2](r)
+               + dot(M, nf[3]) * Wf[3](r);
+    };
+
+}
+
+/**
+ * Return a function that will calculate the magnetic vector potential \f$\mathbf{A}\f$ for a uniformly magnetised
+ * tetrahedron using eq. (11) [1]. The input tetrahedron assumes the following winding for each triangular face:
+ * - \f$r_1 \rightarrow r_2 \rightarrow r_3\f$,
+ * - \f$r_1 \rightarrow r_3 \rightarrow r_4\f$,
+ * - \f$r_1 \rightarrow r_4 \rightarrow r_2\f$,
+ * - \f$r_2 \rightarrow r_4 \rightarrow r_3\f$.
+ * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @param M the (uniform) magnetisation of the tetrahedron.
+ * @param r1 the first vertex of the tetrahedron.
+ * @param r2 the second vertex of the tetrahedron.
+ * @param r3 the third vertex of the tetrahedron.
+ * @param r4 the fourth vertex of the tetrahedron.
+ * @return a function that will calculate the vector potential at any point in space due to the uniformly magnetised
+ *         tetrahedron defined by the inputs.
+ */
+template<typename T>
+std::function<Vector3D<T>(const Vector3D<T> &)>
+new_uni_tet_A_fun(const Vector3D<T> &M,
+                  const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3, const Vector3D<T> &r4) {
+
+    using std::array;
+    using std::function;
+
+    // Face normals.
+    array<Vector3D<T>, 4> nf;
+    nf[0] = triangle_normal(r1, r2, r3);
+    nf[1] = triangle_normal(r1, r3, r4);
+    nf[2] = triangle_normal(r1, r4, r2);
+    nf[3] = triangle_normal(r2, r4, r3);
+
+    // Wf functions.
+    array<function<T(const Vector3D<T> &)>, 4> Wf;
+    Wf[0] = new_Wf_tri_fun(r1, r2, r3);
+    Wf[1] = new_Wf_tri_fun(r1, r3, r4);
+    Wf[2] = new_Wf_tri_fun(r1, r4, r2);
+    Wf[3] = new_Wf_tri_fun(r2, r4, r3);
 
     return [M, nf, Wf](const Vector3D<T> &r) {
         return cross(M, nf[0]) * Wf[0](r)
@@ -212,10 +263,26 @@ new_uni_A_fun(const Vector3D<T> &M,
 
 }
 
+/**
+ * Return a function that will calculate the magnetic induction \f$\mathbf{B}\f$ for a uniformly magnetised
+ * tetrahedron using eq. (12) [1]. The input tetrahedron assumes the following winding for each triangular face:
+ * - \f$r_1 \rightarrow r_2 \rightarrow r_3\f$,
+ * - \f$r_1 \rightarrow r_3 \rightarrow r_4\f$,
+ * - \f$r_1 \rightarrow r_4 \rightarrow r_2\f$,
+ * - \f$r_2 \rightarrow r_4 \rightarrow r_3\f$.
+ * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @param M the (uniform) magnetisation of the tetrahedron.
+ * @param r1 the first vertex of the tetrahedron.
+ * @param r2 the second vertex of the tetrahedron.
+ * @param r3 the third vertex of the tetrahedron.
+ * @param r4 the fourth vertex of the tetrahedron.
+ * @return a function that will calculate the magnetic induction at any point in space due to the uniformly magnetised
+ *         tetrahedron defined by the inputs.
+ */
 template<typename T>
 std::function<Vector3D<T>(const Vector3D<T> &)>
-new_uni_B_fun(const Vector3D<T> &M,
-              const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3, const Vector3D<T> &r4) {
+new_uni_tet_B_fun(const Vector3D<T> &M,
+                  const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3, const Vector3D<T> &r4) {
 
     using std::array;
     using std::function;
@@ -229,10 +296,10 @@ new_uni_B_fun(const Vector3D<T> &M,
 
     // DWf functions.
     array<function<Vector3D<T>(const Vector3D<T> &)>, 4> DWf;
-    DWf[0] = new_DWf_fun(r1, r2, r3);
-    DWf[1] = new_DWf_fun(r1, r3, r4);
-    DWf[2] = new_DWf_fun(r1, r4, r2);
-    DWf[3] = new_DWf_fun(r2, r4, r3);
+    DWf[0] = new_DWf_tri_fun(r1, r2, r3);
+    DWf[1] = new_DWf_tri_fun(r1, r3, r4);
+    DWf[2] = new_DWf_tri_fun(r1, r4, r2);
+    DWf[3] = new_DWf_tri_fun(r2, r4, r3);
 
     return [M, nf, DWf](const Vector3D<T> &r) {
         return cross(cross(M, nf[0]), DWf[0](r))
