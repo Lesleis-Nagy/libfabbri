@@ -122,6 +122,64 @@ TEST_CASE("multiprecision we function", "fabbri") {
 
 }
 
+TEST_CASE("multiprecision lambda_e function", "fabbri") {
+
+    using mpfr::mpreal;
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    Vector3D<mpreal> r1( 1.0,  0.0, -1.0 / mpfr::sqrt(2.0));
+    Vector3D<mpreal> r2(-1.0,  0.0, -1.0 / mpfr::sqrt(2.0));
+
+    Vector3D<mpreal>  r( 0.0, -1.0,  1.0 / mpfr::sqrt(2.0));
+
+    auto lambda_e = new_lambda_e_fun(r1, r2);
+
+    mpreal eps = 1E-40;
+
+    mpreal expected = (mpreal(3)/mpreal(2)) * mpfr::log(3.0);
+
+#ifdef TEST_DEBUG_MESSAGES
+    std::cout.precision(digits);
+    std::cout << "multiprecision lambda_e function" << std::endl;
+    std::cout << "Expected (multiprecision) lambda_e at test point: " << expected << std::endl;
+    std::cout << "Actual   (multiprecision) lambda_e at test point: " << lambda_e(r) << std::endl;
+#endif // TEST_DEBUG_MESSAGES
+
+    REQUIRE( abs(lambda_e(r) - expected) < eps );
+
+}
+
+TEST_CASE("multiprecision D_lambda_e function", "fabbri") {
+
+    using mpfr::mpreal;
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    Vector3D<mpreal> r1( 1.0,  0.0, -1.0 / mpfr::sqrt(2.0));
+    Vector3D<mpreal> r2(-1.0,  0.0, -1.0 / mpfr::sqrt(2.0));
+
+    Vector3D<mpreal>  r( 0.0, -1.0,  1.0 / mpfr::sqrt(2.0));
+
+    auto D_lambda_e = new_D_lambda_e_fun(r1, r2);
+
+    mpreal eps = 1E-40;
+
+    Vector3D<mpreal> expected{0, -mpfr::log(3), mpfr::sqrt(2) * mpfr::log(3.0)};
+
+#ifdef TEST_DEBUG_MESSAGES
+    std::cout.precision(digits);
+    std::cout << "multiprecision D_lambda_e function" << std::endl;
+    std::cout << "Expected (multiprecision) D_lambda_e at test point: " << expected << std::endl;
+    std::cout << "Actual   (multiprecision) D_lambda_e at test point: " << D_lambda_e(r) << std::endl;
+#endif // TEST_DEBUG_MESSAGES
+
+    REQUIRE( abs(D_lambda_e(r).x() - expected.x()) < eps );
+    REQUIRE( abs(D_lambda_e(r).y() - expected.y()) < eps );
+    REQUIRE( abs(D_lambda_e(r).z() - expected.z()) < eps );
+
+}
+
 TEST_CASE("multiprecision Wf (triangular) function", "fabbri") {
 
     using mpfr::mpreal;
@@ -186,6 +244,39 @@ TEST_CASE("multiprecision DWf (triangular) function", "fabbri") {
     REQUIRE( abs(actual.x() - expected.x()) < eps );
     REQUIRE( abs(actual.y() - expected.y()) < eps );
     REQUIRE( abs(actual.z() - expected.z()) < eps );
+
+}
+
+TEST_CASE("multiprecision d_Wf_by_dm_tri_fun (triangular) function", "fabbri") {
+
+    using mpfr::mpreal;
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    Vector3D<mpreal>::set_eps(1E-20);
+    Vector3D<mpreal> r1( 1.0,  0.0, -1.0 / mpfr::sqrt(2.0));
+    Vector3D<mpreal> r2(-1.0,  0.0, -1.0 / mpfr::sqrt(2.0));
+    Vector3D<mpreal> r3( 0.0,  1.0,  1.0 / mpfr::sqrt(2.0));
+
+    Vector3D<mpreal> m(0.0, 0.0, 1.0);
+    Vector3D<mpreal> r( 0.0, -1.0,  1.0 / mpfr::sqrt(2.0));
+
+    auto d_Wf_by_dm = new_d_Wf_by_dm_tri_fun(r1, r2, r3);
+
+    mpreal eps = 1E-40;
+
+    mpreal expected = -mpreal(2) * mpfr::acot(mpreal(5)/mpfr::sqrt(2))/mpfr::sqrt(3);
+
+    mpreal actual = d_Wf_by_dm(m, r);
+
+#ifdef TEST_DEBUG_MESSAGES
+    std::cout.precision(digits);
+    std::cout << "multiprecision DWf (triangular) function" << std::endl;
+    std::cout << "Expected (multiprecision) d_Wf_by_dm at test point: " << expected << std::endl;
+    std::cout << "Actual   (multiprecision) d_Wf_by_dm at test point: " << d_Wf_by_dm(m, r)    << std::endl;
+#endif // TEST_DEBUG_MESSAGES
+
+    REQUIRE( abs(actual - expected) < eps );
 
 }
 
