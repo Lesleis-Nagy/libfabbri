@@ -119,6 +119,30 @@ std::function<Vector3D<T>(const Vector3D<T> &)> new_D_lambda_e_fun(const Vector3
 
 }
 
+/**
+ * Return a function that will calculate \f$\frac{\partial \lambda_\mathrm{e}}{\partial m}\f$ for a line segment with
+ * endpoints \f$r_1\f$ and \f$r_2\f$.
+ * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @param r1 the first point of a line segment.
+ * @param r2 the second point of a line segment.
+ * @return a function that will calculate \f$\frac{\partial \lambda_\mathrm{e}}{\partial m}\f$ as a function of
+ *         \f$\vec{r}\f$ and \f$\vec{m}\f$.
+ */
+template<typename T>
+std::function<T(const Vector3D<T> &, const Vector3D<T> &)>
+new_d_lambda_e_by_dm_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
+
+    using std::function;
+
+    function D_lambda_e = new_D_lambda_e_fun(r1, r2);
+
+    return [D_lambda_e](const Vector3D<T> &m, const Vector3D<T> &r) {
+
+        return dot(m, D_lambda_e(r));
+
+    };
+
+}
 
 /**
  * Return a function that will calculate the face-potential function \f$W_\mathrm{f}\f$ eq. (17) for a triangular
@@ -230,7 +254,7 @@ new_DWf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> 
  * @return a function that will calculate \f$\nabla \lambda_\mathrm{e}\f$.
  */
 template<typename T>
-std::function<T(const Vector3D<T>&, const Vector3D<T> &)>
+std::function<T(const Vector3D<T> &, const Vector3D<T> &)>
 new_d_Wf_by_dm_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
 
     using std::function;

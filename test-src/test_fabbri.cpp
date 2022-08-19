@@ -180,6 +180,35 @@ TEST_CASE("multiprecision D_lambda_e function", "fabbri") {
 
 }
 
+TEST_CASE("multiprecision d_lambda_e_by_dm function", "fabbri") {
+
+    using mpfr::mpreal;
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    Vector3D<mpreal> r1( 1.0,  0.0, -1.0 / mpfr::sqrt(2.0));
+    Vector3D<mpreal> r2(-1.0,  0.0, -1.0 / mpfr::sqrt(2.0));
+
+    Vector3D<mpreal> m(0.0, 0.0, 1.0);
+    Vector3D<mpreal> r(0.0, -1.0,  1.0 / mpfr::sqrt(2.0));
+
+    auto d_lambda_e_by_dm = new_d_lambda_e_by_dm_fun(r1, r2);
+
+    mpreal eps = 1E-40;
+
+    mpreal expected = mpfr::sqrt(2)*mpfr::log(3);
+
+#ifdef TEST_DEBUG_MESSAGES
+    std::cout.precision(digits);
+    std::cout << "multiprecision d_lambda_e_by_dm function" << std::endl;
+    std::cout << "Expected (multiprecision) d_lambda_e_by_dm at test point: " << expected << std::endl;
+    std::cout << "Actual   (multiprecision) d_lambda_e_by_dm at test point: " << d_lambda_e_by_dm(m, r) << std::endl;
+#endif // TEST_DEBUG_MESSAGES
+
+    REQUIRE( abs(d_lambda_e_by_dm(m, r) - expected) < eps );
+
+}
+
 TEST_CASE("multiprecision Wf (triangular) function", "fabbri") {
 
     using mpfr::mpreal;
