@@ -13,14 +13,15 @@
 #include "vector3d.hpp"
 
 /**
- * Return a function that will calculate the solid angle subtended by the triangle with vertices \f$r_1\f$, \f$r_2\f$ &
- * \f$r_3\f$ as a function of space - see eq. (21) in Fabbri, 2008.
+ * Return a function that will calculate the solid angle \f$\Omega\f$ subtended by the triangle with vertices
+ * \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ as a function of space - see eq. (21) in Fabbri, 2008.
  * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
  * @param r1 the first vertex of the subtending triangle.
  * @param r2 the second vertex of the subtending triangle.
  * @param r3 the third vertex of the subtending triangle.
- * @return a function that will take Vector3D<T> values as input and output the solid angle at the input point
- *         subtended by the triangle with vertices \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$.
+ * @return the function \f${\Omega}\left(\vec{r}\right)\f$ (with \f$\vec{r}\f$ being a Vector3D<T> object) that
+ *         calculates the solid angle at the input point subtended by the triangle with vertices
+ *         \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$.
  */
 template<typename T>
 std::function<T(const Vector3D<T> &)>
@@ -125,8 +126,10 @@ std::function<Vector3D<T>(const Vector3D<T> &)> new_D_lambda_e_fun(const Vector3
  * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
  * @param r1 the first point of a line segment.
  * @param r2 the second point of a line segment.
- * @return a function that will calculate \f$\frac{\partial \lambda_\mathrm{e}}{\partial m}\f$ as a function of
- *         \f$\vec{r}\f$ and \f$\vec{m}\f$.
+ * @return the function
+ *         \f$\frac{\partial \lambda_\mathrm{e}}{\partial m}\left(\frac{\partial W_\mathrm{f}}{\partial m}\right)\f$
+ *         with first input magnetisation and second input position.
+ *
  */
 template<typename T>
 std::function<T(const Vector3D<T> &, const Vector3D<T> &)>
@@ -250,7 +253,8 @@ new_DWf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> 
  * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
  * @param r1 the first point of a line segment.
  * @param r2 the second point of a line segment.
- * @return a function that will calculate \f$\nabla \lambda_\mathrm{e}\f$.
+ * @return a function that will calculate \f$\frac{\partial W_\mathrm{f}}{\partial m}\left(\vec{m}, \vec{r} \right)\f$,
+ *         with first input magnetisation and second input position.
  */
 template<typename T>
 std::function<T(const Vector3D<T> &, const Vector3D<T> &)>
