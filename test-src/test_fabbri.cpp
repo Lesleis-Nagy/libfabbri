@@ -310,7 +310,7 @@ TEST_CASE("multiprecision d_Wf_by_dm_tri_fun (triangular) function", "fabbri") {
 
 }
 
-TEST_CASE("double precision Lambda (triangular) function", "fabbri") {
+TEST_CASE("double precision Lambda_f (triangular) function", "fabbri") {
 
     Vector3D<double> r1(1.0, 0.0, -1.0 / sqrt(2.0));
     Vector3D<double> r2(-1.0, 0.0, -1.0 / sqrt(2.0));
@@ -318,26 +318,26 @@ TEST_CASE("double precision Lambda (triangular) function", "fabbri") {
 
     Vector3D<double> r(0.0, -1.0, 1.0 / sqrt(2.0));
 
-    auto Lambda = new_Lambda_fun(r1, r2, r3);
+    auto Lambda_f = new_Lambda_f_fun(r1, r2, r3);
 
     double eps = 1E-14;
 
     double expected = 1.8426320969612156532708703220925032742357173038995;
 
-    double actual = Lambda(r);
+    double actual = Lambda_f(r);
 
 #ifdef TEST_DEBUG_MESSAGES
     std::cout.precision(50);
-    std::cout << "multiprecision Lambda (triangular) function" << std::endl;
-    std::cout << "Expected (double precision) Lambda at test point: " << expected << std::endl;
-    std::cout << "Actual   (double precision) Lambda at test point: " << Lambda(r) << std::endl;
+    std::cout << "multiprecision Lambda_f (triangular) function" << std::endl;
+    std::cout << "Expected (double precision) Lambda_f at test point: " << expected << std::endl;
+    std::cout << "Actual   (double precision) Lambda_f at test point: " << Lambda_f(r) << std::endl;
 #endif // TEST_DEBUG_MESSAGES
 
     REQUIRE(abs(actual - expected) < eps);
 
 }
 
-TEST_CASE("multiprecision Lambda (triangular) function", "fabbri") {
+TEST_CASE("multiprecision Lambda_f (triangular) function", "fabbri") {
 
     using mpfr::mpreal;
     const int digits = 50;
@@ -350,26 +350,25 @@ TEST_CASE("multiprecision Lambda (triangular) function", "fabbri") {
 
     Vector3D<mpreal> r(0.0, -1.0, 1.0 / mpfr::sqrt(2.0));
 
-    auto Lambda = new_Lambda_fun(r1, r2, r3);
+    auto Lambda_f = new_Lambda_f_fun(r1, r2, r3);
 
     mpreal eps = 1E-40;
 
     mpreal expected = (mpreal(1) / mpreal(54)) * (mpreal(-64) * mpfr::sqrt(6) * mpfr::acot(mpreal(5) / mpfr::sqrt(2)) +
                                                   mpreal(75) * mpfr::sqrt(3) * mpfr::log(3));
 
-    mpreal actual = Lambda(r);
+    mpreal actual = Lambda_f(r);
 
 #ifdef TEST_DEBUG_MESSAGES
     std::cout.precision(digits);
-    std::cout << "multiprecision Lambda (triangular) function" << std::endl;
-    std::cout << "Expected (multiprecision) Lambda at test point: " << expected << std::endl;
-    std::cout << "Actual   (multiprecision) Lambda at test point: " << Lambda(r) << std::endl;
+    std::cout << "multiprecision Lambda_f (triangular) function" << std::endl;
+    std::cout << "Expected (multiprecision) Lambda_f at test point: " << expected << std::endl;
+    std::cout << "Actual   (multiprecision) Lambda_f at test point: " << Lambda_f(r) << std::endl;
 #endif // TEST_DEBUG_MESSAGES
 
     REQUIRE(abs(actual - expected) < eps);
 
 }
-
 
 TEST_CASE("Multiprecision phi from uniformly magnetised tetrahedron", "fabbri") {
 
