@@ -378,7 +378,57 @@ new_DLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T
 
 }
 
+/**
+ * Return a function that will calculate \f$\vec{m}\cdot\nabla\nabla\Lambda_f\f$ eq. (28), for a triangular polygon
+ * (Fabbri, 2009) with endpoints \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and winding \f$r_1 \rightarrow r2\f$,
+ * \f$r_2 \rightarrow r_3\f$ and \f$r3 \rightarrow r1\f$.
+ * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @param r1 the first point of a triangle segment.
+ * @param r2 the second point of a triangle segment.
+ * @param r3 the third point of a triangle.
+ * @return a function that will calculate \f$\vec{m}\cdot\nabla\nabla\Lambda_f\f$.
+ */
+template<typename T>
+std::function<Vector3D<T>(const Vector3D<T> &, const Vector3D<T> &)>
+new_m_dot_DDLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
 
+    using std::array;
+    using std::function;
+
+    // Face normal.
+    Vector3D<T> nf = triangle_normal(r1, r2, r3);
+
+    // Edge orientation vectors.
+    array<Vector3D<T>, 3> ue;
+    ue[0] = normalised(r2 - r1);
+    ue[1] = normalised(r3 - r2);
+    ue[2] = normalised(r1 - r3);
+
+    // d_lambda_e_by_dm functions for each edge.
+    array<function<T(const Vector3D<T>&, const Vector3D<T> &)>, 3> d_lambda_e_by_dm;
+    d_lambda_e_by_dm[0] = new_d_lambda_e_by_dm_fun(r1, r2);
+    d_lambda_e_by_dm[1] = new_d_lambda_e_by_dm_fun(r2, r3);
+    d_lambda_e_by_dm[2] = new_d_lambda_e_by_dm_fun(r3, r1);
+
+    // Triangle centroid.
+    Vector3D<T> rf = triangle_center(r1, r2, r3);
+
+    // Wf function.
+    function<T(const Vector3D<T> &)> Wf = new_Wf_tri_fun(r1, r2, r3);
+
+    // d_Wf_dm function for the triangle.
+    function<T(const Vector3D<T> &, const Vector3D<T> &)> d_Wf_dm = new_d_Wf_by_dm_tri_fun(r1, r2, r3);
+
+    return [nf, ue, d_lambda_e_by_dm, rf, Wf, d_Wf_dm](const Vector3D<T> &m, const Vector3D<T> &r) {
+
+        return cross(nf, ue[0]) * d_lambda_e_by_dm[0](m, r)
+               + cross(nf, ue[1]) * d_lambda_e_by_dm[1](m, r)
+               + cross(nf, ue[2]) * d_lambda_e_by_dm[2](m, r)
+               + nf * dot(m, nf) * Wf(r) - nf * dot(rf - r, nf) * d_Wf_dm(m, r);
+
+    };
+
+}
 
 
 /**
