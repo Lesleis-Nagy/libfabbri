@@ -330,6 +330,58 @@ new_Lambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T>
 }
 
 /**
+ * Return a function that will calculate \f$\nabla\Lambda_f\f$ eq. (25), for a triangular polygon (Fabbri, 2009) with
+ * vertices \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and winding \f$r_1 \rightarrow r2\f$, \f$r_2 \rightarrow r_3\f$ and
+ * \f$r3 \rightarrow r1\f$.
+ * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @param r1 the first point of a triangle segment.
+ * @param r2 the second point of a triangle segment.
+ * @param r3 the third point of a triangle.
+ * @return a function that will calculate \f$\nabla\Lambda_f\f$.
+ */
+template<typename T>
+std::function<Vector3D<T>(const Vector3D<T> &)>
+new_DLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
+
+    using std::array;
+    using std::function;
+
+    // Face normal.
+    Vector3D<T> nf = triangle_normal(r1, r2, r3);
+
+    // Edge orientation vectors.
+    array<Vector3D<T>, 3> ue;
+    ue[0] = normalised(r2 - r1);
+    ue[1] = normalised(r3 - r2);
+    ue[2] = normalised(r1 - r3);
+
+    // Edge lambda_e functions.
+    array<function<T(const Vector3D<T> &)>, 3> lambda_e;
+    lambda_e[0] = new_lambda_e_fun(r1, r2);
+    lambda_e[1] = new_lambda_e_fun(r2, r3);
+    lambda_e[2] = new_lambda_e_fun(r3, r1);
+
+    // Triangle centroid.
+    Vector3D<T> rf = triangle_center(r1, r2, r3);
+
+    // Wf function
+    function<T(const Vector3D<T> &)> Wf = new_Wf_tri_fun(r1, r2, r3);
+
+    return [nf, ue, lambda_e, rf, Wf](const Vector3D<T> &r) {
+
+        return cross(nf, ue[0]) * lambda_e[0](r)
+               + cross(nf, ue[1]) * lambda_e[1](r)
+               + cross(nf, ue[2]) * lambda_e[2](r)
+               - nf * dot(rf - r, nf) * Wf(r);
+
+    };
+
+}
+
+
+
+
+/**
  * Return a function that will calculate the magnetic scalar potential \f$\phi\f$ for a uniformly magnetised
  * tetrahedron using eq. (11) (Fabbri, 2008). The input tetrahedron assumes the following winding for each triangular
  * face:

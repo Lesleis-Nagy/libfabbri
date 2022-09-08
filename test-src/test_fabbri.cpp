@@ -370,6 +370,48 @@ TEST_CASE("multiprecision Lambda_f (triangular) function", "fabbri") {
 
 }
 
+
+TEST_CASE("multiprecision DLambda_f (triangular) function", "fabbri") {
+
+    using mpfr::mpreal;
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    Vector3D<mpreal>::set_eps(1E-20);
+    Vector3D<mpreal> r1(1.0, 0.0, -1.0 / mpfr::sqrt(2.0));
+    Vector3D<mpreal> r2(-1.0, 0.0, -1.0 / mpfr::sqrt(2.0));
+    Vector3D<mpreal> r3(0.0, 1.0, 1.0 / mpfr::sqrt(2.0));
+
+    Vector3D<mpreal> r(0.0, -1.0, 1.0 / mpfr::sqrt(2.0));
+
+    auto DLambda_f = new_DLambda_f_fun(r1, r2, r3);
+
+    mpreal eps = 1E-40;
+
+    Vector3D<mpreal> expected (
+            0,
+            (mpreal(4)/mpreal(9))*(
+                    mpreal(4)*mpfr::sqrt(6)*mpfr::acot(mpreal(5)/mpfr::sqrt(2)) - mpreal(3)*mpfr::sqrt(3)*mpfr::log(3)
+                    ),
+            (mpreal(2)/mpreal(9))*(
+                    mpreal(-8)*mpfr::sqrt(3)*mpfr::acot(mpreal(5)/mpfr::sqrt(2)) + mpfr::sqrt(6)*mpfr::log(27)
+                    ));
+
+    auto actual  = DLambda_f(r);
+
+#ifdef TEST_DEBUG_MESSAGES
+    std::cout.precision(digits);
+    std::cout << "multiprecision DLambda_f (triangular) function" << std::endl;
+    std::cout << "Expected (multiprecision) DLambda_f at test point: " << expected << std::endl;
+    std::cout << "Actual   (multiprecision) DLambda_f at test point: " << DLambda_f(r) << std::endl;
+#endif // TEST_DEBUG_MESSAGES
+
+    REQUIRE(abs(actual.x() - expected.x()) < eps);
+    REQUIRE(abs(actual.y() - expected.y()) < eps);
+    REQUIRE(abs(actual.z() - expected.z()) < eps);
+
+}
+
 TEST_CASE("Multiprecision phi from uniformly magnetised tetrahedron", "fabbri") {
 
     using mpfr::mpreal;
