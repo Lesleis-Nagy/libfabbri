@@ -2,7 +2,10 @@
 // Created by Lesleis Nagy on 27/07/2022.
 //
 
-/** @file */
+/**
+ * @file fabbri.hpp
+ * @author L. Nagy
+ */
 
 #ifndef LIBFABBRI_FABBRI_HPP
 #define LIBFABBRI_FABBRI_HPP
@@ -11,6 +14,12 @@
 #include <functional>
 
 #include "vector3d.hpp"
+#include "matrix3x3.hpp"
+
+/**
+ * Return the matrix of the linear variation of the input vector v over a triangle defined by r0, r1 & r2.
+ */
+
 
 /**
  * Return a function that will calculate the solid angle \f$\Omega\f$ subtended by the triangle with vertices
@@ -23,7 +32,7 @@
  *         calculates the solid angle at the input point subtended by the triangle with vertices
  *         \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$.
  */
-template<typename T>
+template <typename T>
 std::function<T(const Vector3D<T> &)>
 new_omega_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
 
@@ -52,7 +61,7 @@ new_omega_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T
  * @param r2 the second point of a line segment.
  * @return a function that will calculate \f$w_\mathrm{e}\f$.
  */
-template<typename T>
+template <typename T>
 std::function<T(const Vector3D<T> &)>
 new_we_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
 
@@ -77,8 +86,9 @@ new_we_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
  * @param r2 the second point of a line segment.
  * @return a function that will calculate \f$\lambda_\mathrm{e}\f$.
  */
-template<typename T>
-std::function<T(const Vector3D<T> &)> new_lambda_e_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
+template <typename T>
+std::function<T(const Vector3D<T> &)>
+new_lambda_e_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
 
     using std::function;
 
@@ -103,8 +113,9 @@ std::function<T(const Vector3D<T> &)> new_lambda_e_fun(const Vector3D<T> &r1, co
  * @param r2 the second point of a line segment.
  * @return a function that will calculate \f$\nabla \lambda_\mathrm{e}\f$.
  */
-template<typename T>
-std::function<Vector3D<T>(const Vector3D<T> &)> new_D_lambda_e_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
+template <typename T>
+std::function<Vector3D<T>(const Vector3D<T> &)>
+new_D_lambda_e_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
 
     using std::function;
 
@@ -131,7 +142,7 @@ std::function<Vector3D<T>(const Vector3D<T> &)> new_D_lambda_e_fun(const Vector3
  *         with first input magnetisation and second input position.
  *
  */
-template<typename T>
+template <typename T>
 std::function<T(const Vector3D<T> &, const Vector3D<T> &)>
 new_d_lambda_e_by_dm_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
 
@@ -157,7 +168,7 @@ new_d_lambda_e_by_dm_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
  * @param r3 the third point of a triangle.
  * @return a function that will calculate \f$W_\mathrm{f}\f$.
  */
-template<typename T>
+template <typename T>
 std::function<T(const Vector3D<T> &)>
 new_Wf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
 
@@ -211,7 +222,7 @@ new_Wf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &
  * @param r3 the third point of a triangle.
  * @return a function that will calculate \f$\Delta W_\mathrm{f}\f$.
  */
-template<typename T>
+template <typename T>
 std::function<Vector3D<T>(const Vector3D<T> &)>
 new_DWf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
 
@@ -256,7 +267,7 @@ new_DWf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> 
  * @return a function that will calculate \f$\frac{\partial W_\mathrm{f}}{\partial m}\left(\vec{m}, \vec{r} \right)\f$,
  *         with first input magnetisation and second input position.
  */
-template<typename T>
+template <typename T>
 std::function<T(const Vector3D<T> &, const Vector3D<T> &)>
 new_d_Wf_by_dm_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
 
@@ -282,7 +293,7 @@ new_d_Wf_by_dm_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vecto
  * @param r3 the third point of a triangle.
  * @return a function that will calculate \f$\Lambda_f\f$.
  */
-template<typename T>
+template <typename T>
 std::function<T(const Vector3D<T> &)>
 new_Lambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
 
@@ -339,7 +350,7 @@ new_Lambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T>
  * @param r3 the third point of a triangle.
  * @return a function that will calculate \f$\nabla\Lambda_f\f$.
  */
-template<typename T>
+template <typename T>
 std::function<Vector3D<T>(const Vector3D<T> &)>
 new_DLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
 
@@ -388,7 +399,7 @@ new_DLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T
  * @param r3 the third point of a triangle.
  * @return a function that will calculate \f$\vec{m}\cdot\nabla\nabla\Lambda_f\f$.
  */
-template<typename T>
+template <typename T>
 std::function<Vector3D<T>(const Vector3D<T> &, const Vector3D<T> &)>
 new_m_dot_DDLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
 
@@ -448,7 +459,7 @@ new_m_dot_DDLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vec
  * @return a function that will calculate the scalar potential at any point in space due to the uniformly magnetised
  *         tetrahedron defined by the inputs.
  */
-template<typename T>
+template <typename T>
 std::function<T(const Vector3D<T> &)> new_uni_tet_phi_fun(const Vector3D<T> &M,
                                                           const Vector3D<T> &r1, const Vector3D<T> &r2,
                                                           const Vector3D<T> &r3, const Vector3D<T> &r4) {
@@ -574,6 +585,10 @@ new_uni_tet_B_fun(const Vector3D<T> &M,
     };
 
 }
+
+template <typename T>
+std::function<Vector3D<T>(const Vector3D<T> &)>
+new_lin_tet_A_fun()
 
 /*
  * References

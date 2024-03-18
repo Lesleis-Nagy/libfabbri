@@ -2,7 +2,10 @@
 // Created by Lesleis Nagy on 26/07/2022.
 //
 
-/** @file */
+/**
+ * @file vector3d.hpp
+ * @author L. Nagy
+ */
 
 #ifndef LIBFABBRI_VECTOR3D_HPP
 #define LIBFABBRI_VECTOR3D_HPP
