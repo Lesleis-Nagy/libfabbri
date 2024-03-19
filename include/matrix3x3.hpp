@@ -5,8 +5,6 @@
 #ifndef LIBFABBRI_MATRIX3X3_HPP
 #define LIBFABBRI_MATRIX3X3_HPP
 
-#include <array>
-
 #include "vector3d.hpp"
 
 /**
@@ -58,6 +56,17 @@ public:
     Matrix3x3& operator=(const Matrix3x3 &m) {
         if (this == &m) return *this;
         _m[0][0] = m._m[0][0];
+        _m[0][1] = m._m[0][1];
+        _m[0][2] = m._m[0][2];
+
+        _m[1][0] = m._m[1][0];
+        _m[1][1] = m._m[1][1];
+        _m[1][2] = m._m[1][2];
+
+        _m[2][0] = m._m[2][0];
+        _m[2][1] = m._m[2][1];
+        _m[2][2] = m._m[2][2];
+
         return *this;
     }
 

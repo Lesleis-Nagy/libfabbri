@@ -17,24 +17,34 @@
 #include "matrix3x3.hpp"
 
 /**
- * Return the matrix of the linear variation of the input vector v over a triangle defined by r0, r1 & r2.
+ * Return the matrix of the linear variation of the input vector v over a
+ * triangle defined by r0, r1 & r2.
  */
+template <typename T>
+Matrix3x3<T> DV() {
+}
 
 
 /**
- * Return a function that will calculate the solid angle \f$\Omega\f$ subtended by the triangle with vertices
- * \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ as a function of space - see eq. (21) in Fabbri, 2008.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * Return a function that will calculate the solid angle \f$\Omega\f$ subtended
+ * by the triangle with vertices \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ as a function
+ * of space - see eq. (21) in Fabbri, 2008.
+ *
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
  * @param r1 the first vertex of the subtending triangle.
  * @param r2 the second vertex of the subtending triangle.
  * @param r3 the third vertex of the subtending triangle.
- * @return the function \f${\Omega}\left(\vec{r}\right)\f$ (with \f$\vec{r}\f$ being a Vector3D<T> object) that
- *         calculates the solid angle at the input point subtended by the triangle with vertices
- *         \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$.
+ *
+ * @return the function \f${\Omega}\left(\vec{r}\right)\f$ (with \f$\vec{r}\f$
+ *         being a Vector3D<T> object) that calculates the solid angle at the
+ *         input point subtended by the triangle with vertices \f$r_1\f$,
+ *         \f$r_2\f$ & \f$r_3\f$.
  */
-template <typename T>
+template<typename T>
 std::function<T(const Vector3D<T> &)>
-new_omega_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
+new_omega_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2,
+                  const Vector3D<T> &r3) {
 
     return [r1, r2, r3](const Vector3D<T> &r) {
 
@@ -47,7 +57,8 @@ new_omega_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T
         T d3 = norm(v3);
 
         return 2.0 * atan2(dot(v1, cross(v2, v3)),
-                           d1 * d2 * d3 + d3 * dot(v1, v2) + d2 * dot(v1, v3) + d1 * dot(v2, v3));
+                           d1 * d2 * d3 + d3 * dot(v1, v2) + d2 * dot(v1, v3) +
+                           d1 * dot(v2, v3));
 
     };
 
@@ -61,7 +72,7 @@ new_omega_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T
  * @param r2 the second point of a line segment.
  * @return a function that will calculate \f$w_\mathrm{e}\f$.
  */
-template <typename T>
+template<typename T>
 std::function<T(const Vector3D<T> &)>
 new_we_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
 
@@ -86,7 +97,7 @@ new_we_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
  * @param r2 the second point of a line segment.
  * @return a function that will calculate \f$\lambda_\mathrm{e}\f$.
  */
-template <typename T>
+template<typename T>
 std::function<T(const Vector3D<T> &)>
 new_lambda_e_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
 
@@ -98,8 +109,9 @@ new_lambda_e_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
 
     return [r1, r2, we, ue, re](const Vector3D<T> &r) {
 
-        return 0.5 * norm(r2 - r) * dot((r2 - r), ue) + 0.5 * norm(r1 - r) * dot((r1 - r), ue)
-               + 0.5 * norm_squared(cross((r - re), ue)) * we(r);
+        return 0.5 * norm(r2 - r) * dot((r2 - r), ue) +
+               0.5 * norm(r1 - r) * dot((r1 - r), ue) +
+               0.5 * norm_squared(cross((r - re), ue)) * we(r);
 
     };
 
@@ -113,7 +125,7 @@ new_lambda_e_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
  * @param r2 the second point of a line segment.
  * @return a function that will calculate \f$\nabla \lambda_\mathrm{e}\f$.
  */
-template <typename T>
+template<typename T>
 std::function<Vector3D<T>(const Vector3D<T> &)>
 new_D_lambda_e_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
 
@@ -125,7 +137,8 @@ new_D_lambda_e_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
 
     return [r1, r2, we, ue, re](const Vector3D<T> &r) {
 
-        return (norm(r1 - r) - norm(r2 - r)) * ue + cross(ue, cross((r - re), ue)) * we(r);
+        return (norm(r1 - r) - norm(r2 - r)) * ue +
+               cross(ue, cross((r - re), ue)) * we(r);
 
     };
 
@@ -142,7 +155,7 @@ new_D_lambda_e_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
  *         with first input magnetisation and second input position.
  *
  */
-template <typename T>
+template<typename T>
 std::function<T(const Vector3D<T> &, const Vector3D<T> &)>
 new_d_lambda_e_by_dm_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
 
@@ -168,9 +181,10 @@ new_d_lambda_e_by_dm_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
  * @param r3 the third point of a triangle.
  * @return a function that will calculate \f$W_\mathrm{f}\f$.
  */
-template <typename T>
+template<typename T>
 std::function<T(const Vector3D<T> &)>
-new_Wf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
+new_Wf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2,
+               const Vector3D<T> &r3) {
 
     using std::array;
     using std::function;
@@ -203,10 +217,10 @@ new_Wf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &
 
     return [nf, rf, omega, re, ue, we](const Vector3D<T> &r) {
 
-        return dot(cross(nf, re[0] - r), ue[0]) * we[0](r)
-               + dot(cross(nf, re[1] - r), ue[1]) * we[1](r)
-               + dot(cross(nf, re[2] - r), ue[2]) * we[2](r)
-               - dot(rf - r, nf) * omega(r);
+        return dot(cross(nf, re[0] - r), ue[0]) * we[0](r) +
+               dot(cross(nf, re[1] - r), ue[1]) * we[1](r) +
+               dot(cross(nf, re[2] - r), ue[2]) * we[2](r) -
+               dot(rf - r, nf) * omega(r);
 
     };
 
@@ -222,9 +236,10 @@ new_Wf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &
  * @param r3 the third point of a triangle.
  * @return a function that will calculate \f$\Delta W_\mathrm{f}\f$.
  */
-template <typename T>
+template<typename T>
 std::function<Vector3D<T>(const Vector3D<T> &)>
-new_DWf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
+new_DWf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2,
+                const Vector3D<T> &r3) {
 
     using std::array;
     using std::function;
@@ -249,10 +264,8 @@ new_DWf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> 
 
     return [nf, omega, ue, we](const Vector3D<T> &r) {
 
-        return cross(nf, ue[0]) * we[0](r)
-               + cross(nf, ue[1]) * we[1](r)
-               + cross(nf, ue[2]) * we[2](r)
-               + nf * omega(r);
+        return cross(nf, ue[0]) * we[0](r) + cross(nf, ue[1]) * we[1](r) +
+               cross(nf, ue[2]) * we[2](r) + nf * omega(r);
 
     };
 
@@ -267,9 +280,10 @@ new_DWf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> 
  * @return a function that will calculate \f$\frac{\partial W_\mathrm{f}}{\partial m}\left(\vec{m}, \vec{r} \right)\f$,
  *         with first input magnetisation and second input position.
  */
-template <typename T>
+template<typename T>
 std::function<T(const Vector3D<T> &, const Vector3D<T> &)>
-new_d_Wf_by_dm_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
+new_d_Wf_by_dm_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2,
+                       const Vector3D<T> &r3) {
 
     using std::function;
 
@@ -293,9 +307,10 @@ new_d_Wf_by_dm_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vecto
  * @param r3 the third point of a triangle.
  * @return a function that will calculate \f$\Lambda_f\f$.
  */
-template <typename T>
+template<typename T>
 std::function<T(const Vector3D<T> &)>
-new_Lambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
+new_Lambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2,
+                 const Vector3D<T> &r3) {
 
     using std::array;
     using std::function;
@@ -329,12 +344,11 @@ new_Lambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T>
 
     return [nf, re, ue, lambda_e, rf, Wf](const Vector3D<T> &r) {
 
-        return (T{1.0} / T{3.0}) * (
-                dot(cross(nf, re[0] - r), ue[0]) * lambda_e[0](r)
-                + dot(cross(nf, re[1] - r), ue[1]) * lambda_e[1](r)
-                + dot(cross(nf, re[2] - r), ue[2]) * lambda_e[2](r)
-                + dot((rf - r), nf) * dot((rf - r), nf) * Wf(r)
-        );
+        return (T{1.0} / T{3.0}) *
+               (dot(cross(nf, re[0] - r), ue[0]) * lambda_e[0](r) +
+                dot(cross(nf, re[1] - r), ue[1]) * lambda_e[1](r) +
+                dot(cross(nf, re[2] - r), ue[2]) * lambda_e[2](r) +
+                dot((rf - r), nf) * dot((rf - r), nf) * Wf(r));
 
     };
 
@@ -350,9 +364,10 @@ new_Lambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T>
  * @param r3 the third point of a triangle.
  * @return a function that will calculate \f$\nabla\Lambda_f\f$.
  */
-template <typename T>
+template<typename T>
 std::function<Vector3D<T>(const Vector3D<T> &)>
-new_DLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
+new_DLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2,
+                  const Vector3D<T> &r3) {
 
     using std::array;
     using std::function;
@@ -380,10 +395,9 @@ new_DLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T
 
     return [nf, ue, lambda_e, rf, Wf](const Vector3D<T> &r) {
 
-        return cross(nf, ue[0]) * lambda_e[0](r)
-               + cross(nf, ue[1]) * lambda_e[1](r)
-               + cross(nf, ue[2]) * lambda_e[2](r)
-               - nf * dot(rf - r, nf) * Wf(r);
+        return cross(nf, ue[0]) * lambda_e[0](r) +
+               cross(nf, ue[1]) * lambda_e[1](r) +
+               cross(nf, ue[2]) * lambda_e[2](r) - nf * dot(rf - r, nf) * Wf(r);
 
     };
 
@@ -399,9 +413,10 @@ new_DLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T
  * @param r3 the third point of a triangle.
  * @return a function that will calculate \f$\vec{m}\cdot\nabla\nabla\Lambda_f\f$.
  */
-template <typename T>
+template<typename T>
 std::function<Vector3D<T>(const Vector3D<T> &, const Vector3D<T> &)>
-new_m_dot_DDLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3) {
+new_m_dot_DDLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2,
+                         const Vector3D<T> &r3) {
 
     using std::array;
     using std::function;
@@ -416,7 +431,8 @@ new_m_dot_DDLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vec
     ue[2] = normalised(r1 - r3);
 
     // d_lambda_e_by_dm functions for each edge.
-    array<function<T(const Vector3D<T>&, const Vector3D<T> &)>, 3> d_lambda_e_by_dm;
+    array<function<T(const Vector3D<T> &,
+                     const Vector3D<T> &)>, 3> d_lambda_e_by_dm;
     d_lambda_e_by_dm[0] = new_d_lambda_e_by_dm_fun(r1, r2);
     d_lambda_e_by_dm[1] = new_d_lambda_e_by_dm_fun(r2, r3);
     d_lambda_e_by_dm[2] = new_d_lambda_e_by_dm_fun(r3, r1);
@@ -428,14 +444,17 @@ new_m_dot_DDLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vec
     function<T(const Vector3D<T> &)> Wf = new_Wf_tri_fun(r1, r2, r3);
 
     // d_Wf_dm function for the triangle.
-    function<T(const Vector3D<T> &, const Vector3D<T> &)> d_Wf_dm = new_d_Wf_by_dm_tri_fun(r1, r2, r3);
+    function<T(const Vector3D<T> &,
+               const Vector3D<T> &)> d_Wf_dm = new_d_Wf_by_dm_tri_fun(r1, r2,
+                                                                      r3);
 
-    return [nf, ue, d_lambda_e_by_dm, rf, Wf, d_Wf_dm](const Vector3D<T> &m, const Vector3D<T> &r) {
+    return [nf, ue, d_lambda_e_by_dm, rf, Wf, d_Wf_dm](const Vector3D<T> &m,
+                                                       const Vector3D<T> &r) {
 
-        return cross(nf, ue[0]) * d_lambda_e_by_dm[0](m, r)
-               + cross(nf, ue[1]) * d_lambda_e_by_dm[1](m, r)
-               + cross(nf, ue[2]) * d_lambda_e_by_dm[2](m, r)
-               + nf * dot(m, nf) * Wf(r) - nf * dot(rf - r, nf) * d_Wf_dm(m, r);
+        return cross(nf, ue[0]) * d_lambda_e_by_dm[0](m, r) +
+               cross(nf, ue[1]) * d_lambda_e_by_dm[1](m, r) +
+               cross(nf, ue[2]) * d_lambda_e_by_dm[2](m, r) +
+               nf * dot(m, nf) * Wf(r) - nf * dot(rf - r, nf) * d_Wf_dm(m, r);
 
     };
 
@@ -459,10 +478,11 @@ new_m_dot_DDLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2, const Vec
  * @return a function that will calculate the scalar potential at any point in space due to the uniformly magnetised
  *         tetrahedron defined by the inputs.
  */
-template <typename T>
-std::function<T(const Vector3D<T> &)> new_uni_tet_phi_fun(const Vector3D<T> &M,
-                                                          const Vector3D<T> &r1, const Vector3D<T> &r2,
-                                                          const Vector3D<T> &r3, const Vector3D<T> &r4) {
+template<typename T>
+std::function<T(const Vector3D<T> &)>
+new_uni_tet_phi_fun(const Vector3D<T> &M, const Vector3D<T> &r1,
+                    const Vector3D<T> &r2, const Vector3D<T> &r3,
+                    const Vector3D<T> &r4) {
 
     using std::array;
     using std::function;
@@ -482,10 +502,8 @@ std::function<T(const Vector3D<T> &)> new_uni_tet_phi_fun(const Vector3D<T> &M,
     Wf[3] = new_Wf_tri_fun(r2, r4, r3);
 
     return [M, nf, Wf](const Vector3D<T> &r) {
-        return dot(M, nf[0]) * Wf[0](r)
-               + dot(M, nf[1]) * Wf[1](r)
-               + dot(M, nf[2]) * Wf[2](r)
-               + dot(M, nf[3]) * Wf[3](r);
+        return dot(M, nf[0]) * Wf[0](r) + dot(M, nf[1]) * Wf[1](r) +
+               dot(M, nf[2]) * Wf[2](r) + dot(M, nf[3]) * Wf[3](r);
     };
 
 }
@@ -509,8 +527,9 @@ std::function<T(const Vector3D<T> &)> new_uni_tet_phi_fun(const Vector3D<T> &M,
  */
 template<typename T>
 std::function<Vector3D<T>(const Vector3D<T> &)>
-new_uni_tet_A_fun(const Vector3D<T> &M,
-                  const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3, const Vector3D<T> &r4) {
+new_uni_tet_A_fun(const Vector3D<T> &M, const Vector3D<T> &r1,
+                  const Vector3D<T> &r2, const Vector3D<T> &r3,
+                  const Vector3D<T> &r4) {
 
     using std::array;
     using std::function;
@@ -530,10 +549,8 @@ new_uni_tet_A_fun(const Vector3D<T> &M,
     Wf[3] = new_Wf_tri_fun(r2, r4, r3);
 
     return [M, nf, Wf](const Vector3D<T> &r) {
-        return cross(M, nf[0]) * Wf[0](r)
-               + cross(M, nf[1]) * Wf[1](r)
-               + cross(M, nf[2]) * Wf[2](r)
-               + cross(M, nf[3]) * Wf[3](r);
+        return cross(M, nf[0]) * Wf[0](r) + cross(M, nf[1]) * Wf[1](r) +
+               cross(M, nf[2]) * Wf[2](r) + cross(M, nf[3]) * Wf[3](r);
     };
 
 }
@@ -557,8 +574,9 @@ new_uni_tet_A_fun(const Vector3D<T> &M,
  */
 template<typename T>
 std::function<Vector3D<T>(const Vector3D<T> &)>
-new_uni_tet_B_fun(const Vector3D<T> &M,
-                  const Vector3D<T> &r1, const Vector3D<T> &r2, const Vector3D<T> &r3, const Vector3D<T> &r4) {
+new_uni_tet_B_fun(const Vector3D<T> &M, const Vector3D<T> &r1,
+                  const Vector3D<T> &r2, const Vector3D<T> &r3,
+                  const Vector3D<T> &r4) {
 
     using std::array;
     using std::function;
@@ -578,17 +596,13 @@ new_uni_tet_B_fun(const Vector3D<T> &M,
     DWf[3] = new_DWf_tri_fun(r2, r4, r3);
 
     return [M, nf, DWf](const Vector3D<T> &r) {
-        return cross(cross(M, nf[0]), DWf[0](r))
-               + cross(cross(M, nf[1]), DWf[1](r))
-               + cross(cross(M, nf[2]), DWf[2](r))
-               + cross(cross(M, nf[3]), DWf[3](r));
+        return cross(cross(M, nf[0]), DWf[0](r)) +
+               cross(cross(M, nf[1]), DWf[1](r)) +
+               cross(cross(M, nf[2]), DWf[2](r)) +
+               cross(cross(M, nf[3]), DWf[3](r));
     };
 
 }
-
-template <typename T>
-std::function<Vector3D<T>(const Vector3D<T> &)>
-new_lin_tet_A_fun()
 
 /*
  * References

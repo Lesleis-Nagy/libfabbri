@@ -37,3 +37,14 @@ target_include_directories(test_matrix3x3
         ${MPREAL_INCLUDE_DIR})
 target_link_libraries(test_matrix3x3
         ${MPFR_LIBRARIES})
+
+# Test matrix4x4.hpp
+add_executable(test_matrix4x4 test_matrix4x4.cpp)
+target_include_directories(test_matrix4x4
+        PRIVATE ${LIBFABBRI_INCLUDE_DIR}
+        ${MPFR_INCLUDES}
+        ${CATCH_INCLUDE_DIR}
+        ${MPREAL_INCLUDE_DIR})
+target_link_libraries(test_matrix4x4
+        ${MPFR_LIBRARIES})
+
