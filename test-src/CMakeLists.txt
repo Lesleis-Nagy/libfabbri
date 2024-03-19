@@ -27,3 +27,13 @@ target_include_directories(test_regular_grid
         ${MPREAL_INCLUDE_DIR})
 target_link_libraries(test_regular_grid
         ${MPFR_LIBRARIES})
+
+# Test matrix3x3.hpp
+add_executable(test_matrix3x3 test_matrix3x3.cpp)
+target_include_directories(test_matrix3x3
+        PRIVATE ${LIBFABBRI_INCLUDE_DIR}
+        ${MPFR_INCLUDES}
+        ${CATCH_INCLUDE_DIR}
+        ${MPREAL_INCLUDE_DIR})
+target_link_libraries(test_matrix3x3
+        ${MPFR_LIBRARIES})

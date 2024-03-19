@@ -27,10 +27,39 @@ public:
     /**
      * Create a 3x3 matrix from an input.
      */
-    explicit
-    Matrix3x3(std::array<std::array<T, 3>, 3> m):
-    _m(m)
-    {}
+    Matrix3x3(std::initializer_list<std::initializer_list<T>> m) {
+        assert(m.size() == 3 && "Number of rows must be 3.");
+
+        auto outerIterator = m.begin();
+        auto innerIterator = outerIterator->begin();
+
+        assert(outerIterator->size() == 3 && "Number of columns must be 3.");
+        _m[0][0] = *innerIterator++;
+        _m[0][1] = *innerIterator++;
+        _m[0][2] = *innerIterator++;
+
+        outerIterator++;
+        innerIterator = outerIterator->begin();
+
+        assert(outerIterator->size() == 3 && "Number of columns must be 3.");
+        _m[1][0] = *innerIterator++;
+        _m[1][1] = *innerIterator++;
+        _m[1][2] = *innerIterator++;
+
+        outerIterator++;
+        innerIterator = outerIterator->begin();
+
+        assert(outerIterator->size() == 3 && "Number of columns must be 3.");
+        _m[2][0] = *innerIterator++;
+        _m[2][1] = *innerIterator++;
+        _m[2][2] = *innerIterator++;
+    }
+
+    Matrix3x3& operator=(const Matrix3x3 &m) {
+        if (this == &m) return *this;
+        _m[0][0] = m._m[0][0];
+        return *this;
+    }
 
     [[nodiscard]]
     T operator() (size_t i, size_t j) const {
@@ -39,7 +68,7 @@ public:
 
 private:
 
-    std::array<std::array<T, 3>, 3> _m;
+    T _m[3][3];
 
 };
 
@@ -180,7 +209,7 @@ T dot(const Matrix3x3<T> &u, const Matrix3x3<T> &v) {
  * @return the matrix Furbinius norm.
  */
 template <typename T>
-T dot(const Matrix3x3<T> &u) {
+T norm(const Matrix3x3<T> &u) {
 
     return sqrt(dot(u, u));
 

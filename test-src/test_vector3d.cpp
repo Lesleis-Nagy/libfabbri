@@ -23,22 +23,6 @@ TEST_CASE("Test vector addition for 'double' type.", "Vector3D") {
     double eps = 1E-14;
     Vec3D actual = u + v;
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                       Vector addition (double)                            |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE(fabs(actual.x() - expected.x()) < eps );
     REQUIRE(fabs(actual.y() - expected.y()) < eps );
     REQUIRE(fabs(actual.z() - expected.z()) < eps );
@@ -62,22 +46,6 @@ TEST_CASE("Test vector addition for 'multiprecision' type.", "Vector3D") {
     mpreal eps = 1E-14;
     Vec3D actual = u + v;
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                       Vector addition (multiprecision)                    |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE( mpfr::abs(actual.x() - expected.x()) < eps );
     REQUIRE( mpfr::abs(actual.y() - expected.y()) < eps );
     REQUIRE( mpfr::abs(actual.z() - expected.z()) < eps );
@@ -96,22 +64,6 @@ TEST_CASE("Test vector subtraction for 'double' type.", "Vector3D") {
 
     double eps = 1E-14;
     Vec3D actual = v - u;
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                       Vector subtraction (double)                         |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(actual.x() - expected.x()) < eps );
     REQUIRE( fabs(actual.y() - expected.y()) < eps );
@@ -136,22 +88,6 @@ TEST_CASE("Test vector subtraction for 'multiprecision' type.", "Vector3D") {
     mpreal eps = 1E-14;
     Vec3D actual = v - u;
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                    Vector addition (multiprecision)                       |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE( mpfr::abs(actual.x() - expected.x()) < eps );
     REQUIRE( mpfr::abs(actual.y() - expected.y()) < eps );
     REQUIRE( mpfr::abs(actual.z() - expected.z()) < eps );
@@ -170,22 +106,6 @@ TEST_CASE("Test vector-scalar multiplication for 'double' type.", "Vector3D") {
 
     double eps = 1E-14;
     Vec3D actual = u * scalar;
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                      vector-scalar product (double)                       |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(actual.x() - expected.x()) < eps );
     REQUIRE( fabs(actual.y() - expected.y()) < eps );
@@ -210,22 +130,6 @@ TEST_CASE("Test vector-scalar multiplication for 'multiprecision' type.", "Vecto
     mpreal eps = 1E-14;
     Vec3D actual = u * scalar;
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                   vector-scalar product (multiprecision)                  |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE( mpfr::abs(actual.x() - expected.x()) < eps );
     REQUIRE( mpfr::abs(actual.y() - expected.y()) < eps );
     REQUIRE( mpfr::abs(actual.z() - expected.z()) < eps );
@@ -244,22 +148,6 @@ TEST_CASE("Test scalar-vector multiplication for 'double' type.", "Vector3D") {
 
     double eps = 1E-14;
     Vec3D actual = scalar * u;
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                        scalar-vector product (double)                     |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(actual.x() - expected.x()) < eps );
     REQUIRE( fabs(actual.y() - expected.y()) < eps );
@@ -284,22 +172,6 @@ TEST_CASE("Test scalar-vector multiplication for 'multiprecision' type.", "Vecto
     mpreal eps = 1E-14;
     Vec3D actual = scalar * u;
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                    scalar-vector product (multiprecision)                 |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE( mpfr::abs(actual.x() - expected.x()) < eps );
     REQUIRE( mpfr::abs(actual.y() - expected.y()) < eps );
     REQUIRE( mpfr::abs(actual.z() - expected.z()) < eps );
@@ -318,22 +190,6 @@ TEST_CASE("Test vector-scalar division for 'double' type.", "Vector3D") {
 
     double eps = 1E-14;
     Vec3D actual = u / scalar;
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                       vector-scalar division (double)                     |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string(53, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string(53, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string(53, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string(53, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(actual.x() - expected.x()) < eps );
     REQUIRE( fabs(actual.y() - expected.y()) < eps );
@@ -358,22 +214,6 @@ TEST_CASE("Test vector-scalar division for 'multiprecision' type.", "Vector3D") 
     mpreal eps = 1E-14;
     Vec3D actual = u / scalar;
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                   vector-scalar division (multiprecision)                 |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string(53, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string(53, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string(53, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string(53, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE( mpfr::abs(actual.x() - expected.x()) < eps );
     REQUIRE( mpfr::abs(actual.y() - expected.y()) < eps );
     REQUIRE( mpfr::abs(actual.z() - expected.z()) < eps );
@@ -392,18 +232,6 @@ TEST_CASE("Test vector dot product for 'double' type.", "Vector3D") {
 
     double eps = 1E-14;
     double actual = dot(u, v);
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                           dot product (double)                            |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected        | " << expected                    << string(54, ' ') << "|" << std::endl;
-    std::cout << "| actual          | " << actual                      << string(54, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(actual - expected) < eps );
 
@@ -426,18 +254,6 @@ TEST_CASE("Test vector dot product for 'multiprecision' type.", "Vector3D") {
     mpreal eps = 1E-14;
     mpreal actual = dot(u, v);
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                       dot product (multiprecision)                        |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected        | " << expected                    << string(54, ' ') << "|" << std::endl;
-    std::cout << "| actual          | " << actual                      << string(54, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE( mpfr::abs(actual - expected) < eps );
 
 }
@@ -454,22 +270,6 @@ TEST_CASE("Test vector cross product for 'double' type.", "Vector3D") {
 
     double eps = 1E-14;
     Vec3D actual = cross(u, v);
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                         cross product (double)                            |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string(54, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string(54, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string(54, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string(54, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( mpfr::abs(actual.x() - expected.x()) < eps );
     REQUIRE( mpfr::abs(actual.y() - expected.y()) < eps );
@@ -493,22 +293,6 @@ TEST_CASE("Test vector cross product for 'multiprecision' type.", "Vector3D") {
 
     mpreal eps = 1E-14;
     Vec3D actual = cross(u, v);
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                       cross product (multiprecision)                      |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string(54, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string(54, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string(55, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string(55, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string(54, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string(54, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( mpfr::abs(actual.x() - expected.x()) < eps );
     REQUIRE( mpfr::abs(actual.y() - expected.y()) < eps );
@@ -534,20 +318,6 @@ TEST_CASE("Test regularized norm for 'double' type.", "Vector3D") {
     double expected = sqrt(14.0);
     double actual = norm(v);
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                          norm (multiprecision)                            |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected        | " << expected                    << string( 5, ' ') << "|" << std::endl;
-    std::cout << "| actual          | " << actual                      << string( 5, ' ') << "|" << std::endl;
-    std::cout << "| reg-eps         | " << Vec3D::eps()                << string( 1, ' ') << "|" << std::endl;
-    std::cout << "| reg-eps squared | " << Vec3D::eps_squared()        << string( 1, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE( fabs(norm(v) - expected) < eps );
 
 }
@@ -572,20 +342,6 @@ TEST_CASE("Test regularized norm for 'multiprecision' type.", "Vector3D") {
     mpreal expected = mpfr::sqrt(14.0);
     mpreal actual = norm(v);
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                          norm (multiprecision)                            |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected        | " << expected                    << string( 5, ' ') << "|" << std::endl;
-    std::cout << "| actual          | " << actual                      << string( 5, ' ') << "|" << std::endl;
-    std::cout << "| reg-eps         | " << Vec3D::eps()                << string( 1, ' ') << "|" << std::endl;
-    std::cout << "| reg-eps squared | " << Vec3D::eps_squared()        << string( 1, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE (mpfr::abs(actual - expected) < eps);
 
 }
@@ -601,18 +357,6 @@ TEST_CASE("Test norm-squared for 'double' type.", "Vector3D") {
     double eps = 1E-14;
     double expected = 14.0;
     double actual = norm_squared(v);
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                          norm-squared (double)                            |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected        | " << expected                    << string(54, ' ') << "|" << std::endl;
-    std::cout << "| actual          | " << actual                      << string(54, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(actual - expected) < eps );
 
@@ -634,18 +378,6 @@ TEST_CASE("Test norm-squared for 'multiprecision' type.", "Vector3D") {
     mpreal expected = 14.0;
     mpreal actual = norm_squared(v);
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(digits);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                      norm-squared (multiprecision)                        |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected        | " << expected                    << string(54, ' ') << "|" << std::endl;
-    std::cout << "| actual          | " << actual                      << string(54, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE (mpfr::abs(actual - expected) < eps);
 
 }
@@ -661,24 +393,6 @@ TEST_CASE("Test normalised() function for 'double' type.", "Vector3D") {
     double eps = 1E-14;
     Vec3D expected(1.0 / sqrt(14.0), 2.0 / sqrt(14.0), 3.0 / sqrt(14.0) );
     Vec3D actual = normalised(v);
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                       normalised function (double)                        |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| reg-eps         | " << Vec3D::eps()                << string( 1, ' ') << "|" << std::endl;
-    std::cout << "| reg-eps squared | " << Vec3D::eps_squared()        << string( 1, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(actual.x() - expected.x()) < eps );
     REQUIRE( fabs(actual.y() - expected.y()) < eps );
@@ -702,24 +416,6 @@ TEST_CASE("Test normalised() function for 'multiprecision' type.", "Vector3D") {
     Vec3D expected(1.0 / mpfr::sqrt(14.0), 2.0 / mpfr::sqrt(14.0), 3.0 / mpfr::sqrt(14.0) );
     Vec3D actual = normalised(v);
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                 normalised function (multiprecision)                      |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string( 5, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string( 5, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string( 5, ' ') << "|" << std::endl;
-    std::cout << "| reg-eps         | " << Vec3D::eps()                << string( 1, ' ') << "|" << std::endl;
-    std::cout << "| reg-eps squared | " << Vec3D::eps_squared()        << string( 1, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE( abs(actual.x() - expected.x()) < eps );
     REQUIRE( abs(actual.y() - expected.y()) < eps );
     REQUIRE( abs(actual.z() - expected.z()) < eps );
@@ -739,21 +435,6 @@ TEST_CASE("Test edge_length() function for 'double' type.", "Vector3D geometry")
     double expected = sqrt(27.0);
     double actual_d1 = edge_length(u, v);
     double actual_d2 = edge_length(v, u);
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                            edge length (double)                           |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected        | " << expected                    << string(11, ' ') << "|" << std::endl;
-    std::cout << "| actual d1       | " << actual_d1                   << string( 5, ' ') << "|" << std::endl;
-    std::cout << "| actual d2       | " << actual_d2                   << string( 5, ' ') << "|" << std::endl;
-    std::cout << "| reg-eps         | " << Vec3D::eps()                << string( 1, ' ') << "|" << std::endl;
-    std::cout << "| reg-eps squared | " << Vec3D::eps_squared()        << string( 1, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE(fabs(actual_d1 - expected) < eps );
     REQUIRE(fabs(actual_d2 - expected) < eps );
@@ -778,21 +459,6 @@ TEST_CASE("Test edge_length() function for 'multiprecision' type.", "Vector3D ge
     mpreal actual_d1 = edge_length(u, v);
     mpreal actual_d2 = edge_length(v, u);
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                        edge length (multiprecision)                       |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected        | " << expected                    << string( 5, ' ') << "|" << std::endl;
-    std::cout << "| actual d1       | " << actual_d1                   << string( 5, ' ') << "|" << std::endl;
-    std::cout << "| actual d2       | " << actual_d2                   << string( 5, ' ') << "|" << std::endl;
-    std::cout << "| reg-eps         | " << Vec3D::eps()                << string( 1, ' ') << "|" << std::endl;
-    std::cout << "| reg-eps squared | " << Vec3D::eps_squared()        << string( 1, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE(abs(actual_d1 - expected) < eps );
     REQUIRE(abs(actual_d2 - expected) < eps );
 
@@ -811,22 +477,6 @@ TEST_CASE("Test edge_center() function for 'double' type.", "Vector3D geometry")
     Vec3D actual = edge_center(r1, r2);
 
     double eps = 1E-14;
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                            edge center (double)                           |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string(53, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string(53, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string(53, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string(53, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string(53, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string(53, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(expected.x() - actual.x()) < eps );
     REQUIRE( fabs(expected.y() - actual.y()) < eps );
@@ -852,22 +502,6 @@ TEST_CASE("Test edge_center() function for 'multiprecision' type.", "Vector3D ge
 
     mpreal eps = 1E-40;
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                       edge center (multiprecision)                        |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string(53, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string(53, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string(53, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string(53, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string(53, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string(53, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE( abs(expected.x() - actual.x()) < eps );
     REQUIRE( abs(expected.y() - actual.y()) < eps );
     REQUIRE( abs(expected.z() - actual.z()) < eps );
@@ -887,22 +521,6 @@ TEST_CASE("Test edge_orientation() function for 'double' type.", "Vector3D geome
     Vec3D actual = edge_orientation(r1, r2);
 
     double eps = 1E-14;
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                         edge orientation (double)                         |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(expected.x() - actual.x()) < eps );
     REQUIRE( fabs(expected.y() - actual.y()) < eps );
@@ -928,22 +546,6 @@ TEST_CASE("Test edge_orientation() function for 'multiprecision' type.", "Vector
 
     mpreal eps = 1E-40;
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                    edge orientation (multiprecision)                      |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE( abs(expected.x() - actual.x()) < eps );
     REQUIRE( abs(expected.y() - actual.y()) < eps );
     REQUIRE( abs(expected.z() - actual.z()) < eps );
@@ -964,22 +566,6 @@ TEST_CASE("Test triangle_normal() function for 'double' type.", "Vector3D geomet
     Vec3D actual = triangle_normal(r1, r2, r3);
 
     double eps = 1E-14;
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                         triangle normal (double)                          |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(expected.x() - actual.x()) < eps );
     REQUIRE( fabs(expected.y() - actual.y()) < eps );
@@ -1005,22 +591,6 @@ TEST_CASE("Test triangle_normal() function for 'multiprecision' type.", "Vector3
     Vec3D expected(1.0/mpfr::sqrt(3.0), 1.0/mpfr::sqrt(3.0), 1.0/mpfr::sqrt(3.0));
     Vec3D actual = triangle_normal(r1, r2, r3);
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                     triangle normal (multiprecision)                      |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE( abs(expected.x() - actual.x()) < eps );
     REQUIRE( abs(expected.y() - actual.y()) < eps );
     REQUIRE( abs(expected.z() - actual.z()) < eps );
@@ -1041,22 +611,6 @@ TEST_CASE("Test triangle_center() function for 'double' type.", "Vector3D geomet
     Vec3D actual = triangle_center(r1, r2, r3);
 
     double eps = 1E-14;
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                         triangle center (double)                          |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( fabs(expected.x() - actual.x()) < eps );
     REQUIRE( fabs(expected.y() - actual.y()) < eps );
@@ -1081,22 +635,6 @@ TEST_CASE("Test triangle_center() function for 'multiprecision' type.", "Vector3
     mpreal eps = 1E-40;
     Vec3D expected(mpreal(1.0)/mpreal(3.0), mpreal(1.0)/mpreal(3.0), mpreal(1.0)/mpreal(3.0));
     Vec3D actual = triangle_center(r1, r2, r3);
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "|                     triangle center (multiprecision)                      |" << std::endl;
-    std::cout << "+---------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| variable        | value                                                   |" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-    std::cout << "| expected x      | " << expected.x()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual x        | " << actual.x()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| expected y      | " << expected.y()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual y        | " << actual.y()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| expected z      | " << expected.z()                << string( 4, ' ') << "|" << std::endl;
-    std::cout << "| actual z        | " << actual.z()                  << string( 4, ' ') << "|" << std::endl;
-    std::cout << "+-----------------+---------------------------------------------------------+" << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE( abs(expected.x() - actual.x()) < eps );
     REQUIRE( abs(expected.y() - actual.y()) < eps );

@@ -21,7 +21,7 @@ if (${MULTIPRECISION})
     message(STATUS "MPFR_VERSION:   ${MPFR_VERSION}")
 
     # Add mpreal.
-    set(MPREAL_INCLUDE_DIR "${LIBFABBRI_THIRD_PARTY_DIR}/mpreal-v4.2.0/include")
+    set(MPREAL_INCLUDE_DIR "${LIBFABBRI_THIRD_PARTY_DIR}/mpreal-v3.7.0/include")
     message(STATUS "MPREAL_INCLUDE_DIR: ${MPREAL_INCLUDE_DIR}")
 
 endif()
