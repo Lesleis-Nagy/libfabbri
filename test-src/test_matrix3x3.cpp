@@ -747,6 +747,76 @@ TEST_CASE("Test matrix determinant for 'multiprecision' type.", "Matrix3x3") {
 
 }
 
+//###########################################################################//
+//# Test matrix transpose                                                   #//
+//###########################################################################//
+
+TEST_CASE("Test matrix transpose for 'double' type.", "Matrix3x3") {
+
+    using std::string;
+    using Mat3x3 = Matrix3x3<double>;
+
+    Mat3x3 m = {{ 1.0, 2.0, 3.0},
+                { 4.0, 5.0, 6.0},
+                { 7.0, 8.0, 9.0}};
+
+    Mat3x3 expected = {{1.0, 4.0, 7.0},
+                       {2.0, 5.0, 8.0},
+                       {3.0, 6.0, 9.0}};
+
+    double eps = 1E-14;
+
+    Mat3x3 actual = tr(m);
+
+    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
+    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
+    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+
+    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
+    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
+    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+
+    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
+    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
+    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
+
+}
+
+TEST_CASE("Test matrix transpose for 'multiprecision' type.", "Matrix3x3") {
+
+    using std::string;
+    using mpfr::mpreal;
+
+    using Mat3x3 = Matrix3x3<double>;
+
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    Mat3x3 m = {{ 1.0, 2.0, 3.0},
+                { 4.0, 5.0, 6.0},
+                { 7.0, 8.0, 9.0}};
+
+    Mat3x3 expected = {{1.0, 4.0, 7.0},
+                       {2.0, 5.0, 8.0},
+                       {3.0, 6.0, 9.0}};
+
+    mpreal eps = 1E-14;
+
+    Mat3x3 actual = tr(m);
+
+    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
+    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
+    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+
+    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
+    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
+    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+
+    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
+    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
+    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
+
+}
 
 
 

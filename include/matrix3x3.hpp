@@ -281,6 +281,22 @@ T det(const Matrix3x3<T> &m) {
 }
 
 /**
+ * Matrix transpose.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param m the matrix.
+ * @return the matrix transpose.
+ */
+template <typename T>
+Matrix3x3<T> tr(const Matrix3x3<T> &m) {
+
+    return {{m(0, 0), m(1, 0), m(2, 0)},
+            {m(0, 1), m(1, 1), m(2, 1)},
+            {m(0, 2), m(1, 2), m(2, 2)}};
+
+}
+
+/**
  * Matrix-matrix Frobenius (dot) product.
  * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
  * @param u the matrix on the left hand side of the dot product.
