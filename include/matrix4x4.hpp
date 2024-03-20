@@ -144,4 +144,77 @@ Matrix4x4<T> operator+ (const Matrix4x4<T> &u, const Matrix4x4<T> &v) {
 
 }
 
+/**
+ * Matrix subtraction operator.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param u the matrix on the left hand side of the sum.
+ * @param v the matrix on the right hand side of the sum.
+ * @return the difference of the two input matrices.
+ */
+template <typename T>
+Matrix4x4<T> operator- (const Matrix4x4<T> &u, const Matrix4x4<T> &v) {
+
+    return {{u(0, 0) - v(0, 0), u(0, 1) - v(0, 1), u(0, 2) - v(0, 2), u(0, 3) - v(0, 3) },
+            {u(1, 0) - v(1, 0), u(1, 1) - v(1, 1), u(1, 2) - v(1, 2), u(1, 3) - v(1, 3) },
+            {u(2, 0) - v(2, 0), u(2, 1) - v(2, 1), u(2, 2) - v(2, 2), u(2, 3) - v(2, 3) },
+            {u(3, 0) - v(3, 0), u(3, 1) - v(3, 1), u(3, 2) - v(3, 2), u(3, 3) - v(3, 3) }
+    };
+
+}
+
+/**
+ * Scalar-matrix product operator.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param lambda the scalar on the right hand side of the product.
+ * @param v the matrix on the left hand side of the product.
+ * @return the matrix-scalar product.
+ */
+template <typename T>
+Matrix4x4<T> operator*(T lambda, const Matrix4x4<T> &v) {
+
+    return {{lambda * v(0, 0), lambda * v(0, 1), lambda * v(0, 2), lambda * v(0, 3)},
+            {lambda * v(1, 0), lambda * v(1, 1), lambda * v(1, 2), lambda * v(1, 3)},
+            {lambda * v(2, 0), lambda * v(2, 1), lambda * v(2, 2), lambda * v(2, 3)},
+            {lambda * v(3, 0), lambda * v(3, 1), lambda * v(3, 2), lambda * v(3, 3)}};
+
+}
+
+/**
+ * Matrix-scalar product operator.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param v the matrix on the left hand side of the product.
+ * @param lambda the scalar on the right hand side of the product.
+ * @return the matrix-scalar product.
+ */
+template <typename T>
+Matrix4x4<T> operator*(const Matrix4x4<T> &v, T lambda) {
+
+    return {{v(0, 0) * lambda, v(0, 1) * lambda, v(0, 2) * lambda, v(0, 3) * lambda},
+            {v(1, 0) * lambda, v(1, 1) * lambda, v(1, 2) * lambda, v(1, 3) * lambda},
+            {v(2, 0) * lambda, v(2, 1) * lambda, v(2, 2) * lambda, v(2, 3) * lambda},
+            {v(3, 0) * lambda, v(3, 1) * lambda, v(3, 2) * lambda, v(3, 3) * lambda}};
+
+}
+
+/**
+ * Matrix-scalar division operator.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param v the matrix on the left hand side of the product.
+ * @param lambda the scalar on the right hand side of the product.
+ * @return the matrix-scalar division.
+ */
+template <typename T>
+Matrix4x4<T> operator/(const Matrix4x4<T> &v, T lambda) {
+
+    return {{v(0, 0) / lambda, v(0, 1) / lambda, v(0, 2) / lambda, v(0, 3) / lambda},
+            {v(1, 0) / lambda, v(1, 1) / lambda, v(1, 2) / lambda, v(1, 3) / lambda},
+            {v(2, 0) / lambda, v(2, 1) / lambda, v(2, 2) / lambda, v(2, 3) / lambda},
+            {v(3, 0) / lambda, v(3, 1) / lambda, v(3, 2) / lambda, v(3, 3) / lambda}};
+
+}
+
 #endif //LIBFABBRI_MATRIX4X4_HPP

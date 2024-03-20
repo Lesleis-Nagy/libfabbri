@@ -8,24 +8,14 @@ target_include_directories(test_vector3d
 target_link_libraries(test_vector3d
         ${MPFR_LIBRARIES})
 
-# Test fabbri.hpp
-add_executable(test_fabbri test_fabbri.cpp)
-target_include_directories(test_fabbri
+# Test vector4d.hpp
+add_executable(test_vector4d test_vector4d.cpp)
+target_include_directories(test_vector4d
         PRIVATE ${LIBFABBRI_INCLUDE_DIR}
         ${MPFR_INCLUDES}
         ${CATCH_INCLUDE_DIR}
         ${MPREAL_INCLUDE_DIR})
-target_link_libraries(test_fabbri
-        ${MPFR_LIBRARIES})
-
-# Test regular_grid.hpp
-add_executable(test_regular_grid test_regular_grid.cpp)
-target_include_directories(test_regular_grid
-        PRIVATE ${LIBFABBRI_INCLUDE_DIR}
-        ${MPFR_INCLUDES}
-        ${CATCH_INCLUDE_DIR}
-        ${MPREAL_INCLUDE_DIR})
-target_link_libraries(test_regular_grid
+target_link_libraries(test_vector4d
         ${MPFR_LIBRARIES})
 
 # Test matrix3x3.hpp
@@ -48,3 +38,22 @@ target_include_directories(test_matrix4x4
 target_link_libraries(test_matrix4x4
         ${MPFR_LIBRARIES})
 
+# Test fabbri.hpp
+add_executable(test_fabbri test_fabbri.cpp)
+target_include_directories(test_fabbri
+        PRIVATE ${LIBFABBRI_INCLUDE_DIR}
+        ${MPFR_INCLUDES}
+        ${CATCH_INCLUDE_DIR}
+        ${MPREAL_INCLUDE_DIR})
+target_link_libraries(test_fabbri
+        ${MPFR_LIBRARIES})
+
+# Test regular_grid.hpp
+add_executable(test_regular_grid test_regular_grid.cpp)
+target_include_directories(test_regular_grid
+        PRIVATE ${LIBFABBRI_INCLUDE_DIR}
+        ${MPFR_INCLUDES}
+        ${CATCH_INCLUDE_DIR}
+        ${MPREAL_INCLUDE_DIR})
+target_link_libraries(test_regular_grid
+        ${MPFR_LIBRARIES})

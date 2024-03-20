@@ -17,7 +17,8 @@
 
 /**
  * An implementation of a three dimensional cartesian vector.
- * @tparam T the underlying data type for the calculation - usually ‘double’ or ‘mpreal’.
+ * @tparam T the underlying data type for the calculation - usually ‘double’ or
+ *           ‘mpreal’.
  */
 template <typename T>
 class Vector3D {
@@ -25,7 +26,8 @@ class Vector3D {
 public:
 
     /**
-     * Set the regularisation-epsilon value for **all** Vector3D objects of this type.
+     * Set the regularisation-epsilon value for **all** Vector3D objects of this
+     * type.
      * @param new_eps the new regularisation-epsilon.
      */
     static void set_eps(T new_eps) {
@@ -63,8 +65,8 @@ public:
     {}
 
     /**
-     * Create a three dimensional vector object with the given x, y & z components along
-     * with a regularisation-epsilon value.
+     * Create a three dimensional vector object with the given x, y & z
+     * components along with a regularisation-epsilon value.
      * @param x the vector x component.
      * @param y the vector y component.
      * @param z the vector z component.
@@ -103,7 +105,8 @@ private:
 
 };
 
-// Initialize static eps & eps_squared values to defaults for double precision arithmetic.
+// Initialize static eps & eps_squared values to defaults for double precision
+// arithmetic.
 template <typename T>
 T Vector3D<T>::_eps = 1E-7;
 
@@ -112,7 +115,8 @@ T Vector3D<T>::_eps_squared = 1E-14;
 
 /**
  * Redirection operator to display the vector.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
  * @param out the output stream.
  * @param v the vector to display.
  * @return the output stream with a representation of the input vector.
@@ -127,7 +131,8 @@ std::ostream &operator << (std::ostream &out, const Vector3D<T> v) {
 
 /**
  * Vector addition operator.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
  * @param u the vector on the left hand side of the sum.
  * @param v the vector on the right hand side of the sum.
  * @return the sum of the two input vectors.
@@ -141,7 +146,8 @@ Vector3D<T> operator+ (const Vector3D<T> &u, const Vector3D<T> &v) {
 
 /**
  * Vector subtraction operator.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
  * @param u the vector on the left hand side of the operator.
  * @param v the vector on the right hand side of the operator.
  * @return the difference of two input vectors.
@@ -155,7 +161,8 @@ Vector3D<T> operator- (const Vector3D<T> &u, const Vector3D<T> &v) {
 
 /**
  * Vector-scalar product operator.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
  * @param v the vector on the left hand side of the product.
  * @param lambda the scalar on the right hand side of the product.
  * @return the vector-scalar product.
@@ -169,7 +176,8 @@ Vector3D<T> operator*(const Vector3D<T> &v, T lambda) {
 
 /**
  * Scalar-vector product operator.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
  * @param lambda the scalar on the left hand side of the product.
  * @param v the vector on the right hand side of the product.
  * @return the scalar-vector product.
@@ -183,7 +191,8 @@ Vector3D<T> operator*(T lambda, const Vector3D<T> &v) {
 
 /**
  * Vector-scalar division.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
  * @param v the vector on the left hand side of the division.
  * @param lambda the scalar on the right hand side of the division.
  * @return the vector-scalar division.
@@ -197,7 +206,8 @@ Vector3D<T> operator/(const Vector3D<T> &v, T lambda) {
 
 /**
  * Vector dot product.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
  * @param u the vector on the left hand side of the dot product.
  * @param v the scalar on the right hand side of the dot product.
  * @return the vector dot product.
@@ -211,7 +221,8 @@ T dot(const Vector3D<T> &u, const Vector3D<T> &v) {
 
 /**
  * Vector cross product.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
  * @param u the vector on the left hand side of the cross product.
  * @param v the scalar on the right hand side of the cross product.
  * @return the vector cross product.
@@ -226,7 +237,8 @@ Vector3D<T> cross(const Vector3D<T> &u, const Vector3D<T> &v)  {
 
 /**
  * The norm of a vector
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
  * @param v the vector for which we seek the norm.
  * @return the norm of the input vector.
  */
@@ -239,7 +251,8 @@ T norm(const Vector3D<T> &v) {
 
 /**
  * The norm squared of a vector.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
  * @param v the vector for which we seek the norm-squared.
  * @return the norm-squared of the input vector.
  */
@@ -252,7 +265,8 @@ T norm_squared(const Vector3D<T> &v) {
 
 /**
  * Produce a normalised version of the input vector.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
  * @param v the vector that we seek to normalise.
  * @return the normalised input vector.
  */
@@ -268,7 +282,8 @@ Vector3D<T> normalised(const Vector3D<T> &v) {
 
 /**
  * Return the edge_length between two vector endpoints.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
  * @param lhs vector representing the start point of the edge.
  * @param rhs vector representing the end point of the edge.
  * @return the length of the edge.
@@ -282,7 +297,8 @@ T edge_length(const Vector3D<T> &lhs, const Vector3D<T> &rhs) {
 
 /**
  * Return the edge center between two vector endpoints.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *          'mpreal'.
  * @param r1 vector representing the start point of the edge.
  * @param r2 vector representing the end point of the edge.
  * @return the vector representing the center point of the edge.
@@ -309,7 +325,8 @@ Vector3D<mpfr::mpreal> edge_center(const Vector3D<mpfr::mpreal> &r1, const Vecto
 }
 
 /**
- * Return the orientation vector between two vector end points; this is the unit vector pointing from \f$r_1\f$ to
+ * Return the orientation vector between two vector end points; this is the unit
+ * vector pointing from \f$r_1\f$ to
  * \f$r_2\f$.
  * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
  * @param r1 vector representing the start point of the edge.
@@ -324,8 +341,9 @@ Vector3D<T> edge_orientation(const Vector3D<T> &r1, const Vector3D<T> &r2) {
 }
 
 /**
- * Return the triangle normal vector assuming vertex clockwise winding \f$ r_1 \rightarrow r_2 \f$,
- * \f$ r_2 \rightarrow r_3 \f$ and \f$ r_3 \rightarrow r_1 \f$.
+ * Return the triangle normal vector assuming vertex clockwise winding
+ * \f$ r_1 \rightarrow r_2 \f$, \f$ r_2 \rightarrow r_3 \f$ and
+ * \f$ r_3 \rightarrow r_1 \f$.
  * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
  * @param r1 vector representing a point on the triangle.
  * @param r2 vector representing a point on the triangle.
@@ -341,7 +359,8 @@ Vector3D<T> triangle_normal(const Vector3D<T> &r1, const Vector3D<T> &r2, const 
 
 /**
  * Return the triangle center vector.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
  * @param r1 vector representing a point on the triangle.
  * @param r2 vector representing a point on the triangle.
  * @param r3 vector representing a point on the triangle.

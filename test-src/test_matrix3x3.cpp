@@ -177,6 +177,7 @@ TEST_CASE("Test matrix subtraction for 'multiprecision' type.", "Matrix3x3") {
     REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
 
 }
+
 //###########################################################################//
 //# Test scalar-matrix multiplication                                       #//
 //###########################################################################//
