@@ -14,15 +14,17 @@
 #include <functional>
 
 #include "vector3d.hpp"
+#include "geometry3d.hpp"
 #include "matrix3x3.hpp"
+#include "matrix4x4.hpp"
 
 /**
- * Return the matrix of the linear variation of the input vector v over a
+ * Return the Jacobian of the linear variation of the input vector v over a
  * triangle defined by r0, r1 & r2.
  */
-template <typename T>
-Matrix3x3<T> DV() {
-}
+//template <typename T>
+//Matrix3x3<T> DV() {
+//}
 
 
 /**

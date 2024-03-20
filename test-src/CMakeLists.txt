@@ -8,6 +8,16 @@ target_include_directories(test_vector3d
 target_link_libraries(test_vector3d
         ${MPFR_LIBRARIES})
 
+# Test geometry3d.hpp
+add_executable(test_geometry3d test_geometry3d.cpp)
+target_include_directories(test_geometry3d
+        PRIVATE ${LIBFABBRI_INCLUDE_DIR}
+                ${MPFR_INCLUDES}
+                ${CATCH_INCLUDE_DIR}
+                ${MPREAL_INCLUDE_DIR})
+target_link_libraries(test_geometry3d
+        ${MPFR_LIBRARIES})
+
 # Test vector4d.hpp
 add_executable(test_vector4d test_vector4d.cpp)
 target_include_directories(test_vector4d
