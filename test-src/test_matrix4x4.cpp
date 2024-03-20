@@ -684,3 +684,98 @@ TEST_CASE("Test matrix-matrix multiplication for 'multiprecision' type.", "Matri
     REQUIRE(fabs(actual(3, 3) - expected(3, 3)) < eps );
 
 }
+
+//###########################################################################//
+//# Test matrix adjugate                                                    #//
+//###########################################################################//
+
+TEST_CASE("Test matrix adjugate for 'double' type.", "Matrix4x4") {
+
+    using std::string;
+    using Mat4x4 = Matrix4x4<double>;
+
+    Mat4x4 m = {
+            {1.0, 2.0, 3.0, 4.0},
+            {2.0, 2.0, 2.0, 2.0},
+            {0.0, 1.0, 1.0, 0.0},
+            {1.0, 0.0, 2.0, 4.0}};
+
+    Mat4x4 expected = {
+            { 4.0, -4.0,  0.0,  -2.0},
+            {-6.0,  0.0,  6.0,   6.0},
+            { 6.0,  0.0, -12.0, -6.0},
+            {-4.0,  1.0,  6.0,   2.0}};
+
+    double eps = 1E-14;
+
+    Mat4x4 actual = adj(m);
+
+    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
+    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
+    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+    REQUIRE(fabs(actual(0, 3) - expected(0, 3)) < eps );
+
+    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
+    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
+    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+    REQUIRE(fabs(actual(1, 3) - expected(1, 3)) < eps );
+
+    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
+    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
+    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
+    REQUIRE(fabs(actual(2, 3) - expected(2, 3)) < eps );
+
+    REQUIRE(fabs(actual(3, 0) - expected(3, 0)) < eps );
+    REQUIRE(fabs(actual(3, 1) - expected(3, 1)) < eps );
+    REQUIRE(fabs(actual(3, 2) - expected(3, 2)) < eps );
+    REQUIRE(fabs(actual(3, 3) - expected(3, 3)) < eps );
+
+}
+
+TEST_CASE("Test matrix adjugate for 'multiprecision' type.", "Matrix4x4") {
+
+    using std::string;
+    using mpfr::mpreal;
+
+    using Mat4x4 = Matrix4x4<double>;
+
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    Mat4x4 m = {
+            {1.0, 2.0, 3.0, 4.0},
+            {2.0, 2.0, 2.0, 2.0},
+            {0.0, 1.0, 1.0, 0.0},
+            {1.0, 0.0, 2.0, 4.0}};
+
+    Mat4x4 expected = {
+            { 4.0, -4.0,  0.0,  -2.0},
+            {-6.0,  0.0,  6.0,   6.0},
+            { 6.0,  0.0, -12.0, -6.0},
+            {-4.0,  1.0,  6.0,   2.0}};
+
+    mpreal eps = 1E-14;
+
+    Mat4x4 actual = adj(m);
+
+    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
+    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
+    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+    REQUIRE(fabs(actual(0, 3) - expected(0, 3)) < eps );
+
+    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
+    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
+    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+    REQUIRE(fabs(actual(1, 3) - expected(1, 3)) < eps );
+
+    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
+    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
+    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
+    REQUIRE(fabs(actual(2, 3) - expected(2, 3)) < eps );
+
+    REQUIRE(fabs(actual(3, 0) - expected(3, 0)) < eps );
+    REQUIRE(fabs(actual(3, 1) - expected(3, 1)) < eps );
+    REQUIRE(fabs(actual(3, 2) - expected(3, 2)) < eps );
+    REQUIRE(fabs(actual(3, 3) - expected(3, 3)) < eps );
+
+}

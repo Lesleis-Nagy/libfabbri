@@ -224,6 +224,35 @@ Matrix3x3<T> operator *(const Matrix3x3<T> &m0, const Matrix3x3<T> &m1) {
 }
 
 /**
+ * Matrix adjugate.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param m the matrix.
+ * @return the matrix adjugate.
+ */
+template <typename T>
+Matrix3x3<T> adj(const Matrix3x3<T> &m) {
+
+    return {{-(m(1, 2)*m(2, 1)) + m(1, 1)*m(2, 2),
+               m(0, 2)*m(2, 1)  - m(0, 1)*m(2, 2),
+             -(m(0, 2)*m(1, 1)) + m(0, 1)*m(1, 2)},
+
+            {  m(1, 2)*m(2, 0) - m(1, 0)*m(2, 2),
+             -(m(0, 2)*m(2, 0)) + m(0, 0)*m(2, 2),
+               m(0, 2)*m(1, 0) - m(0, 0)*m(1, 2)},
+
+            {-(m(1, 1)*m(2, 0)) + m(1, 0)*m(2, 1),
+               m(0, 1)*m(2, 0) - m(0, 0)*m(2, 1),
+             -(m(0, 1)*m(1, 0)) + m(0, 0)*m(1, 1)}};
+
+}
+
+
+
+
+
+
+/**
  * Matrix-matrix Frobenius (dot) product.
  * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
  * @param u the matrix on the left hand side of the dot product.
