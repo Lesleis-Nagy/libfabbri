@@ -912,7 +912,7 @@ TEST_CASE("Test matrix Frobenius norm for 'multiprecision' type.", "Matrix3x3") 
     using std::string;
     using mpfr::mpreal;
 
-    using Mat3x3 = Matrix3x3<double>;
+    using Mat3x3 = Matrix3x3<mpreal>;
 
     const int digits = 50;
     mpreal::set_default_prec(mpfr::digits2bits(digits));
@@ -926,10 +926,64 @@ TEST_CASE("Test matrix Frobenius norm for 'multiprecision' type.", "Matrix3x3") 
                                4.0*4.0 + 5.0*5.0 + 6.0*6.0 +
                                7.0*7.0 + 8.0*8.0 + 9.0*9.0);  // 16.881943016134134
 
-    double eps = 1E-14;
+    mpreal eps = 1E-14;
 
-    double actual = norm(m0);
+    mpreal actual = norm(m0);
 
     REQUIRE(fabs(actual - expected) < eps);
+
+}
+
+//###########################################################################//
+//# Test matrix diagonal                                                    #//
+//###########################################################################//
+
+TEST_CASE("Test matrix diagonal for 'double' type.", "Matrix3x3") {
+    using std::string;
+    using Mat3x3 = Matrix3x3<double>;
+    using Vec3 = Vector3D<double>;
+
+    Mat3x3 m = {
+            { 1.0,  2.0,  3.0},
+            { 4.0,  5.0,  6.0},
+            { 7.0,  8.0,  9.0}};
+
+    Vec3 expected = {1.0, 5.0, 9.0};
+
+    double eps = 1E-14;
+
+    Vec3 actual = diag(m);
+
+    REQUIRE(fabs(actual.x() - expected.x()) < eps );
+    REQUIRE(fabs(actual.y() - expected.y()) < eps );
+    REQUIRE(fabs(actual.z() - expected.z()) < eps );
+
+}
+
+TEST_CASE("Test matrix diagonal for 'multiprecision' type.", "Matrix3x3") {
+
+    using std::string;
+    using mpfr::mpreal;
+
+    using Mat3x3 = Matrix3x3<mpreal>;
+    using Vec3 = Vector3D<mpreal>;
+
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    Mat3x3 m = {
+            { 1.0,  2.0,  3.0},
+            { 4.0,  5.0,  6.0},
+            { 7.0,  8.0,  9.0}};
+
+    Vec3 expected = {1.0, 5.0, 9.0};
+
+    double eps = 1E-14;
+
+    Vec3 actual = diag(m);
+
+    REQUIRE(fabs(actual.x() - expected.x()) < eps );
+    REQUIRE(fabs(actual.y() - expected.y()) < eps );
+    REQUIRE(fabs(actual.z() - expected.z()) < eps );
 
 }

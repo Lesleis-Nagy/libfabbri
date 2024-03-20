@@ -298,7 +298,8 @@ Matrix3x3<T> tr(const Matrix3x3<T> &m) {
 
 /**
  * Matrix-matrix Frobenius (dot) product.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
  * @param u the matrix on the left hand side of the dot product.
  * @param v the matrix on the right hand side of the dot product.
  * @return the matrix-vector multiplication.
@@ -314,14 +315,29 @@ T dot(const Matrix3x3<T> &u, const Matrix3x3<T> &v) {
 
 /**
  * Matrix Frobenius norm.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
  * @param u the matrix to take the norm of.
- * @return the matrix Furbinius norm.
+ * @return the matrix Frobenius norm.
  */
 template <typename T>
 T norm(const Matrix3x3<T> &u) {
 
     return sqrt(dot(u, u));
+
+}
+
+/**
+ * Matrix diagonal.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param m the matrix from which to extract the diagonal.
+ * @return the matrix diagonal.
+ */
+template <typename T>
+Vector3D<T> diag(const Matrix3x3<T> &m) {
+
+    return {m(0, 0), m(1, 1), m(2, 2)};
 
 }
 
