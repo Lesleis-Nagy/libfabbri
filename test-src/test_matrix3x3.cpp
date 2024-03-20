@@ -639,6 +639,54 @@ TEST_CASE("Test matrix adjugate for 'multiprecision' type.", "Matrix3x3") {
 
 }
 
+//###########################################################################//
+//# Test matrix determinant                                                 #//
+//###########################################################################//
+
+TEST_CASE("Test matrix determinant for 'double' type.", "Matrix3x3") {
+
+    using std::string;
+    using Mat3x3 = Matrix3x3<double>;
+
+    Mat3x3 m = {
+            { 1.0,  2.0,  3.0},
+            { 0.0,  5.0,  6.0},
+            { 0.0,  0.0,  9.0}};
+
+    double expected = 45.0;
+
+    double eps = 1E-14;
+
+    double actual = det(m);
+
+    REQUIRE(fabs(actual - expected) < eps );
+
+}
+
+TEST_CASE("Test matrix determinant for 'multiprecision' type.", "Matrix3x3") {
+
+    using std::string;
+    using mpfr::mpreal;
+
+    using Mat3x3 = Matrix3x3<double>;
+
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    Mat3x3 m = {
+            { 1.0,  2.0,  3.0},
+            { 0.0,  5.0,  6.0},
+            { 0.0,  0.0,  9.0}};
+
+    mpreal expected = 45.0;
+
+    mpreal eps = 1E-14;
+
+    mpreal actual = det(m);
+
+    REQUIRE(fabs(actual - expected) < eps );
+
+}
 
 
 

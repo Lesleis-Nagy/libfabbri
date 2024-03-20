@@ -247,10 +247,21 @@ Matrix3x3<T> adj(const Matrix3x3<T> &m) {
 
 }
 
+/**
+ * Matrix determinant.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param m the matrix.
+ * @return the matrix determinant.
+ */
+template <typename T>
+T det(const Matrix3x3<T> &m) {
 
+    return -(m(0, 2)*m(1, 1)*m(2, 0)) + m(0, 1)*m(1, 2)*m(2, 0) +
+             m(0, 2)*m(1, 0)*m(2, 1)  - m(0, 0)*m(1, 2)*m(2, 1) -
+             m(0, 1)*m(1, 0)*m(2, 2)  + m(0, 0)*m(1, 1)*m(2, 2);
 
-
-
+}
 
 /**
  * Matrix-matrix Frobenius (dot) product.
