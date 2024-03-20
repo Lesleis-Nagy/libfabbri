@@ -5,10 +5,7 @@
 #ifndef LIBFABBRI_MATRIX4X4_HPP
 #define LIBFABBRI_MATRIX4X4_HPP
 
-#include <ostream>
-#include <utility>
-
-#include "mpreal.h"
+#include "vector4d.hpp"
 
 /**
  * An implementation of a three by three square matrix.
