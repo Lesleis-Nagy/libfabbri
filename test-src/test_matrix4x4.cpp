@@ -1050,3 +1050,54 @@ TEST_CASE("Test matrix-matrix Frobenius product for 'multiprecision' type.", "Ma
     REQUIRE(fabs(actual - expected) < eps);
 
 }
+
+//###########################################################################//
+//# Test matrix Frobenius norm                                              #//
+//###########################################################################//
+
+TEST_CASE("Test matrix Frobenius norm for 'double' type.", "Matrix3x3") {
+
+    using std::string;
+    using Mat4x4 = Matrix4x4<double>;
+
+    Mat4x4 m = {
+            { 1.0,  2.0,  3.0,  4.0},
+            { 5.0,  6.0,  7.0,  8.0},
+            { 9.0, 10.0, 11.0, 12.0},
+            {13.0, 14.0, 15.0, 16.0}};
+
+    double expected = sqrt(1496.0);
+
+    double eps = 1E-14;
+
+    double actual = norm(m);
+
+    REQUIRE(fabs(actual - expected) < eps);
+
+}
+
+TEST_CASE("Test matrix Frobenius norm for 'multiprecision' type.", "Matrix3x3") {
+
+    using std::string;
+    using mpfr::mpreal;
+
+    using Mat4x4 = Matrix4x4<double>;
+
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    Mat4x4 m = {
+            { 1.0,  2.0,  3.0,  4.0},
+            { 5.0,  6.0,  7.0,  8.0},
+            { 9.0, 10.0, 11.0, 12.0},
+            {13.0, 14.0, 15.0, 16.0}};
+
+    mpreal expected = sqrt(1496.0);
+
+    double eps = 1E-14;
+
+    double actual = norm(m);
+
+    REQUIRE(fabs(actual - expected) < eps);
+
+}

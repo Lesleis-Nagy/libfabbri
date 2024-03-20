@@ -377,4 +377,17 @@ T dot(const Matrix4x4<T> &m0, const Matrix4x4<T> &m1) {
 
 }
 
+/**
+ * Matrix Frobenius product.
+ * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @param m the matrix.
+ * @return the matrix Frobenius norm.
+ */
+template <typename T>
+T norm(const Matrix4x4<T> &m) {
+
+    return sqrt(dot(m, m));
+
+}
+
 #endif //LIBFABBRI_MATRIX4X4_HPP
