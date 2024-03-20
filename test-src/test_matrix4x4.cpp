@@ -987,3 +987,66 @@ TEST_CASE("Test matrix transpose for 'multiprecision' type.", "Matrix4x4") {
     REQUIRE(fabs(actual(3, 3) - expected(3, 3)) < eps );
 
 }
+
+//###########################################################################//
+//# Test matrix-matrix Frobenius multiplication                             #//
+//###########################################################################//
+
+TEST_CASE("Test matrix-matrix Frobenius product for 'double' type.", "Matrix3x3") {
+
+    using std::string;
+    using Mat4x4 = Matrix4x4<double>;
+
+    Mat4x4 m0 = {
+            { 1.0,  2.0,  3.0,  4.0},
+            { 5.0,  6.0,  7.0,  8.0},
+            { 9.0, 10.0, 11.0, 12.0},
+            {13.0, 14.0, 15.0, 16.0}};
+
+    Mat4x4 m1 = {
+            {17.0, 18.0, 19.0, 20.0},
+            {21.0, 22.0, 23.0, 24.0},
+            {25.0, 26.0, 27.0, 28.0},
+            {29.0, 30.0, 31.0, 32.0}};
+
+    double expected = 3672.0;
+
+    double eps = 1E-14;
+
+    double actual = dot(m0, m1);
+
+    REQUIRE(fabs(actual - expected) < eps);
+
+}
+
+TEST_CASE("Test matrix-matrix Frobenius product for 'multiprecision' type.", "Matrix3x3") {
+
+    using std::string;
+    using mpfr::mpreal;
+
+    using Mat4x4 = Matrix4x4<double>;
+
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    Mat4x4 m0 = {
+            { 1.0,  2.0,  3.0,  4.0},
+            { 5.0,  6.0,  7.0,  8.0},
+            { 9.0, 10.0, 11.0, 12.0},
+            {13.0, 14.0, 15.0, 16.0}};
+
+    Mat4x4 m1 = {
+            {17.0, 18.0, 19.0, 20.0},
+            {21.0, 22.0, 23.0, 24.0},
+            {25.0, 26.0, 27.0, 28.0},
+            {29.0, 30.0, 31.0, 32.0}};
+
+    mpreal expected = 3672.0;
+
+    double eps = 1E-14;
+
+    double actual = dot(m0, m1);
+
+    REQUIRE(fabs(actual - expected) < eps);
+
+}

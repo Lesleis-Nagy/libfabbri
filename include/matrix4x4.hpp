@@ -360,4 +360,21 @@ Matrix4x4<T> tr(const Matrix4x4<T> &m) {
 
 }
 
+/**
+ * Matrix-matrix Frobenius (dot) product.
+ * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @param m0 the matrix on the left hand side of the dot product.
+ * @param m1 the matrix on the right hand side of the dot product.
+ * @return the matrix-vector multiplication.
+ */
+template <typename T>
+T dot(const Matrix4x4<T> &m0, const Matrix4x4<T> &m1) {
+
+    return m0(0, 0)*m1(0, 0) + m0(0, 1)*m1(0, 1) + m0(0, 2)*m1(0, 2) + m0(0, 3)*m1(0, 3) +
+           m0(1, 0)*m1(1, 0) + m0(1, 1)*m1(1, 1) + m0(1, 2)*m1(1, 2) + m0(1, 3)*m1(1, 3) +
+           m0(2, 0)*m1(2, 0) + m0(2, 1)*m1(2, 1) + m0(2, 2)*m1(2, 2) + m0(2, 3)*m1(2, 3) +
+           m0(3, 0)*m1(3, 0) + m0(3, 1)*m1(3, 1) + m0(3, 2)*m1(3, 2) + m0(3, 3)*m1(3, 3);
+
+}
+
 #endif //LIBFABBRI_MATRIX4X4_HPP

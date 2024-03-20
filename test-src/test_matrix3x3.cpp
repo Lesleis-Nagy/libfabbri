@@ -818,8 +818,6 @@ TEST_CASE("Test matrix transpose for 'multiprecision' type.", "Matrix3x3") {
 
 }
 
-
-
 //###########################################################################//
 //# Test matrix-matrix Frobenius multiplication                             #//
 //###########################################################################//
