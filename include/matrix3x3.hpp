@@ -199,6 +199,23 @@ Vector3D<T> operator*(const Matrix3x3<T> &m, const Vector3D<T> &v) {
 }
 
 /**
+ * Vector-matrix multiplication.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param v the vector on the left hand side of the multiplication.
+ * @param m the matrix on the right hand side of the multiplication.
+ * @return the matrix-vector multiplication.
+ */
+template <typename T>
+Vector3D<T> operator*(const Vector3D<T> &v, const Matrix3x3<T> &m) {
+
+    return {m(0, 0)*v.x() + m(1, 0)*v.y() + m(2, 0)*v.z(),
+            m(0, 1)*v.x() + m(1, 1)*v.y() + m(2, 1)*v.z(),
+            m(0, 2)*v.x() + m(1, 2)*v.y() + m(2, 2)*v.z()};
+
+}
+
+/**
  * Matrix-matrix multiplication.
  * @tparam T the underlying data type for the calculation - usually 'double' or
  *           'mpreal'.

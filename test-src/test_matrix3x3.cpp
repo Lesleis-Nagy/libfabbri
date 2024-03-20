@@ -480,6 +480,65 @@ TEST_CASE("Test matrix-vector multiplication for 'multiprecision' type.", "Matri
 }
 
 //###########################################################################//
+//# Test vector-matrix multiplication                                       #//
+//###########################################################################//
+
+TEST_CASE("Test vector-matrix multiplication for 'double' type.", "Matrix3x3") {
+
+    using std::string;
+    using Vec3 = Vector3D<double>;
+    using Mat3x3 = Matrix3x3<double>;
+
+    Mat3x3 m0 = {
+            { 1.0,  2.0,  3.0},
+            { 4.0,  5.0,  6.0},
+            { 7.0,  8.0,  9.0}};
+
+    Vec3 v = {1.0, 2.0, 3.0};
+
+    Vec3 expected = {30.0, 36.0, 42.0};
+
+    double eps = 1E-14;
+
+    Vec3 actual = v * m0;
+
+    REQUIRE(fabs(actual.x() - expected.x()) < eps );
+    REQUIRE(fabs(actual.y() - expected.y()) < eps );
+    REQUIRE(fabs(actual.z() - expected.z()) < eps );
+
+}
+
+TEST_CASE("Test vector-matrix multiplication for 'multiprecision' type.", "Matrix3x3") {
+
+    using std::string;
+    using mpfr::mpreal;
+
+    using Vec3 = Vector3D<double>;
+    using Mat3x3 = Matrix3x3<double>;
+
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    Mat3x3 m0 = {
+            { 1.0,  2.0,  3.0},
+            { 4.0,  5.0,  6.0},
+            { 7.0,  8.0,  9.0}};
+
+    Vec3 v = {1.0, 2.0, 3.0};
+
+    Vec3 expected = {30.0, 36.0, 42.0};
+
+    mpreal eps = 1E-14;
+
+    Vec3 actual = v * m0;
+
+    REQUIRE(fabs(actual.x() - expected.x()) < eps );
+    REQUIRE(fabs(actual.y() - expected.y()) < eps );
+    REQUIRE(fabs(actual.z() - expected.z()) < eps );
+
+}
+
+//###########################################################################//
 //# Test matrix-matrix multiplication                                       #//
 //###########################################################################//
 

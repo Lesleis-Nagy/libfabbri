@@ -579,6 +579,68 @@ TEST_CASE("Test matrix-vector multiplication for 'multiprecision' type.", "Matri
 }
 
 //###########################################################################//
+//# Test vector-matrix multiplication                                       #//
+//###########################################################################//
+
+TEST_CASE("Test vector-matrix multiplication for 'double' type.", "Matrix4x4") {
+
+    using std::string;
+    using Mat4x4 = Matrix4x4<double>;
+    using Vec4 = Vector4D<double>;
+
+    Mat4x4 m0 = {
+            { 1.0,  2.0,  3.0,  4.0},
+            { 5.0,  6.0,  7.0,  8.0},
+            { 9.0, 10.0, 11.0, 12.0},
+            {13.0, 14.0, 15.0, 16.0}};
+
+    Vec4 v = {17.0, 18.0, 19.0, 20.0};
+
+    Vec4 expected = {190.0, 486.0, 782.0, 1078.0};
+
+    double eps = 1E-14;
+
+    Vec4 actual = m0 * v;
+
+    REQUIRE(fabs(actual.x() - expected.x()) < eps );
+    REQUIRE(fabs(actual.y() - expected.y()) < eps );
+    REQUIRE(fabs(actual.z() - expected.z()) < eps );
+    REQUIRE(fabs(actual.w() - expected.w()) < eps );
+
+}
+
+TEST_CASE("Test vector-matrix multiplication for 'multiprecision' type.", "Matrix4x4") {
+
+    using std::string;
+    using mpfr::mpreal;
+
+    using Mat4x4= Matrix4x4<mpreal>;
+    using Vec4 = Vector4D<mpreal>;
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    Mat4x4 m0 = {
+            { 1.0,  2.0,  3.0,  4.0},
+            { 5.0,  6.0,  7.0,  8.0},
+            { 9.0, 10.0, 11.0, 12.0},
+            {13.0, 14.0, 15.0, 16.0}};
+
+    Vec4 v = {17.0, 18.0, 19.0, 20.0};
+
+    Vec4 expected = {190.0, 486.0, 782.0, 1078.0};
+
+    mpreal eps = 1E-14;
+
+    Vec4 actual = m0 * v;
+
+    REQUIRE(fabs(actual.x() - expected.x()) < eps );
+    REQUIRE(fabs(actual.y() - expected.y()) < eps );
+    REQUIRE(fabs(actual.z() - expected.z()) < eps );
+    REQUIRE(fabs(actual.w() - expected.w()) < eps );
+
+}
+
+//###########################################################################//
 //# Test matrix-matrix multiplication                                       #//
 //###########################################################################//
 

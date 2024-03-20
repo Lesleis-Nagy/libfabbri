@@ -234,6 +234,24 @@ Vector4D<T> operator*(const Matrix4x4<T> &m, const Vector4D<T> &v) {
 }
 
 /**
+ * Vector-matrix multiplication.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param v the vector on the left hand side of the multiplication.
+ * @param m the matrix on the right hand side of the multiplication.
+ * @return the matrix-vector multiplication.
+ */
+template <typename T>
+Vector4D<T> operator*(const Vector4D<T> &v, const Matrix4x4<T> &m) {
+
+    return {m(3, 0)*v.w() + m(0, 0)*v.x() + m(1, 0)*v.y() + m(2, 0)*v.z(),
+            m(3, 1)*v.w() + m(0, 1)*v.x() + m(1, 1)*v.y() + m(2, 1)*v.z(),
+            m(3, 2)*v.w() + m(0, 2)*v.x() + m(1, 2)*v.y() + m(2, 2)*v.z(),
+            m(3, 3)*v.w() + m(0, 3)*v.x() + m(1, 3)*v.y() + m(2, 3)*v.z()};
+
+}
+
+/**
  * Matrix-matrix multiplication.
  * @tparam T the underlying data type for the calculation - usually 'double' or
  *           'mpreal'.
