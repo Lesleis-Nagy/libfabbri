@@ -987,3 +987,52 @@ TEST_CASE("Test matrix diagonal for 'multiprecision' type.", "Matrix3x3") {
     REQUIRE(fabs(actual.z() - expected.z()) < eps );
 
 }
+
+//###########################################################################//
+//# Test matrix trace                                                       #//
+//###########################################################################//
+
+TEST_CASE("Test matrix trace for 'double' type.", "Matrix3x3") {
+    using std::string;
+    using Mat3x3 = Matrix3x3<double>;
+
+    Mat3x3 m = {
+            { 1.0,  2.0,  3.0},
+            { 4.0,  5.0,  6.0},
+            { 7.0,  8.0,  9.0}};
+
+    double expected = 15.0;
+
+    double eps = 1E-14;
+
+    double actual = trace(m);
+
+    REQUIRE(fabs(actual - expected) < eps );
+
+}
+
+TEST_CASE("Test matrix trace for 'multiprecision' type.", "Matrix3x3") {
+
+    using std::string;
+    using mpfr::mpreal;
+
+    using Mat3x3 = Matrix3x3<mpreal>;
+    using Vec3 = Vector3D<mpreal>;
+
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    Mat3x3 m = {
+            { 1.0,  2.0,  3.0},
+            { 4.0,  5.0,  6.0},
+            { 7.0,  8.0,  9.0}};
+
+    mpreal expected = 15.0;
+
+    mpreal eps = 1E-14;
+
+    mpreal actual = trace(m);
+
+    REQUIRE(fabs(actual - expected) < eps );
+
+}

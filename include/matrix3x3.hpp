@@ -341,4 +341,18 @@ Vector3D<T> diag(const Matrix3x3<T> &m) {
 
 }
 
+/**
+ * Matrix trace.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param m the matrix for which to compute the trace.
+ * @return the matrix trace.
+ */
+template <typename T>
+T trace(const Matrix3x3<T> &m) {
+
+    return m(0, 0) + m(1, 1) + m(2, 2);
+
+}
+
 #endif //LIBFABBRI_MATRIX3X3_HPP

@@ -404,4 +404,18 @@ Vector4D<T> diag(const Matrix4x4<T> &m) {
 
 }
 
+/**
+ * Matrix trace.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param m the matrix for which to compute the trace.
+ * @return the matrix trace.
+ */
+template <typename T>
+T trace(const Matrix4x4<T> &m) {
+
+    return m(0, 0) + m(1, 1) + m(2, 2) + m(3, 3);
+
+}
+
 #endif //LIBFABBRI_MATRIX4X4_HPP

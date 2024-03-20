@@ -1160,3 +1160,55 @@ TEST_CASE("Test matrix diagonal for 'multiprecision' type.", "Matrix4x4") {
     REQUIRE(fabs(actual.w() - expected.w()) < eps );
 
 }
+
+//###########################################################################//
+//# Test matrix trace                                                       #//
+//###########################################################################//
+
+TEST_CASE("Test matrix trace for 'double' type.", "Matrix4x4") {
+
+    using std::string;
+    using Mat4x4 = Matrix4x4<double>;
+
+    Mat4x4 m = {
+            { 1.0,  2.0,  3.0,  4.0},
+            { 5.0,  6.0,  7.0,  8.0},
+            { 9.0, 10.0, 11.0, 12.0},
+            {13.0, 14.0, 15.0, 16.0}};
+
+    double expected = 34.0;
+
+    double eps = 1E-14;
+
+    double actual = trace(m);
+
+    REQUIRE(fabs(actual - expected) < eps );
+
+}
+
+TEST_CASE("Test matrix trace for 'multiprecision' type.", "Matrix4x4") {
+
+    using std::string;
+    using mpfr::mpreal;
+
+    using Mat4x4 = Matrix4x4<mpreal>;
+    using Vec4 = Vector4D<mpreal>;
+
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    Mat4x4 m = {
+            { 1.0,  2.0,  3.0,  4.0},
+            { 5.0,  6.0,  7.0,  8.0},
+            { 9.0, 10.0, 11.0, 12.0},
+            {13.0, 14.0, 15.0, 16.0}};
+
+    mpreal expected = 34.0;
+
+    mpreal eps = 1E-14;
+
+    mpreal actual = trace(m);
+
+    REQUIRE(fabs(actual - expected) < eps );
+
+}
