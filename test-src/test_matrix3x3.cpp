@@ -480,6 +480,96 @@ TEST_CASE("Test matrix-vector multiplication for 'multiprecision' type.", "Matri
 }
 
 //###########################################################################//
+//# Test matrix-matrix multiplication                                       #//
+//###########################################################################//
+
+TEST_CASE("Test matrix-matrix multiplication for 'double' type.", "Matrix3x3") {
+
+    using std::string;
+    using Mat3x3 = Matrix3x3<double>;
+
+    Mat3x3 m0 = {
+            { 1.0,  2.0,  3.0},
+            { 4.0,  5.0,  6.0},
+            { 7.0,  8.0,  9.0}};
+
+    Mat3x3 m1 = {
+            {10.0, 11.0, 12.0},
+            {13.0, 14.0, 15.0},
+            {16.0, 17.0, 18.0}};
+
+    Mat3x3 expected = {
+            { 84.0,  90.0,  96.0},
+            {201.0, 216.0, 231.0},
+            {318.0, 342.0, 366.0}};
+
+    double eps = 1E-14;
+
+    Mat3x3 actual = m0 * m1;
+
+    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
+    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
+    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+
+    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
+    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
+    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+
+    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
+    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
+    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
+
+}
+
+TEST_CASE("Test matrix-matrix multiplication for 'multiprecision' type.", "Matrix3x3") {
+
+    using std::string;
+    using mpfr::mpreal;
+
+    using Mat3x3 = Matrix3x3<double>;
+
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    Mat3x3 m0 = {
+            { 1.0,  2.0,  3.0},
+            { 4.0,  5.0,  6.0},
+            { 7.0,  8.0,  9.0}};
+
+    Mat3x3 m1 = {
+            {10.0, 11.0, 12.0},
+            {13.0, 14.0, 15.0},
+            {16.0, 17.0, 18.0}};
+
+    Mat3x3 expected = {
+            { 84.0,  90.0,  96.0},
+            {201.0, 216.0, 231.0},
+            {318.0, 342.0, 366.0}};
+
+    mpreal eps = 1E-14;
+
+    Mat3x3 actual = m0 * m1;
+
+    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
+    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
+    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+
+    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
+    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
+    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+
+    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
+    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
+    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
+
+}
+
+
+
+
+
+
+//###########################################################################//
 //# Test matrix-matrix Frobenius multiplication                             #//
 //###########################################################################//
 

@@ -26,6 +26,7 @@ public:
      * Create a 3x3 matrix from an input.
      */
     Matrix3x3(std::initializer_list<std::initializer_list<T>> m) {
+
         assert(m.size() == 3 && "Number of rows must be 3.");
 
         auto outerIterator = m.begin();
@@ -51,9 +52,11 @@ public:
         _m[2][0] = *innerIterator++;
         _m[2][1] = *innerIterator++;
         _m[2][2] = *innerIterator++;
+
     }
 
     Matrix3x3& operator=(const Matrix3x3 &m) {
+
         if (this == &m) return *this;
         _m[0][0] = m._m[0][0];
         _m[0][1] = m._m[0][1];
@@ -68,12 +71,11 @@ public:
         _m[2][2] = m._m[2][2];
 
         return *this;
+
     }
 
     [[nodiscard]]
-    T operator() (size_t i, size_t j) const {
-        return _m[i][j];
-    }
+    T operator() (size_t i, size_t j) const { return _m[i][j]; }
 
 private:
 
@@ -181,8 +183,9 @@ Matrix3x3<T> operator/(const Matrix3x3<T> &v, T lambda) {
 
 /**
  * Matrix-vector multiplication.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
- * @param u the matrix on the left hand side of the multiplication.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param m the matrix on the left hand side of the multiplication.
  * @param v the vector on the right hand side of the multiplication.
  * @return the matrix-vector multiplication.
  */
@@ -192,6 +195,31 @@ Vector3D<T> operator*(const Matrix3x3<T> &m, const Vector3D<T> &v) {
     return {m(0, 0)*v.x() + m(0, 1)*v.y() + m(0, 2)*v.z(),
             m(1, 0)*v.x() + m(1, 1)*v.y() + m(1, 2)*v.z(),
             m(2, 0)*v.x() + m(2, 1)*v.y() + m(2, 2)*v.z()};
+
+}
+
+/**
+ * Matrix-matrix multiplication.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param m0 the matrix on the left hand side of the multiplication.
+ * @param m1 the matrix on the right hand side of the multiplication.
+ * @return the matrix-matrix multiplication.
+ */
+template <typename T>
+Matrix3x3<T> operator *(const Matrix3x3<T> &m0, const Matrix3x3<T> &m1) {
+
+    return {{m0(0, 0) * m1(0, 0) + m0(0, 1) * m1(1, 0) + m0(0, 2) * m1(2, 0),
+             m0(0, 0) * m1(0, 1) + m0(0, 1) * m1(1, 1) + m0(0, 2) * m1(2, 1),
+             m0(0, 0) * m1(0, 2) + m0(0, 1) * m1(1, 2) + m0(0, 2) * m1(2, 2)},
+
+            {m0(1, 0) * m1(0, 0) + m0(1, 1) * m1(1, 0) + m0(1, 2) * m1(2, 0),
+             m0(1, 0) * m1(0, 1) + m0(1, 1) * m1(1, 1) + m0(1, 2) * m1(2, 1),
+             m0(1, 0) * m1(0, 2) + m0(1, 1) * m1(1, 2) + m0(1, 2) * m1(2, 2)},
+
+            {m0(2, 0) * m1(0, 0) + m0(2, 1) * m1(1, 0) + m0(2, 2) * m1(2, 0),
+             m0(2, 0) * m1(0, 1) + m0(2, 1) * m1(1, 1) + m0(2, 2) * m1(2, 1),
+             m0(2, 0) * m1(0, 2) + m0(2, 1) * m1(1, 2) + m0(2, 2) * m1(2, 2)}};
 
 }
 

@@ -26,6 +26,7 @@ public:
      * Create a 4x4 matrix from an input.
      */
     Matrix4x4(std::initializer_list<std::initializer_list<T>> m) {
+
         assert(m.size() == 4 && "Number of rows must be 4.");
 
         auto outerIterator = m.begin();
@@ -67,6 +68,7 @@ public:
     }
 
     Matrix4x4& operator=(const Matrix4x4 &m) {
+
         if (this == &m) return *this;
         _m[0][0] = m._m[0][0];
         _m[0][1] = m._m[0][1];
@@ -89,12 +91,11 @@ public:
         _m[3][3] = m._m[3][3];
 
         return *this;
+
     }
 
     [[nodiscard]]
-    T operator() (size_t i, size_t j) const {
-        return _m[i][j];
-    }
+    T operator() (size_t i, size_t j) const { return _m[i][j]; }
 
 private:
 
@@ -213,5 +214,57 @@ Matrix4x4<T> operator/(const Matrix4x4<T> &v, T lambda) {
             {v(3, 0) / lambda, v(3, 1) / lambda, v(3, 2) / lambda, v(3, 3) / lambda}};
 
 }
+
+/**
+ * Matrix-vector multiplication.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param m the matrix on the left hand side of the multiplication.
+ * @param v the vector on the right hand side of the multiplication.
+ * @return the matrix-vector multiplication.
+ */
+template <typename T>
+Vector4D<T> operator*(const Matrix4x4<T> &m, const Vector4D<T> &v) {
+
+    return {m(0, 3)*v.w() + m(0, 0)*v.x() + m(0, 1)*v.y() + m(0, 2)*v.z(),
+            m(1, 3)*v.w() + m(1, 0)*v.x() + m(1, 1)*v.y() + m(1, 2)*v.z(),
+            m(2, 3)*v.w() + m(2, 0)*v.x() + m(2, 1)*v.y() + m(2, 2)*v.z(),
+            m(3, 3)*v.w() + m(3, 0)*v.x() + m(3, 1)*v.y() + m(3, 2)*v.z()};
+
+}
+
+/**
+ * Matrix-matrix multiplication.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param m0 the matrix on the left hand side of the multiplication.
+ * @param m1 the matrix on the right hand side of the multiplication.
+ * @return the matrix-matrix multiplication.
+ */
+template <typename T>
+Matrix4x4<T> operator *(const Matrix4x4<T> &m0, const Matrix4x4<T> &m1) {
+
+    return{{m0(0, 0)*m1(0, 0) + m0(0, 1)*m1(1, 0) + m0(0, 2)*m1(2, 0) + m0(0, 3)*m1(3, 0),
+            m0(0, 0)*m1(0, 1) + m0(0, 1)*m1(1, 1) + m0(0, 2)*m1(2, 1) + m0(0, 3)*m1(3, 1),
+            m0(0, 0)*m1(0, 2) + m0(0, 1)*m1(1, 2) + m0(0, 2)*m1(2, 2) + m0(0, 3)*m1(3, 2),
+            m0(0, 0)*m1(0, 3) + m0(0, 1)*m1(1, 3) + m0(0, 2)*m1(2, 3) + m0(0, 3)*m1(3, 3)},
+
+           {m0(1, 0)*m1(0, 0) + m0(1, 1)*m1(1, 0) + m0(1, 2)*m1(2, 0) + m0(1, 3)*m1(3, 0),
+            m0(1, 0)*m1(0, 1) + m0(1, 1)*m1(1, 1) + m0(1, 2)*m1(2, 1) + m0(1, 3)*m1(3, 1),
+            m0(1, 0)*m1(0, 2) + m0(1, 1)*m1(1, 2) + m0(1, 2)*m1(2, 2) + m0(1, 3)*m1(3, 2),
+            m0(1, 0)*m1(0, 3) + m0(1, 1)*m1(1, 3) + m0(1, 2)*m1(2, 3) + m0(1, 3)*m1(3, 3)},
+
+           {m0(2, 0)*m1(0, 0) + m0(2, 1)*m1(1, 0) + m0(2, 2)*m1(2, 0) + m0(2, 3)*m1(3, 0),
+            m0(2, 0)*m1(0, 1) + m0(2, 1)*m1(1, 1) + m0(2, 2)*m1(2, 1) + m0(2, 3)*m1(3, 1),
+            m0(2, 0)*m1(0, 2) + m0(2, 1)*m1(1, 2) + m0(2, 2)*m1(2, 2) + m0(2, 3)*m1(3, 2),
+            m0(2, 0)*m1(0, 3) + m0(2, 1)*m1(1, 3) + m0(2, 2)*m1(2, 3) + m0(2, 3)*m1(3, 3)},
+
+           {m0(3, 0)*m1(0, 0) + m0(3, 1)*m1(1, 0) + m0(3, 2)*m1(2, 0) + m0(3, 3)*m1(3, 0),
+            m0(3, 0)*m1(0, 1) + m0(3, 1)*m1(1, 1) + m0(3, 2)*m1(2, 1) + m0(3, 3)*m1(3, 1),
+            m0(3, 0)*m1(0, 2) + m0(3, 1)*m1(1, 2) + m0(3, 2)*m1(2, 2) + m0(3, 3)*m1(3, 2),
+            m0(3, 0)*m1(0, 3) + m0(3, 1)*m1(1, 3) + m0(3, 2)*m1(2, 3) + m0(3, 3)*m1(3, 3)}};
+
+}
+
 
 #endif //LIBFABBRI_MATRIX4X4_HPP
