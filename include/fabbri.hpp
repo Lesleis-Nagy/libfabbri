@@ -20,7 +20,7 @@
 
 /**
  * Return the Jacobian of the linear variation of four vectors V1, V2, V3 & V4
- * defined on the corners of a tetrahedron with coordinates p1, p2, p3 & p4
+ * defined on the corners of a tetrahedron with coordinates r1, r2, r3 & r4
  * respectively.
  */
 template <typename T>
