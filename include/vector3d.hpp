@@ -10,6 +10,7 @@
 #ifndef LIBFABBRI_VECTOR3D_HPP
 #define LIBFABBRI_VECTOR3D_HPP
 
+#include <array>
 #include <ostream>
 #include <utility>
 
@@ -60,9 +61,7 @@ public:
     /**
      * Create a three dimensional zero-vector object.
      */
-    Vector3D():
-        _x(0), _y(0), _z(0)
-    {}
+    Vector3D(): _x{0.0, 0.0, 0.0} {}
 
     /**
      * Create a three dimensional vector object with the given x, y & z
@@ -72,33 +71,36 @@ public:
      * @param z the vector z component.
      * @param eps the regularization-epsilon value.
      */
-    Vector3D(T x, T y, T z):
-            _x(std::move(x)), _y(std::move(y)), _z(std::move(z))
-    {}
+    Vector3D(T x, T y, T z): _x{x, y, z} {}
 
     /**
      * Retrieve the vector's x-component.
      * @return the vector's x-component.
      */
-    [[nodiscard]] inline T x() const { return _x; }
+    [[nodiscard]] inline T x() const { return _x[0]; }
 
     /**
      * Retrieve the vector's y-component.
      * @return the vector's y-component.
      */
-    [[nodiscard]] inline T y() const { return _y; }
+    [[nodiscard]] inline T y() const { return _x[1]; }
 
     /**
      * Retrieve the vector's z-component.
      * @return the vector's z-component.
      */
-    [[nodiscard]] inline T z() const { return _z; }
+    [[nodiscard]] inline T z() const { return _x[2]; }
+
+    /**
+     * Retrieve the vector's ith component.
+     * @param idx the index of the component.
+     * @return the vector component.
+     */
+    [[nodiscard]] T operator()(size_t idx) const { return _x[idx]; }
 
 private:
 
-    T _x;
-    T _y;
-    T _z;
+    std::array<T, 3> _x;
 
     [[maybe_unused]] static T _eps;
     [[maybe_unused]] static T _eps_squared;

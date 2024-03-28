@@ -787,7 +787,7 @@ TEST_CASE("Test matrix transpose for 'multiprecision' type.", "Matrix3x3") {
     using std::string;
     using mpfr::mpreal;
 
-    using Mat3x3 = Matrix3x3<double>;
+    using Mat3x3 = Matrix3x3<mpreal>;
 
     const int digits = 50;
     mpreal::set_default_prec(mpfr::digits2bits(digits));

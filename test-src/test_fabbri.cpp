@@ -11,7 +11,92 @@
 #include <fabbri.hpp>
 #include "mpreal.h"
 
-// Test omega function.
+//###########################################################################//
+//# Test Jacobian of linear variation function.                             #//
+//###########################################################################//
+
+TEST_CASE("double precision DV", "fabbri") {
+
+    using Vec3 = Vector3D<double>;
+    using Mat3x3 = Matrix3x3<double>;
+
+    Vec3 p0 = {1.0, 1.0, 1.0};
+    Vec3 p1 = {2.0, 1.0, 1.0};
+    Vec3 p2 = {1.0, 2.0, 1.0};
+    Vec3 p3 = {1.0, 1.0, 2.0};
+
+    Vec3 V0 = { -0.07828208061576669, 0.891083559087613,   0.997236180512604};
+    Vec3 V1 = { -0.962895500734466,   0.3806126313355205, -0.5038813716491481};
+    Vec3 V2 = {  0.1128032056289734, -0.0944227798576547, -0.1052945877318137};
+    Vec3 V3 = { -0.5557302170295157, -0.5387369899133336,  0.6196439276785162};
+
+    Mat3x3 expected = {
+            { -0.884613420118699,   0.1910852862447401, -0.4774481364137491},
+            { -0.5104709277520922, -0.985506338945267,  -1.429820549000946},
+            { -1.501117552161752,  -1.102530768244418,  -0.3775922528340874}};
+
+    double eps = 1E-14;
+
+    Mat3x3 actual = DV(p0, p1, p2, p3, V0, V1, V2, V3);
+
+    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
+    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
+    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+
+    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
+    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
+    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+
+    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
+    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
+    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
+
+}
+
+TEST_CASE("multiprecision DV", "fabbri") {
+    using mpfr::mpreal;
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    using Vec3 = Vector3D<mpreal>;
+    using Mat3x3 = Matrix3x3<mpreal>;
+
+    Vec3 p0 = {1.0, 1.0, 1.0};
+    Vec3 p1 = {2.0, 1.0, 1.0};
+    Vec3 p2 = {1.0, 2.0, 1.0};
+    Vec3 p3 = {1.0, 1.0, 2.0};
+
+    Vec3 V0 = { -0.07828208061576669, 0.891083559087613,   0.997236180512604};
+    Vec3 V1 = { -0.962895500734466,   0.3806126313355205, -0.5038813716491481};
+    Vec3 V2 = {  0.1128032056289734, -0.0944227798576547, -0.1052945877318137};
+    Vec3 V3 = { -0.5557302170295157, -0.5387369899133336,  0.6196439276785162};
+
+    Mat3x3 expected = {
+            { -0.884613420118699,   0.1910852862447401, -0.4774481364137491},
+            { -0.5104709277520922, -0.985506338945267,  -1.429820549000946},
+            { -1.501117552161752,  -1.102530768244418,  -0.3775922528340874}};
+
+    mpreal eps = 1E-15;
+
+    Mat3x3 actual = DV(p0, p1, p2, p3, V0, V1, V2, V3);
+
+    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
+    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
+    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+
+    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
+    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
+    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+
+    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
+    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
+    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
+
+}
+
+//###########################################################################//
+//# Test omega function.                                                    #//
+//###########################################################################//
 
 TEST_CASE("double precision omega (triangular) function", "fabbri") {
 
@@ -56,13 +141,6 @@ TEST_CASE("multiprecision omega (triangular) function", "fabbri") {
 
     mpreal eps = 1E-40;
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(digits);
-    std::cout << "multiprecision omega (triangular) function" << std::endl;
-    std::cout << "Expected (multiprecision) solid angle at test point: " << expected << std::endl;
-    std::cout << "Actual   (multiprecision) solid angle at test point: " << omega(r) << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE(abs(omega(r) - expected) < eps);
 
 }
@@ -82,13 +160,6 @@ TEST_CASE("double precision we function", "fabbri") {
     double eps = 1E-14;
 
     double expected = log(3.0);
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "double precision we function" << std::endl;
-    std::cout << "Expected (double precision) we at test point: " << expected << std::endl;
-    std::cout << "Actual   (double precision) we at test point: " << we(r) << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE(fabs(we(r) - expected) < eps);
 
@@ -112,13 +183,6 @@ TEST_CASE("multiprecision we function", "fabbri") {
 
     mpreal expected = mpfr::log(3.0);
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(digits);
-    std::cout << "multiprecision we function" << std::endl;
-    std::cout << "Expected (multiprecision) we at test point: " << expected << std::endl;
-    std::cout << "Actual   (multiprecision) we at test point: " << we(r) << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE(abs(we(r) - expected) < eps);
 
 }
@@ -140,13 +204,6 @@ TEST_CASE("multiprecision lambda_e function", "fabbri") {
 
     mpreal expected = (mpreal(3) / mpreal(2)) * mpfr::log(3.0);
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(digits);
-    std::cout << "multiprecision lambda_e function" << std::endl;
-    std::cout << "Expected (multiprecision) lambda_e at test point: " << expected << std::endl;
-    std::cout << "Actual   (multiprecision) lambda_e at test point: " << lambda_e(r) << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE(abs(lambda_e(r) - expected) < eps);
 
 }
@@ -167,13 +224,6 @@ TEST_CASE("multiprecision D_lambda_e function", "fabbri") {
     mpreal eps = 1E-40;
 
     Vector3D<mpreal> expected{0, -mpfr::log(3), mpfr::sqrt(2) * mpfr::log(3.0)};
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(digits);
-    std::cout << "multiprecision D_lambda_e function" << std::endl;
-    std::cout << "Expected (multiprecision) D_lambda_e at test point: " << expected << std::endl;
-    std::cout << "Actual   (multiprecision) D_lambda_e at test point: " << D_lambda_e(r) << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE(abs(D_lambda_e(r).x() - expected.x()) < eps);
     REQUIRE(abs(D_lambda_e(r).y() - expected.y()) < eps);
@@ -199,13 +249,6 @@ TEST_CASE("multiprecision d_lambda_e_by_dm function", "fabbri") {
 
     mpreal expected = mpfr::sqrt(2) * mpfr::log(3);
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(digits);
-    std::cout << "multiprecision d_lambda_e_by_dm function" << std::endl;
-    std::cout << "Expected (multiprecision) d_lambda_e_by_dm at test point: " << expected << std::endl;
-    std::cout << "Actual   (multiprecision) d_lambda_e_by_dm at test point: " << d_lambda_e_by_dm(m, r) << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE(abs(d_lambda_e_by_dm(m, r) - expected) < eps);
 
 }
@@ -229,13 +272,6 @@ TEST_CASE("multiprecision Wf (triangular) function", "fabbri") {
 
     mpreal expected = mpreal(-4) * mpfr::sqrt(mpreal(2) / mpreal(3)) * mpfr::acot(mpreal(5) / mpfr::sqrt(2))
                       + mpfr::sqrt(3) * mpfr::log(3);
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(digits);
-    std::cout << "multiprecision Wf (triangular) function" << std::endl;
-    std::cout << "Expected (multiprecision) Wf at test point: " << expected << std::endl;
-    std::cout << "Actual   (multiprecision) Wf at test point: " << Wf(r) << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE(abs(Wf(r) - expected) < eps);
 
@@ -263,13 +299,6 @@ TEST_CASE("multiprecision DWf (triangular) function", "fabbri") {
             mpreal(2) * mpfr::sqrt(mpreal(2) / mpreal(3)) * mpfr::atan(mpfr::sqrt(2) / mpreal(5)),
             mpreal(-2) * mpfr::atan(mpfr::sqrt(2) / mpreal(5)) / mpfr::sqrt(3));
     Vector3D<mpreal> actual = DWf(r);
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(digits);
-    std::cout << "multiprecision DWf (triangular) function" << std::endl;
-    std::cout << "Expected (multiprecision) DWf at test point: " << expected << std::endl;
-    std::cout << "Actual   (multiprecision) DWf at test point: " << DWf(r) << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE(abs(actual.x() - expected.x()) < eps);
     REQUIRE(abs(actual.y() - expected.y()) < eps);
@@ -299,13 +328,6 @@ TEST_CASE("multiprecision d_Wf_by_dm_tri_fun (triangular) function", "fabbri") {
 
     mpreal actual = d_Wf_by_dm(m, r);
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(digits);
-    std::cout << "multiprecision DWf (triangular) function" << std::endl;
-    std::cout << "Expected (multiprecision) d_Wf_by_dm at test point: " << expected << std::endl;
-    std::cout << "Actual   (multiprecision) d_Wf_by_dm at test point: " << d_Wf_by_dm(m, r) << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE(abs(actual - expected) < eps);
 
 }
@@ -325,13 +347,6 @@ TEST_CASE("double precision Lambda_f (triangular) function", "fabbri") {
     double expected = 1.8426320969612156532708703220925032742357173038995;
 
     double actual = Lambda_f(r);
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "multiprecision Lambda_f (triangular) function" << std::endl;
-    std::cout << "Expected (double precision) Lambda_f at test point: " << expected << std::endl;
-    std::cout << "Actual   (double precision) Lambda_f at test point: " << Lambda_f(r) << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE(abs(actual - expected) < eps);
 
@@ -358,13 +373,6 @@ TEST_CASE("multiprecision Lambda_f (triangular) function", "fabbri") {
                                                   mpreal(75) * mpfr::sqrt(3) * mpfr::log(3));
 
     mpreal actual = Lambda_f(r);
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(digits);
-    std::cout << "multiprecision Lambda_f (triangular) function" << std::endl;
-    std::cout << "Expected (multiprecision) Lambda_f at test point: " << expected << std::endl;
-    std::cout << "Actual   (multiprecision) Lambda_f at test point: " << Lambda_f(r) << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE(abs(actual - expected) < eps);
 
@@ -398,13 +406,6 @@ TEST_CASE("multiprecision DLambda_f (triangular) function", "fabbri") {
 
     auto actual  = DLambda_f(r);
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(digits);
-    std::cout << "multiprecision DLambda_f (triangular) function" << std::endl;
-    std::cout << "Expected (multiprecision) DLambda_f at test point: " << expected << std::endl;
-    std::cout << "Actual   (multiprecision) DLambda_f at test point: " << DLambda_f(r) << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE(abs(actual.x() - expected.x()) < eps);
     REQUIRE(abs(actual.y() - expected.y()) < eps);
     REQUIRE(abs(actual.z() - expected.z()) < eps);
@@ -437,31 +438,11 @@ TEST_CASE("multiprecision m_dot_DDLambda_f (triangular) function", "fabbri") {
 
     auto actual  = m_dot_DDLambda_f(m, r);
 
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(digits);
-    std::cout << "multiprecision m_dot_DDLambda_f (triangular) function" << std::endl;
-    std::cout << "Expected (multiprecision) m_dot_DDLambda_f at test point: " << expected << std::endl;
-    std::cout << "Actual   (multiprecision) m_dot_DDLambda_f at test point: " << m_dot_DDLambda_f(m, r) << std::endl;
-#endif // TEST_DEBUG_MESSAGES
-
     REQUIRE(abs(actual.x() - expected.x()) < eps);
     REQUIRE(abs(actual.y() - expected.y()) < eps);
     REQUIRE(abs(actual.z() - expected.z()) < eps);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 TEST_CASE("Multiprecision phi from uniformly magnetised tetrahedron", "fabbri") {
 
@@ -485,13 +466,6 @@ TEST_CASE("Multiprecision phi from uniformly magnetised tetrahedron", "fabbri") 
             100);
     auto phi_fun = new_uni_tet_phi_fun(m, r1, r2, r3, r4);
     mpreal actual = phi_fun({1, 1, 1});
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(digits);
-    std::cout << "Multiprecision phi from uniformly magnetised tetrahedral source" << std::endl;
-    std::cout << "Expected (multiprecision) phi at test point: " << expected << std::endl;
-    std::cout << "Actual   (multiprecision) phi at test point: " << actual << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE(abs(actual - expected) < eps);
 
@@ -524,13 +498,6 @@ TEST_CASE("Multiprecision A from uniformly magnetised source", "fabbri") {
               100);
 
     Vector3D<mpreal> A_actual = A_fun({1, 1, 1});
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(digits);
-    std::cout << "Multiprecision A from uniformly magnetised source" << std::endl;
-    std::cout << "Expected (multiprecision) A at test point:  <" << Ax << ", " << Ay << ", " << Az << ">" << std::endl;
-    std::cout << "Actual   (multiprecision) A at test point:  " << A_actual << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE(abs(A_actual.x() - Ax) < eps);
     REQUIRE(abs(A_actual.y() - Ay) < eps);

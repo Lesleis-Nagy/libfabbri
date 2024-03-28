@@ -10,6 +10,7 @@
 #ifndef LIBFABBRI_VECTOR4D_HPP
 #define LIBFABBRI_VECTOR4D_HPP
 
+#include <array>
 #include <ostream>
 #include <utility>
 
@@ -60,9 +61,7 @@ public:
     /**
      * Create a three dimensional zero-vector object.
      */
-    Vector4D():
-        _x(0), _y(0), _z(0), _w(0)
-    {}
+    Vector4D(): _x{0.0, 0.0, 0.0, 0.0} {}
 
     /**
      * Create a three dimensional vector object with the given x, y & z
@@ -73,41 +72,35 @@ public:
      * @param w the vector w component.
      * @param eps the regularization-epsilon value.
      */
-    Vector4D(T x, T y, T z, T w):
-            _x(std::move(x)), _y(std::move(y)),
-            _z(std::move(z)), _w(std::move(w))
-    {}
+    Vector4D(T x, T y, T z, T w): _x{x, y, z, w} {}
 
     /**
      * Retrieve the vector's x-component.
      * @return the vector's x-component.
      */
-    [[nodiscard]] inline T x() const { return _x; }
+    [[nodiscard]] inline T x() const { return _x[0]; }
 
     /**
      * Retrieve the vector's y-component.
      * @return the vector's y-component.
      */
-    [[nodiscard]] inline T y() const { return _y; }
+    [[nodiscard]] inline T y() const { return _x[1]; }
 
     /**
      * Retrieve the vector's z-component.
      * @return the vector's z-component.
      */
-    [[nodiscard]] inline T z() const { return _z; }
+    [[nodiscard]] inline T z() const { return _x[2]; }
 
     /**
      * Retrieve the vector's w-component.
      * @return the vector's w-component.
      */
-    [[nodiscard]] inline T w() const { return _w; }
+    [[nodiscard]] inline T w() const { return _x[3]; }
 
 private:
 
-    T _x;
-    T _y;
-    T _z;
-    T _w;
+    std::array<T, 4> _x;
 
     [[maybe_unused]] static T _eps;
     [[maybe_unused]] static T _eps_squared;

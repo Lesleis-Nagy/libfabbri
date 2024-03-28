@@ -19,21 +19,131 @@
 #include "matrix4x4.hpp"
 
 /**
- * Return the Jacobian of the linear variation of the input vector v over a
- * triangle defined by r0, r1 & r2.
+ * Return the Jacobian of the linear variation of four vectors V1, V2, V3 & V4
+ * defined on the corners of a tetrahedron with coordinates p1, p2, p3 & p4
+ * respectively.
  */
-//template <typename T>
-//Matrix3x3<T> DV() {
-//}
+template <typename T>
+Matrix3x3<T>
+DV(const Vector3D<T> &r1, const Vector3D<T> &r2,
+   const Vector3D<T> &r3, const Vector3D<T> &r4,
+   const Vector3D<T> &V1, const Vector3D<T> &V2,
+   const Vector3D<T> &V3, const Vector3D<T> &V4) {
 
+    using Mat3x3 = Matrix3x3<T>;
+    using Mat4x4 = Matrix4x4<T>;
+
+    Mat4x4 tetra = {{   1.0,    1.0,    1.0,    1.0},
+                    {r1.x(), r2.x(), r3.x(), r4.x()},
+                    {r1.y(), r2.y(), r3.y(), r4.y()},
+                    {r1.z(), r2.z(), r3.z(), r4.z()}};
+
+    T signed_vol = -1.0 * det(tetra);
+
+    // [c]olumn 1 [s]um <1-4>
+
+    Mat3x3 c1s1 = {{1.0,    1.0,    1.0},
+                   {r2.y(), r3.y(), r4.y()},
+                   {r2.z(), r3.z(), r4.z()}};
+
+    Mat3x3 c1s2 = {{1.0,    1.0,    1.0},
+                   {r1.y(), r3.y(), r4.y()},
+                   {r1.z(), r3.z(), r4.z()}};
+
+    Mat3x3 c1s3 = {{1.0,    1.0,    1.0},
+                   {r1.y(), r2.y(), r4.y()},
+                   {r1.z(), r2.z(), r4.z()}};
+
+    Mat3x3 c1s4 = {{1.0,    1.0,    1.0},
+                   {r1.y(), r2.y(), r3.y()},
+                   {r1.z(), r2.z(), r3.z()}};
+
+    // [c]olumn 2 [s]um <1-4>
+
+    Mat3x3 c2s1 = {{1.0,    1.0,    1.0},
+                   {r2.x(), r3.x(), r4.x()},
+                   {r2.z(), r3.z(), r4.z()}};
+
+    Mat3x3 c2s2 = {{1.0,    1.0,    1.0},
+                   {r1.x(), r3.x(), r4.x()},
+                   {r1.z(), r3.z(), r4.z()}};
+
+    Mat3x3 c2s3 = {{1.0,    1.0,    1.0},
+                   {r1.x(), r2.x(), r4.x()},
+                   {r1.z(), r2.z(), r4.z()}};
+
+    Mat3x3 c2s4 = {{1.0,    1.0,    1.0},
+                   {r1.x(), r2.x(), r3.x()},
+                   {r1.z(), r2.z(), r3.z()}};
+
+    // [e]dge [c]olumn 2 [s]um <1-4>
+
+    Mat3x3 c3s1 = {{1.0,    1.0,    1.0},
+                   {r2.x(), r3.x(), r4.x()},
+                   {r2.y(), r3.y(), r4.y()}};
+
+    Mat3x3 c3s2 = {{1.0,    1.0,    1.0},
+                   {r1.x(), r3.x(), r4.x()},
+                   {r1.y(), r3.y(), r4.y()}};
+
+    Mat3x3 c3s3 = {{1.0,    1.0,    1.0},
+                   {r1.x(), r2.x(), r4.x()},
+                   {r1.y(), r2.y(), r4.y()}};
+
+    Mat3x3 c3s4 = {{1.0,    1.0,    1.0},
+                   {r1.x(), r2.x(), r3.x()},
+                   {r1.y(), r2.y(), r3.y()}};
+
+
+    // [d]eterminant of [c]olumn 1 [s]um <1-4>
+
+    T dc1s1 = det(c1s1);
+    T dc1s2 = det(c1s2);
+    T dc1s3 = det(c1s3);
+    T dc1s4 = det(c1s4);
+
+    // [d]eterminant of  [c]olumn 2 [s]um <1-4>
+
+    T dc2s1 = det(c2s1);
+    T dc2s2 = det(c2s2);
+    T dc2s3 = det(c2s3);
+    T dc2s4 = det(c2s4);
+
+    // [d]eterminant of [c]olumn 3 [s]um <1-4>
+
+    T dc3s1 = det(c3s1);
+    T dc3s2 = det(c3s2);
+    T dc3s3 = det(c3s3);
+    T dc3s4 = det(c3s4);
+
+    Matrix3x3<T> DV = {
+        // Row r=0
+        { V1.x() * dc1s1 - V2.x() * dc1s2 + V3.x() * dc1s3 - V4.x() * dc1s4,
+         -V1.x() * dc2s1 + V2.x() * dc2s2 - V3.x() * dc2s3 + V4.x() * dc2s4,
+          V1.x() * dc3s1 - V2.x() * dc3s2 + V4.x() * dc3s3 - V4.x() * dc3s4 },
+
+        // Row r=1
+        { V1.y() * dc1s1 - V2.y() * dc1s2 + V3.y() * dc1s3 - V4.y() * dc1s4,
+         -V1.y() * dc2s1 + V2.y() * dc2s2 - V3.y() * dc2s3 + V4.y() * dc2s4,
+          V1.y() * dc3s1 - V2.y() * dc3s2 + V4.y() * dc3s3 - V4.y() * dc3s4 },
+
+        // Row r=2
+        { V1.z() * dc1s1 - V2.z() * dc1s2 + V3.z() * dc1s3 - V4.z() * dc1s4,
+         -V1.z() * dc2s1 + V2.z() * dc2s2 - V3.z() * dc2s3 + V4.z() * dc2s4,
+          V1.z() * dc3s1 - V2.z() * dc3s2 + V4.z() * dc3s3 - V4.z() * dc3s4 }
+    };
+
+    return DV / signed_vol;
+
+}
 
 /**
  * Return a function that will calculate the solid angle \f$\Omega\f$ subtended
  * by the triangle with vertices \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ as a function
  * of space - see eq. (21) in Fabbri, 2008.
  *
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double'
+ *           or 'mpreal'.
  * @param r1 the first vertex of the subtending triangle.
  * @param r2 the second vertex of the subtending triangle.
  * @param r3 the third vertex of the subtending triangle.
@@ -58,18 +168,21 @@ new_omega_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2,
         T d2 = norm(v2);
         T d3 = norm(v3);
 
-        return 2.0 * atan2(dot(v1, cross(v2, v3)),
-                           d1 * d2 * d3 + d3 * dot(v1, v2) + d2 * dot(v1, v3) +
-                           d1 * dot(v2, v3));
+        return 2.0 * atan2 (
+            dot(v1, cross(v2, v3)),
+            d1*d2*d3 + d3*dot(v1, v2) + d2*dot(v1, v3) + d1*dot(v2, v3)
+        );
 
     };
 
 }
 
 /**
- * Return a function that will calculate the edge potential function \f$w_\mathrm{e}\f$ eq. (18) for a line segment
- * with endpoints \f$r_1\f$ & \f$r_2\f$ (Fabbri, 2008).
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * Return a function that will calculate the edge potential function
+ * \f$w_\mathrm{e}\f$ eq. (18) for a line segment with endpoints
+ * \f$r_1\f$ & \f$r_2\f$ (Fabbri, 2008).
+ * @tparam T the underlying data type for the calculation - usually 'double'
+ *           or 'mpreal'.
  * @param r1 the first point of a line segment.
  * @param r2 the second point of a line segment.
  * @return a function that will calculate \f$w_\mathrm{e}\f$.
@@ -92,9 +205,10 @@ new_we_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
 }
 
 /**
- * Return a function that will calculate \f$\lambda_\mathrm{e}\f$ in eq. (22) for a line segment with endpoints
- * \f$r_1\f$ and \f$r_2\f$ (Fabbri, 2009).
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * Return a function that will calculate \f$\lambda_\mathrm{e}\f$ in eq. (22)
+ * for a line segment with endpoints \f$r_1\f$ and \f$r_2\f$ (Fabbri, 2009).
+ * @tparam T the underlying data type for the calculation - usually 'double'
+ *           or 'mpreal'.
  * @param r1 the first point of a line segment.
  * @param r2 the second point of a line segment.
  * @return a function that will calculate \f$\lambda_\mathrm{e}\f$.
@@ -120,9 +234,11 @@ new_lambda_e_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
 }
 
 /**
- * Return a function that will calculate \f$\nabla \lambda_\mathrm{e}\f$ in eq. (29) for a line segment with endpoints
- * \f$r_1\f$ and \f$r_2\f$ (Fabbri, 2009).
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * Return a function that will calculate \f$\nabla \lambda_\mathrm{e}\f$ in eq.
+ * (29) for a line segment with endpoints \f$r_1\f$ and \f$r_2\f$
+ * (Fabbri, 2009).
+ * @tparam T the underlying data type for the calculation - usually 'double'
+ *           or 'mpreal'.
  * @param r1 the first point of a line segment.
  * @param r2 the second point of a line segment.
  * @return a function that will calculate \f$\nabla \lambda_\mathrm{e}\f$.
@@ -147,15 +263,16 @@ new_D_lambda_e_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
 }
 
 /**
- * Return a function that will calculate \f$\frac{\partial \lambda_\mathrm{e}}{\partial m}\f$ for a line segment with
+ * Return a function that will calculate
+ * \f$\frac{\partial \lambda_\mathrm{e}}{\partial m}\f$ for a line segment with
  * endpoints \f$r_1\f$ and \f$r_2\f$ (Fabbri, 2008).
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double'
+ *           or 'mpreal'.
  * @param r1 the first point of a line segment.
  * @param r2 the second point of a line segment.
  * @return the function
  *         \f$\frac{\partial \lambda_\mathrm{e}}{\partial m}\left(\frac{\partial W_\mathrm{f}}{\partial m}\right)\f$
  *         with first input magnetisation and second input position.
- *
  */
 template<typename T>
 std::function<T(const Vector3D<T> &, const Vector3D<T> &)>
@@ -174,10 +291,12 @@ new_d_lambda_e_by_dm_fun(const Vector3D<T> &r1, const Vector3D<T> &r2) {
 }
 
 /**
- * Return a function that will calculate the face-potential function \f$W_\mathrm{f}\f$ eq. (17) for a triangular
- * polyhedron (Fabbri, 2008) with endpoints \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and counter-clockwise winding
+ * Return a function that will calculate the face-potential function
+ * \f$W_\mathrm{f}\f$ eq. (17) for a triangular polyhedron (Fabbri, 2008) with
+ * endpoints \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and counter-clockwise winding
  * \f$r_1 \rightarrow r2\f$, \f$r_2 \rightarrow r_3\f$ & \f$r3 \rightarrow r1\f$.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double'
+ *           or 'mpreal'.
  * @param r1 the first point of a triangle segment.
  * @param r2 the second point of a triangle segment.
  * @param r3 the third point of a triangle.
@@ -229,10 +348,12 @@ new_Wf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2,
 }
 
 /**
- * Return a function that will calculate the gradient of Fabbri's face potential function \f$\Delta W_\mathrm{f}\f$ eq.
- * (25) for a triangular polygon (Fabbri, 2008) with endpoints \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and winding
+ * Return a function that will calculate the gradient of Fabbri's face potential
+ * function \f$\Delta W_\mathrm{f}\f$ eq. (25) for a triangular polygon
+ * (Fabbri, 2008) with endpoints \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and winding
  * \f$r_1 \rightarrow r2\f$, \f$r_2 \rightarrow r_3\f$ & \f$r3 \rightarrow r1\f$.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double'
+ *           or 'mpreal'.
  * @param r1 the first point of a triangle segment.
  * @param r2 the second point of a triangle segment.
  * @param r3 the third point of a triangle.
@@ -274,12 +395,15 @@ new_DWf_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2,
 }
 
 /**
- * Return a function that will calculate \f$\frac{\partial W_\mathrm{f}}{\partial m}\f$ for a line segment with
+ * Return a function that will calculate
+ * \f$\frac{\partial W_\mathrm{f}}{\partial m}\f$ for a line segment with
  * endpoints \f$r_1\f$ and \f$r_2\f$ (Fabbri, 2009).
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double'
+ *           or 'mpreal'.
  * @param r1 the first point of a line segment.
  * @param r2 the second point of a line segment.
- * @return a function that will calculate \f$\frac{\partial W_\mathrm{f}}{\partial m}\left(\vec{m}, \vec{r} \right)\f$,
+ * @return a function that will calculate
+ *         \f$\frac{\partial W_\mathrm{f}}{\partial m}\left(\vec{m}, \vec{r} \right)\f$,
  *         with first input magnetisation and second input position.
  */
 template<typename T>
@@ -300,10 +424,12 @@ new_d_Wf_by_dm_tri_fun(const Vector3D<T> &r1, const Vector3D<T> &r2,
 }
 
 /**
- * Return a function that will calculate \f$\Lambda_f\f$ eq. (21), for a triangular polygon (Fabbri, 2009) with
- * endpoints \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and winding \f$r_1 \rightarrow r2\f$, \f$r_2 \rightarrow r_3\f$ and
- * \f$r3 \rightarrow r1\f$.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * Return a function that will calculate \f$\Lambda_f\f$ eq. (21), for a
+ * triangular polygon (Fabbri, 2009) with endpoints
+ * \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and winding
+ * \f$r_1 \rightarrow r2\f$, \f$r_2 \rightarrow r_3\f$ and \f$r3 \rightarrow r1\f$.
+ * @tparam T the underlying data type for the calculation - usually 'double'
+ *           or 'mpreal'.
  * @param r1 the first point of a triangle segment.
  * @param r2 the second point of a triangle segment.
  * @param r3 the third point of a triangle.
@@ -357,10 +483,12 @@ new_Lambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2,
 }
 
 /**
- * Return a function that will calculate \f$\nabla\Lambda_f\f$ eq. (25), for a triangular polygon (Fabbri, 2009) with
- * vertices \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and winding \f$r_1 \rightarrow r2\f$, \f$r_2 \rightarrow r_3\f$ and
+ * Return a function that will calculate \f$\nabla\Lambda_f\f$ eq. (25), for a
+ * triangular polygon (Fabbri, 2009) with vertices
+ * \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and winding \f$r_1 \rightarrow r2\f$, \f$r_2 \rightarrow r_3\f$ and
  * \f$r3 \rightarrow r1\f$.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double'
+ *           or 'mpreal'.
  * @param r1 the first point of a triangle segment.
  * @param r2 the second point of a triangle segment.
  * @param r3 the third point of a triangle.
@@ -406,10 +534,12 @@ new_DLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2,
 }
 
 /**
- * Return a function that will calculate \f$\vec{m}\cdot\nabla\nabla\Lambda_f\f$ eq. (28), for a triangular polygon
- * (Fabbri, 2009) with endpoints \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and winding \f$r_1 \rightarrow r2\f$,
+ * Return a function that will calculate \f$\vec{m}\cdot\nabla\nabla\Lambda_f\f$
+ * eq. (28), for a triangular polygon (Fabbri, 2009) with endpoints
+ * \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ and winding \f$r_1 \rightarrow r2\f$,
  * \f$r_2 \rightarrow r_3\f$ and \f$r3 \rightarrow r1\f$.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double'
+ *           or 'mpreal'.
  * @param r1 the first point of a triangle segment.
  * @param r2 the second point of a triangle segment.
  * @param r3 the third point of a triangle.
@@ -464,21 +594,24 @@ new_m_dot_DDLambda_f_fun(const Vector3D<T> &r1, const Vector3D<T> &r2,
 
 
 /**
- * Return a function that will calculate the magnetic scalar potential \f$\phi\f$ for a uniformly magnetised
- * tetrahedron using eq. (11) (Fabbri, 2008). The input tetrahedron assumes the following winding for each triangular
- * face:
+ * Return a function that will calculate the magnetic scalar potential
+ * \f$\phi\f$ for a uniformly magnetised tetrahedron using eq. (11)
+ * (Fabbri, 2008). The input tetrahedron assumes the following winding for each
+ * triangular face:
  * - \f$r_1 \rightarrow r_2 \rightarrow r_3\f$,
  * - \f$r_1 \rightarrow r_3 \rightarrow r_4\f$,
  * - \f$r_1 \rightarrow r_4 \rightarrow r_2\f$,
  * - \f$r_2 \rightarrow r_4 \rightarrow r_3\f$.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double'
+ *           or 'mpreal'.
  * @param M the (uniform) magnetisation of the tetrahedron.
  * @param r1 the first vertex of the tetrahedron.
  * @param r2 the second vertex of the tetrahedron.
  * @param r3 the third vertex of the tetrahedron.
  * @param r4 the fourth vertex of the tetrahedron.
- * @return a function that will calculate the scalar potential at any point in space due to the uniformly magnetised
- *         tetrahedron defined by the inputs.
+ * @return a function that will calculate the scalar potential at any point in
+ *         space due to the uniformly magnetised tetrahedron defined by the
+ *         inputs.
  */
 template<typename T>
 std::function<T(const Vector3D<T> &)>
@@ -511,21 +644,24 @@ new_uni_tet_phi_fun(const Vector3D<T> &M, const Vector3D<T> &r1,
 }
 
 /**
- * Return a function that will calculate the magnetic vector potential \f$\mathbf{A}\f$ for a uniformly magnetised
- * tetrahedron using eq. (11) (Fabbri, 2008). The input tetrahedron assumes the following winding for each triangular
- * face:
+ * Return a function that will calculate the magnetic vector potential
+ * \f$\mathbf{A}\f$ for a uniformly magnetised tetrahedron using eq. (11)
+ * (Fabbri, 2008). The input tetrahedron assumes the following winding for each
+ * triangular face:
  * - \f$r_1 \rightarrow r_2 \rightarrow r_3\f$,
  * - \f$r_1 \rightarrow r_3 \rightarrow r_4\f$,
  * - \f$r_1 \rightarrow r_4 \rightarrow r_2\f$,
  * - \f$r_2 \rightarrow r_4 \rightarrow r_3\f$.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation - usually 'double'
+ *           or 'mpreal'.
  * @param M the (uniform) magnetisation of the tetrahedron.
  * @param r1 the first vertex of the tetrahedron.
  * @param r2 the second vertex of the tetrahedron.
  * @param r3 the third vertex of the tetrahedron.
  * @param r4 the fourth vertex of the tetrahedron.
- * @return a function that will calculate the vector potential at any point in space due to the uniformly magnetised
- *         tetrahedron defined by the inputs.
+ * @return a function that will calculate the vector potential at any point in
+ *         space due to the uniformly magnetised tetrahedron defined by the
+ *         inputs.
  */
 template<typename T>
 std::function<Vector3D<T>(const Vector3D<T> &)>
