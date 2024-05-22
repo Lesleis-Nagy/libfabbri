@@ -11,6 +11,12 @@
 #include <fabbri.hpp>
 #include "mpreal.h"
 
+#ifdef WIN32
+#define M_PI 3.14159265358979323846
+#endif
+
+// Rest of your code
+
 //###########################################################################//
 //# Test curl of of linearly varying vector function.                       #//
 //###########################################################################//
