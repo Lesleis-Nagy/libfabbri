@@ -12,7 +12,79 @@
 #include "mpreal.h"
 
 //###########################################################################//
-//# Test Jacobian of linear variation function.                             #//
+//# Test curl of of linearly varying vector function.                       #//
+//###########################################################################//
+
+TEST_CASE("double precision curl (linear V over tetrahedron)", "fabbri") {
+
+    using Vec3 = Vector3D<double>;
+
+    Vec3 p1 = {2.0, 2.0, 2.0};
+    Vec3 p2 = {3.0, 2.0, 2.0};
+    Vec3 p3 = {2.0, 3.0, 2.0};
+    Vec3 p4 = {2.0, 2.0, 3.0};
+
+    Vec3 V1 = {-0.1565641612315334,  1.7821671181752250,  1.9944723610252080};
+    Vec3 V2 = {-1.9257910014689320,  0.7612252626710410, -1.0077627432982960};
+    Vec3 V3 = { 0.2256064112579468, -0.1888455597153094, -0.2105891754636273};
+    Vec3 V4 = {-1.1114604340590310, -1.0774739798266670,  1.2392878553570320};
+
+    Vec3 curlV_expected = {  0.6545795615130547,
+                             2.0473388314960030,
+                            -1.4031124279936660 };
+
+    Vec3 curlV_actual = curl<double>(p1, p2, p3, p4,
+                                     V1, V2, V3, V4);
+
+    std::cout << curlV_actual << std::endl;
+
+    /*
+    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
+     */
+
+}
+
+TEST_CASE("multiprecision curl (linear V over tetrahedron)", "fabbri") {
+
+    using mpfr::mpreal;
+    const int digits = 50;
+    mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+    using Vec3 = Vector3D<mpreal>;
+    using Mat3x3 = Matrix3x3<mpreal>;
+
+    Vec3 p1 = {2.0, 2.0, 2.0};
+    Vec3 p2 = {3.0, 2.0, 2.0};
+    Vec3 p3 = {2.0, 3.0, 2.0};
+    Vec3 p4 = {2.0, 2.0, 3.0};
+
+    Vec3 V1 = {-0.1565641612315334,  1.7821671181752250,  1.9944723610252080};
+    Vec3 V2 = {-1.9257910014689320,  0.7612252626710410, -1.0077627432982960};
+    Vec3 V3 = { 0.2256064112579468, -0.1888455597153094, -0.2105891754636273};
+    Vec3 V4 = {-1.1114604340590310, -1.0774739798266670,  1.2392878553570320};
+
+    Vec3 curlV_expected = {  0.6545795615130547,
+                             2.0473388314960030,
+                            -1.4031124279936660 }
+
+    Vec3 curlV_actual = curl<mpreal>(p1, p2, p3, p4,
+                                     V1, V2, V3, V4);
+
+
+    mpreal eps = 1E-15;
+
+    std::cout << curlV_actual << std::endl;
+
+
+}
+
+
+
+
+//###########################################################################//
+//# Test curl of of linearly varying vector function.                       #//
 //###########################################################################//
 
 TEST_CASE("double precision DV", "fabbri") {
@@ -39,17 +111,17 @@ TEST_CASE("double precision DV", "fabbri") {
 
     Mat3x3 actual = DV(p0, p1, p2, p3, V0, V1, V2, V3);
 
-    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
-    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
-    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps);
+    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps);
+    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps);
 
-    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
-    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
-    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps);
+    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps);
+    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps);
 
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
+    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
 
 }
 
@@ -93,6 +165,10 @@ TEST_CASE("multiprecision DV", "fabbri") {
     REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
 
 }
+
+
+
+
 
 //###########################################################################//
 //# Test omega function.                                                    #//

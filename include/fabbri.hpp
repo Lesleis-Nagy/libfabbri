@@ -138,6 +138,126 @@ DV(const Vector3D<T> &r1, const Vector3D<T> &r2,
 }
 
 /**
+ * Return the curl of the linearly varying vector field defined over a
+ * tetrahedron with vertices r1, r2, r3, r4; and vector field values
+ * V1(r1), V2(r2), V3(r3) & V4(r4).
+ */
+template <typename T>
+Vector3D<T>
+curl(const Vector3D<T> &r1, const Vector3D<T> &r2,
+     const Vector3D<T> &r3, const Vector3D<T> &r4,
+     const Vector3D<T> &V1, const Vector3D<T> &V2,
+     const Vector3D<T> &V3, const Vector3D<T> &V4) {
+
+    using Mat3x3 = Matrix3x3<T>;
+    using Mat4x4 = Matrix4x4<T>;
+
+    Mat4x4 tetra = {{   1.0,    1.0,    1.0,    1.0},
+                    {r1.x(), r2.x(), r3.x(), r4.x()},
+                    {r1.y(), r2.y(), r3.y(), r4.y()},
+                    {r1.z(), r2.z(), r3.z(), r4.z()}};
+
+    T signed_vol = -1.0 * det(tetra);
+
+    // xy
+
+    // Determinant of matrix x2x3x4_y2y3y4
+    T x2x3x4_y2y3y4 = det(Mat3x3{{   1.0,    1.0,    1.0},
+                                 {r2.x(), r3.x(), r4.x()},
+                                 {r2.y(), r3.y(), r4.y()}});
+
+    // Determinant of matrix x1x3x4_y1y3y4
+    T x1x3x4_y1y3y4 = det(Mat3x3{{   1.0,    1.0,    1.0},
+                                 {r1.x(), r3.x(), r4.x()},
+                                 {r1.y(), r3.y(), r4.y()}});
+
+    // Determinant of matrix x1x2x4_y1y2y4
+    T x1x2x4_y1y2y4 = det(Mat3x3{{   1.0,    1.0,    1.0},
+                                 {r1.x(), r2.x(), r4.x()},
+                                 {r1.y(), r2.y(), r4.y()}});
+
+    // Determinant of matrix x1x2x3_y1y2y3
+    T x1x2x3_y1y2y3 = det(Mat3x3{{   1.0,    1.0,    1.0},
+                                 {r1.x(), r2.x(), r3.x()},
+                                 {r1.y(), r2.y(), r3.y()}});
+
+    // yz
+
+    // Determinant of matrix y2y3y4_z2z3z4
+    T y2y3y4_z2z3z4 = det(Mat3x3{{   1.0,    1.0,    1.0},
+                           {r2.y(), r3.y(), r4.y()},
+                           {r2.z(), r3.z(), r4.z()}});
+
+    // Determinant of matrix y1y3y4_z1z3z4
+    T y1y3y4_z1z3z4 = det(Mat3x3{{   1.0,    1.0,    1.0},
+                           {r1.y(), r3.y(), r4.y()},
+                           {r1.z(), r3.z(), r4.z()}});
+
+    // Determinant of matrix y1y2y4_z1z2z4
+    T y1y2y4_z1z2z4 = det(Mat3x3{{   1.0,    1.0,    1.0},
+                           {r1.y(), r2.y(), r4.y()},
+                           {r1.z(), r2.z(), r4.z()}});
+
+    // Determinant of matrix y1y2y3_z1z2z3
+    T y1y2y3_z1z2z3 = det(Mat3x3{{   1.0,    1.0,    1.0},
+                           {r1.y(), r2.y(), r3.y()},
+                           {r1.z(), r2.z(), r3.z()}});
+
+    // xz
+
+    // Determinant of matrix x2x3x4_z2z3z4
+    T x2x3x4_z2z3z4 = det(Mat3x3{{   1.0,    1.0,    1.0},
+                           {r2.x(), r3.x(), r4.x()},
+                           {r2.z(), r3.z(), r4.z()}});
+
+    // Determinant of matrix x1x3x4_z1z3z4
+    T x1x3x4_z1z3z4 = det(Mat3x3{{   1.0,    1.0,    1.0},
+                           {r1.x(), r3.x(), r4.x()},
+                           {r1.z(), r3.z(), r4.z()}});
+
+    // Determinant of matrix x1x2x4_z1z2z4
+    T x1x2x4_z1z2z4 = det(Mat3x3{{   1.0,    1.0,    1.0},
+                           {r1.x(), r2.x(), r4.x()},
+                           {r1.z(), r2.z(), r4.z()}});
+
+    // Determinant of matrix x1x2x3_z1z2z3
+    T x1x2x3_z1z2z3 = det(Mat3x3{{   1.0,    1.0,    1.0},
+                           {r1.x(), r2.x(), r3.x()},
+                           {r1.z(), r2.z(), r3.z()}});
+
+    return {
+        // Entry x.
+        (  V1.y() * x2x3x4_y2y3y4
+         - V2.y() * x1x3x4_y1y3y4
+         + V3.y() * x1x2x4_y1y2y4
+         - V4.y() * x1x2x3_y1y2y3
+         - V1.z() * x2x3x4_z2z3z4
+         + V2.z() * x1x3x4_z1z3z4
+         - V3.z() * x1x2x4_z1z2z4
+         + V4.z() * x1x2x3_z1z2z3 ) / signed_vol,
+        // Entry y
+        (  V1.x() * x2x3x4_y2y3y4
+         - V2.x() * x1x3x4_y1y3y4
+         + V3.x() * x1x2x4_y1y2y4
+         - V4.x() * x1x2x3_y1y2y3
+         - V1.z() * y2y3y4_z2z3z4
+         + V2.z() * y1y3y4_z1z3z4
+         - V3.z() * y1y2y4_z1z2z4
+         + V4.z() * y1y2y3_z1z2z3 ) / signed_vol,
+        // Entry z
+        (  V1.x() * x2x3x4_z2z3z4
+         - V2.x() * x1x3x4_z1z3z4
+         + V3.x() * x1x2x4_z1z2z4
+         - V4.x() * x1x2x3_z1z2z3
+         + V1.y() * y2y3y4_z2z3z4
+         - V2.y() * y1y3y4_z1z3z4
+         + V3.y() * y1y2y4_z1z2z4
+         - V4.y() * y1y2y3_z1z2z3) / signed_vol
+    };
+
+}
+
+/**
  * Return a function that will calculate the solid angle \f$\Omega\f$ subtended
  * by the triangle with vertices \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ as a function
  * of space - see eq. (21) in Fabbri, 2008.
@@ -648,10 +768,11 @@ new_uni_tet_phi_fun(const Vector3D<T> &M, const Vector3D<T> &r1,
  * \f$\mathbf{A}\f$ for a uniformly magnetised tetrahedron using eq. (11)
  * (Fabbri, 2008). The input tetrahedron assumes the following winding for each
  * triangular face:
- * - \f$r_1 \rightarrow r_2 \rightarrow r_3\f$,
- * - \f$r_1 \rightarrow r_3 \rightarrow r_4\f$,
- * - \f$r_1 \rightarrow r_4 \rightarrow r_2\f$,
- * - \f$r_2 \rightarrow r_4 \rightarrow r_3\f$.
+ * - \f$r_1 \rightarrow r_2 \rightarrow r_3$\f,
+ * - \f$r_1 \rightarrow r_3 \rightarrow r_4$\f,
+ * - \f$r_1 \rightarrow r_4 \rightarrow r_2$\f,
+ * - \f$r_2 \rightarrow r_4 \rightarrow r_3$\f.
+ *
  * @tparam T the underlying data type for the calculation - usually 'double'
  *           or 'mpreal'.
  * @param M the (uniform) magnetisation of the tetrahedron.
@@ -738,6 +859,56 @@ new_uni_tet_B_fun(const Vector3D<T> &M, const Vector3D<T> &r1,
                cross(cross(M, nf[1]), DWf[1](r)) +
                cross(cross(M, nf[2]), DWf[2](r)) +
                cross(cross(M, nf[3]), DWf[3](r));
+    };
+
+}
+
+/**
+ * Return a function that will calculate the magnetic scalar potential
+ * \f$\mathbb{A}$\f for a linearly magnetised tetrahedron using
+ * (15) from (fabbri, 2009). The input tetrahedron assumes the following winding
+ * for each triangular face:
+ * - \f$r_1 \rightarrow r_2 \rightarrow r_3$\f
+ * - \f$r_1 \rightarrow r_3 \rightarrow r_4$\f
+ * - \f$r_1 \rightarrow r_4 \rightarrow r_2$\f
+ * - \f$r_2 \rightarrow r_4 \rightarrow r_3$\f
+ *
+ * @tparam T the underlying data type for the calculation - usually 'double'
+ *           or 'mpreal'.
+ * @param M the (uniform) magnetisation of the tetrahedron.
+ * @param r1 the first vertex of the tetrahedron.
+ * @param r2 the second vertex of the tetrahedron.
+ * @param r3 the third vertex of the tetrahedron.
+ * @param r4 the fourth vertex of the tetrahedron.
+ * @return a function that will calculate the vector potential at any point in
+ *         space due to the uniformly magnetised tetrahedron defined by the
+ *         inputs.
+ */
+template<typename T>
+std::function<Vector3D<T>(const Vector3D<T> &)>
+new_lin_tet_A_fun(const Vector3D<T> &M, const Vector3D<T> &r1,
+                  const Vector3D<T> &r2, const Vector3D<T> &r3,
+                  const Vector3D<T> &r4) {
+
+    using std::array;
+    using std::function;
+
+    // Face normals.
+    array<Vector3D<T>, 4> nf;
+    nf[0] = triangle_normal(r1, r2, r3);
+    nf[1] = triangle_normal(r1, r3, r4);
+    nf[2] = triangle_normal(r1, r4, r2);
+    nf[3] = triangle_normal(r2, r4, r3);
+
+    // Wf functions.
+    array<function<T(const Vector3D<T> &)>, 4> Wf;
+    Wf[0] = new_Wf_tri_fun(r1, r2, r3);
+    Wf[1] = new_Wf_tri_fun(r1, r3, r4);
+    Wf[2] = new_Wf_tri_fun(r1, r4, r2);
+    Wf[3] = new_Wf_tri_fun(r2, r4, r3);
+
+    return [M, nf, Wf](const Vector3D<T> &r) {
+
     };
 
 }
