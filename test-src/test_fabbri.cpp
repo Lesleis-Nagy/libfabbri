@@ -36,13 +36,11 @@ TEST_CASE("double precision curl (linear V over tetrahedron)", "fabbri") {
     Vec3 curlV_actual = curl<double>(p1, p2, p3, p4,
                                      V1, V2, V3, V4);
 
-    std::cout << curlV_actual << std::endl;
+    double eps = 1E-10;
 
-    /*
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
-     */
+    REQUIRE(fabs(curlV_expected(0) - curlV_actual(0)) < eps);
+    REQUIRE(fabs(curlV_expected(1) - curlV_actual(1)) < eps);
+    REQUIRE(fabs(curlV_expected(2) - curlV_actual(2)) < eps);
 
 }
 
@@ -67,21 +65,19 @@ TEST_CASE("multiprecision curl (linear V over tetrahedron)", "fabbri") {
 
     Vec3 curlV_expected = {  0.6545795615130547,
                              2.0473388314960030,
-                            -1.4031124279936660 }
+                            -1.4031124279936660 };
 
     Vec3 curlV_actual = curl<mpreal>(p1, p2, p3, p4,
                                      V1, V2, V3, V4);
 
 
-    mpreal eps = 1E-15;
+    double eps = 1E-10;
 
-    std::cout << curlV_actual << std::endl;
-
+    REQUIRE(fabs(curlV_expected(0) - curlV_actual(0)) < eps);
+    REQUIRE(fabs(curlV_expected(1) - curlV_actual(1)) < eps);
+    REQUIRE(fabs(curlV_expected(2) - curlV_actual(2)) < eps);
 
 }
-
-
-
 
 //###########################################################################//
 //# Test curl of of linearly varying vector function.                       #//
@@ -187,13 +183,6 @@ TEST_CASE("double precision omega (triangular) function", "fabbri") {
     auto omega = new_omega_tri_fun(r1, r2, r3);
 
     double eps = 1E-14;
-
-#ifdef TEST_DEBUG_MESSAGES
-    std::cout.precision(50);
-    std::cout << "double precision omega (triangular) function" << std::endl;
-    std::cout << "Expected (double precision) solid angle at test point: " << expected << std::endl;
-    std::cout << "Actual   (double precision) solid angle at test point: " << omega(r) << std::endl;
-#endif // TEST_DEBUG_MESSAGES
 
     REQUIRE(fabs(omega(r) - expected) < eps);
 

@@ -185,52 +185,52 @@ curl(const Vector3D<T> &r1, const Vector3D<T> &r2,
 
     // Determinant of matrix y2y3y4_z2z3z4
     T y2y3y4_z2z3z4 = det(Mat3x3{{   1.0,    1.0,    1.0},
-                           {r2.y(), r3.y(), r4.y()},
-                           {r2.z(), r3.z(), r4.z()}});
+                                 {r2.y(), r3.y(), r4.y()},
+                                 {r2.z(), r3.z(), r4.z()}});
 
     // Determinant of matrix y1y3y4_z1z3z4
     T y1y3y4_z1z3z4 = det(Mat3x3{{   1.0,    1.0,    1.0},
-                           {r1.y(), r3.y(), r4.y()},
-                           {r1.z(), r3.z(), r4.z()}});
+                                 {r1.y(), r3.y(), r4.y()},
+                                 {r1.z(), r3.z(), r4.z()}});
 
     // Determinant of matrix y1y2y4_z1z2z4
     T y1y2y4_z1z2z4 = det(Mat3x3{{   1.0,    1.0,    1.0},
-                           {r1.y(), r2.y(), r4.y()},
-                           {r1.z(), r2.z(), r4.z()}});
+                                 {r1.y(), r2.y(), r4.y()},
+                                 {r1.z(), r2.z(), r4.z()}});
 
     // Determinant of matrix y1y2y3_z1z2z3
     T y1y2y3_z1z2z3 = det(Mat3x3{{   1.0,    1.0,    1.0},
-                           {r1.y(), r2.y(), r3.y()},
-                           {r1.z(), r2.z(), r3.z()}});
+                                 {r1.y(), r2.y(), r3.y()},
+                                 {r1.z(), r2.z(), r3.z()}});
 
     // xz
 
     // Determinant of matrix x2x3x4_z2z3z4
     T x2x3x4_z2z3z4 = det(Mat3x3{{   1.0,    1.0,    1.0},
-                           {r2.x(), r3.x(), r4.x()},
-                           {r2.z(), r3.z(), r4.z()}});
+                                 {r2.x(), r3.x(), r4.x()},
+                                 {r2.z(), r3.z(), r4.z()}});
 
     // Determinant of matrix x1x3x4_z1z3z4
     T x1x3x4_z1z3z4 = det(Mat3x3{{   1.0,    1.0,    1.0},
-                           {r1.x(), r3.x(), r4.x()},
-                           {r1.z(), r3.z(), r4.z()}});
+                                 {r1.x(), r3.x(), r4.x()},
+                                 {r1.z(), r3.z(), r4.z()}});
 
     // Determinant of matrix x1x2x4_z1z2z4
     T x1x2x4_z1z2z4 = det(Mat3x3{{   1.0,    1.0,    1.0},
-                           {r1.x(), r2.x(), r4.x()},
-                           {r1.z(), r2.z(), r4.z()}});
+                                 {r1.x(), r2.x(), r4.x()},
+                                 {r1.z(), r2.z(), r4.z()}});
 
     // Determinant of matrix x1x2x3_z1z2z3
     T x1x2x3_z1z2z3 = det(Mat3x3{{   1.0,    1.0,    1.0},
-                           {r1.x(), r2.x(), r3.x()},
-                           {r1.z(), r2.z(), r3.z()}});
+                                 {r1.x(), r2.x(), r3.x()},
+                                 {r1.z(), r2.z(), r3.z()}});
 
     return {
         // Entry x.
-        (  V1.y() * x2x3x4_y2y3y4
-         - V2.y() * x1x3x4_y1y3y4
-         + V3.y() * x1x2x4_y1y2y4
-         - V4.y() * x1x2x3_y1y2y3
+        (-  V1.y() * x2x3x4_y2y3y4
+         + V2.y() * x1x3x4_y1y3y4
+         - V3.y() * x1x2x4_y1y2y4
+         + V4.y() * x1x2x3_y1y2y3
          - V1.z() * x2x3x4_z2z3z4
          + V2.z() * x1x3x4_z1z3z4
          - V3.z() * x1x2x4_z1z2z4
