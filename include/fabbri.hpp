@@ -227,7 +227,7 @@ curl(const Vector3D<T> &r1, const Vector3D<T> &r2,
 
     return {
         // Entry x.
-        (-  V1.y() * x2x3x4_y2y3y4
+        (- V1.y() * x2x3x4_y2y3y4
          + V2.y() * x1x3x4_y1y3y4
          - V3.y() * x1x2x4_y1y2y4
          + V4.y() * x1x2x3_y1y2y3
