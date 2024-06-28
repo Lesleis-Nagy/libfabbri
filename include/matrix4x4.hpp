@@ -108,7 +108,7 @@ private:
  * @tparam T the underlying data type for the calculation - usually 'double' or
  *           'mpreal'.
  * @param out the output stream.
- * @param v the matrix to display.
+ * @param m the matrix to display.
  * @return the output stream with a representation of the input matrix.
  */
 template <typename T>
