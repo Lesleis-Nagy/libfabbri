@@ -11,6 +11,7 @@ cmake-build-*
 doc/xml
 doc/html
 doc/_build
+doc/Doxyfile.bak
 
 # Files
 MANIFEST
