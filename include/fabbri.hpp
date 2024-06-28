@@ -235,6 +235,7 @@ curl(const Vector3D<T> &r1, const Vector3D<T> &r2,
          + V2.z() * x1x3x4_z1z3z4
          - V3.z() * x1x2x4_z1z2z4
          + V4.z() * x1x2x3_z1z2z3 ) / signed_vol,
+
         // Entry y
         (  V1.x() * x2x3x4_y2y3y4
          - V2.x() * x1x3x4_y1y3y4
@@ -244,6 +245,7 @@ curl(const Vector3D<T> &r1, const Vector3D<T> &r2,
          + V2.z() * y1y3y4_z1z3z4
          - V3.z() * y1y2y4_z1z2z4
          + V4.z() * y1y2y3_z1z2z3 ) / signed_vol,
+
         // Entry z
         (  V1.x() * x2x3x4_z2z3z4
          - V2.x() * x1x3x4_z1z3z4
