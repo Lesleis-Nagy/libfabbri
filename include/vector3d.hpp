@@ -69,7 +69,6 @@ public:
      * @param x the vector x component.
      * @param y the vector y component.
      * @param z the vector z component.
-     * @param eps the regularization-epsilon value.
      */
     Vector3D(T x, T y, T z): _x{x, y, z} {}
 

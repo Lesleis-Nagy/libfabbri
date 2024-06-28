@@ -70,7 +70,6 @@ public:
      * @param y the vector y component.
      * @param z the vector z component.
      * @param w the vector w component.
-     * @param eps the regularization-epsilon value.
      */
     Vector4D(T x, T y, T z, T w): _x{x, y, z, w} {}
 
