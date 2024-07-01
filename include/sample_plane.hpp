@@ -7,11 +7,27 @@
 
 #include "geometry3d.hpp"
 
+/**
+ * Object to represent an oriented plane in three-dimensions that is uniformly
+ * sampled at discreet points (with the same spacing in the plane-local
+ * horizontal and vertical directions).
+ * @tparam T the underlying type of the plane.
+ */
 template <typename T>
 class SamplePlane {
 
  public:
 
+  /**
+   * Constructor create a new plane; it should be noted that sample points can
+   * overshoot the width/height of the sample plane by one sample spacing
+   * length.
+   * @param centre a position-vector defining the centre of the plane.
+   * @param theta the orientation angle of the plane.
+   * @param width the width of the plane.
+   * @param height the height of the plane.
+   * @param spacing the spacing of the sample points of the plane.
+   */
   SamplePlane(Vector3D<T> centre, T theta, T width, T height, T spacing):
   _target{0, 0, 0},
   _centre{centre},
@@ -61,6 +77,12 @@ class SamplePlane {
 
   }
 
+  /**
+   * Retrieve the i, j sample point.
+   * @param i the row index of the plane (corresponds to the y-coordinate).
+   * @param j the column index of the plane (corresponds to the x-coordinate).
+   * @return the position vector at the given indices.
+   */
   Vector3D<T> operator()(size_t i, size_t j) {
 
     size_t index = _nx * i + j;
@@ -69,8 +91,16 @@ class SamplePlane {
 
   }
 
+  /**
+   * Retrieve the number of sample points in the x-direction.
+   * @return the number of sample points in the x-direction.
+   */
   [[nodiscard]] size_t nx() const { return _nx; }
 
+  /**
+   * Retrieve the number of sample points in the y-direction.
+   * @return the number of sample points in the y-direction.
+   */
   [[nodiscard]] size_t ny() const { return _ny; }
 
  private:
