@@ -6,7 +6,6 @@
 #include <catch/catch.hpp>
 
 #include <array>
-#include <iostream>
 
 #include "regular_grid.hpp"
 
