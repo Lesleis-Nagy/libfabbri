@@ -5,6 +5,7 @@
 #ifndef LIBFABBRI_INCLUDE_SAMPLE_PLANE_HPP_
 #define LIBFABBRI_INCLUDE_SAMPLE_PLANE_HPP_
 
+#include "aliases.hpp"
 #include "geometry3d.hpp"
 
 /**
@@ -61,33 +62,83 @@ class SamplePlane {
 
     _anchor = _centre - (_width / 2.0) * _e1 - (_height / 2.0) * _e2;
 
-    _data.resize(_nx * _ny);
+  }
+
+  /**
+   * Retrieve the vertices
+   */
+  [[nodiscard]] v_list
+  vcl() const {
+
+    v_list result(_nx * _ny);
 
     for (size_t i = 0; i < _ny; ++i) {
 
-      for(size_t j = 0; j < _nx; ++j) {
+      for (size_t j = 0; j < _nx; ++j) {
 
         size_t index = _nx * i + j;
 
-        _data[index] = _anchor + _spacing * j * _e1 + _spacing * i * _e2;
+        auto r = _anchor + _spacing * j * _e1 + _spacing * i * _e2;
+
+        result[index] = {r.x(), r.y(), r.z()};
 
       }
 
     }
 
+    return result;
+
   }
 
   /**
-   * Retrieve the i, j sample point.
-   * @param i the row index of the plane (corresponds to the y-coordinate).
-   * @param j the column index of the plane (corresponds to the x-coordinate).
-   * @return the position vector at the given indices.
+   * Connectivity index list
    */
-  Vector3D<T> operator()(size_t i, size_t j) {
+  [[nodiscard]] tri_list
+  cil() const {
 
-    size_t index = _nx * i + j;
+    size_t n = (_nx - 1) * (_ny - 1);
 
-    return _data[index];
+    tri_list result(2*n);
+
+    size_t ti = 0;
+
+    for (size_t i = 0; i < _ny - 1; ++i) {
+
+      for (size_t j = 0; j < _nx - 1; ++j) {
+
+        size_t bl = _nx * i + j;
+        size_t tl = _nx * (i + 1) + j;
+        size_t br = bl + 1;
+        size_t tr = tl + 1;
+
+        result[ti] = {bl, tr, tl};
+        ++ti;
+
+        result[ti] = {bl, br, tr};
+        ++ti;
+
+      }
+
+    }
+
+    return result;
+
+  }
+
+  [[nodiscard]] sm_list
+  sml() const {
+
+    size_t n = (_nx - 1) * (_ny - 1);
+
+    sm_list result(2*n);
+
+    for (size_t i = 0; i < 2*n; ++i) {
+
+      result[i] = 1;
+
+    }
+
+    return result;
 
   }
 
@@ -120,8 +171,6 @@ class SamplePlane {
 
   size_t _nx;
   size_t _ny;
-
-  std::vector<Vector3D<T>> _data;
 
 };
 

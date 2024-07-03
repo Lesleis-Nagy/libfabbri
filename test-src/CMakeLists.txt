@@ -74,6 +74,26 @@ target_include_directories(test_sample_plane
         PRIVATE ${LIBFABBRI_INCLUDE_DIR}
         ${MPFR_INCLUDES}
         ${CATCH_INCLUDE_DIR}
-        ${MPREAL_INCLUDE_DIR})
+        ${MPREAL_INCLUDE_DIR}
+        ${RAPIDXML_INCLUDE_DIR})
 target_link_libraries(test_sample_plane
+        HDF5::HDF5
+        ${MPFR_LIBRARIES})
+
+##############################################################################
+# Integration test                                                           #
+##############################################################################
+
+# Integration test
+add_executable(integration_001 integration_001.cpp)
+target_include_directories(integration_001
+        PRIVATE ${LIBFABBRI_INCLUDE_DIR}
+                ${MPFR_INCLUDES}
+                ${MPREAL_INCLUDE_DIR}
+                ${CATCH_INCLUDE_DIR}
+                ${MPREAL_INCLUDE_DIR}
+                ${RAPIDXML_INCLUDE_DIR})
+MESSAGE("RAPIDXML_INCLUDE_DIR: ${RAPIDXML_INCLUDE_DIR}")
+target_link_libraries(integration_001
+        HDF5::HDF5
         ${MPFR_LIBRARIES})
