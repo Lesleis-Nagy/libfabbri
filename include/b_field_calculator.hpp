@@ -12,7 +12,7 @@ class BFieldCalculator {
 
  public:
 
-  BFieldCalculator(const Model<3> &model) {
+  BFieldCalculator(const Model<DIM3> &model) {
 
     _b_field_parts.resize(model.mesh().cil().size());
 

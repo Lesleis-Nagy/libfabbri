@@ -16,8 +16,9 @@ main(int argc, char *argv[]) {
   auto model = MicromagFileLoader<3>::read(
       "/Users/lnagy2/Projects/libfabbri/test001.mmf");
 
-  auto regular_grid = SamplePlane<double>{
-      {0.08, 0.08, 0.08},
-      0.0, 0.100, 0.100, 0.001};
+  auto model_surface = model.mesh().extract_surface_mesh();
+
+  MicromagFileWriter<DIM2>::write("surface.mmf", model_surface);
+  XDMFFileWriter<DIM2>::write("surface.xdmf", "surface.mmf", model_surface);
 
 }

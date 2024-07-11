@@ -9,12 +9,13 @@
 #include <array>
 #include <functional>
 #include <iostream>
-#include <string>
+#include <set>
 #include <sstream>
+#include <stdexcept>
+#include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
-#include <stdexcept>
-#include <unordered_map>
 
 #include "vector3d.hpp"
 #include "aliases.hpp"
@@ -29,7 +30,7 @@
  * An DIM-dimesional mesh forward declaration.
  * @tparam DIM the dimensionality of the mesh.
  */
-template <size_t DIM>
+template <Dimension DIM>
 class Mesh;
 
 
@@ -37,7 +38,7 @@ class Mesh;
  * An object that holds information about a three-dimensional mesh.
  */
 template <>
-class Mesh<2> {
+class Mesh<DIM2> {
 
  public:
 
@@ -112,15 +113,15 @@ class Mesh<2> {
 };
 
 /**
- * An object that holds information about a mesh.
+ * An object that holds information about a three-dimensional mesh.
  */
 template <>
-class Mesh<3> {
+class Mesh<DIM3> {
 
  public:
 
   /**
-   * Constructor will create a new mesh.
+   * Constructor will create a new three-dimensional mesh.
    * @param vcl the (v)ertex (c)oordinate (l)ist.
    * @param cil the (c)onnectivity (i)ndex (l)ist.
    * @param sml the (s)ub-(m)esh list.
@@ -131,10 +132,9 @@ class Mesh<3> {
       _sml(std::move(sml)) {
 
     // Initialize internal data structures.
-    init_stri2tet_and_stri2tri();
+    init_stri2tet_stri2tri_stri2smi();
     init_sedge2tet();
     init_tet2tet_tri();
-    init_btri();
     init_v2v_edge();
 
   }
@@ -230,13 +230,41 @@ class Mesh<3> {
   }
 
   /**
-   * Retrieve the list of boundary triangle faces.
-   * @return the list of boundary triangle faces.
+   * Extract the surface of the mesh as a new mesh object.
+   *
    */
-  [[nodiscard]] const tri_list &
-  btri() const {
+  [[nodiscard]] Mesh<DIM2>
+  extract_surface_mesh() const {
 
-    return _btri;
+    // Take a deep copy of mesh information.
+    tri_list cil;
+    sm_list sml;
+
+    // Populate the connectivity list (cil) and sub-mesh list (sml).
+    for (const auto &kv : _stri2tets) {
+
+      auto stri = kv.first;
+      auto tets = kv.second;
+
+      // If the triangle face belongs to only one element.
+      if (tets.size() == 1) {
+        const auto &face = _stri2tri.find(stri)->second;
+        cil.push_back(face);
+      }
+
+      // If a triangle face belongs to only one element ...
+      if (tets.size() == 1) {
+        // ... then it is a boundary face.
+        const auto &sub_mesh_ids = _stri2smis.find(stri)->second;
+        sml.push_back(sub_mesh_ids);
+      }
+
+    }
+
+    v_list vcl(_vcl);
+
+
+    return {vcl, cil, sml};
 
   }
 
@@ -254,31 +282,32 @@ class Mesh<3> {
   // Mapping of (s)orted (tri)angle to (tet)rahedra.
   stri_to_tets_map _stri2tets;
 
+  // Mapping of (s)orted (tri)angles to (tri)angles (where the unsorted triangle
+  // indices: 0, 1, 2 are in counter-clockwise winding order).
+  stri_to_tri_map _stri2tri;
+
+  // Mapping of (s)orted (tri)angles to (s)ub-(m)esh (i)ndices.
+  stri_to_smis_map _stri2smis;
+
   // Mapping of (s)orted (edge) to (tet)rahedra.
   sedge_to_tets_map _sedge2tets;
 
-  // Mapping of (s)orted (tri)angles to (tri)angles (the triangles indices
-  // 0, 1, 2 are in counterclockwise winding order).
-  stri_to_tri_map _stri2tri;
-
-  // Mapping of (tet)rahedra indices (in til) to (tet)rahedra indices by
+  // Mapping of (tet)rahedra indices (in cil) to (tet)rahedra indices by
   // triangular face.
   tet_to_tets_map _tet2tets_tri;
 
-  // Mapping of (v)ertex indices to (v)tex indices by edge.
+  // Mapping of (v)ertex index to (v)ertex indices by edge.
   v_to_vs_list _v2vs_edge;
-
-  // List of boundary tetrahedra (the indices 0, 1, 2 are in counterclockwise
-  // winding order).
-  tri_list _btri;
 
   /**
    * Initialize the sorted triangle to tetrahedron index mapping.
    */
-  void init_stri2tet_and_stri2tri() {
+  void init_stri2tet_stri2tri_stri2smi() {
 
     for (size_t i = 0; i < _cil.size(); ++i) {
+
       auto fs = faces(_cil[i]);
+      auto sub_id = _sml[i];
 
       size_t tri_idx = 0;
       for (auto &f : fs) {
@@ -289,6 +318,7 @@ class Mesh<3> {
           f[0] = f[1];
           f[1] = tmp_idx;
         }
+
         tri_idx++;
 
         auto sf = sort(f);
@@ -307,7 +337,22 @@ class Mesh<3> {
           //     tetrahedra.
           _stri2tets[sf].push_back(i);
         }
+
+        // If the sorted (triangle) face is *NOT* in _stri2smis ...
+        if (_stri2smis.find(sf) == _stri2smis.end()) {
+          // ... then create a new mapping from the sorted face to the
+          //     tetrahedron's submesh index.
+          _stri2smis[sf] = {_sml[i]};
+        } else {
+          // ... otherwise append the tetrahedron's sub-mesh index to the
+          //     mapping from sorted face to sub-mesh indices.
+          for (auto sidx : _sml[i]) {
+            _stri2smis[sf].insert(sidx);
+          }
+        }
+
       }
+
     }
 
   }
@@ -318,16 +363,20 @@ class Mesh<3> {
   void init_sedge2tet() {
 
     for (size_t i = 0; i < _cil.size(); ++i) {
+
       auto es = edges(_cil[i]);
 
       for (auto &e : es) {
+
         auto se = sort(e);
         if (_sedge2tets.find(se) == _sedge2tets.end()) {
           _sedge2tets[se] = {i};
         } else {
           _sedge2tets[se].push_back(i);
         }
+
       }
+
     }
 
   }
@@ -338,6 +387,7 @@ class Mesh<3> {
   void init_tet2tet_tri() {
 
     for (const auto &kv : _stri2tets) {
+
       auto stri = kv.first;
       auto tets = kv.second;
 
@@ -359,6 +409,7 @@ class Mesh<3> {
         } else {
           _tet2tets_tri[v1].push_back(v0);
         }
+
       }
 
     }
@@ -371,6 +422,7 @@ class Mesh<3> {
   void init_v2v_edge() {
 
     for (const auto &kv : _sedge2tets) {
+
       auto &sedge = kv.first;
 
       if (_v2vs_edge.find(sedge[0]) == _v2vs_edge.end()) {
@@ -384,28 +436,12 @@ class Mesh<3> {
       } else {
         _v2vs_edge[sedge[1]].push_back(sedge[0]);
       }
+
     }
 
     for (auto &kv : _v2vs_edge) {
       auto &vs = kv.second;
       sort(vs.begin(), vs.end());
-    }
-
-  }
-
-  /**
-   * Initialize the boundary triangles list.
-   */
-  void init_btri() {
-
-    for (const auto &kv : _stri2tets) {
-      auto stri = kv.first;
-      auto tets = kv.second;
-
-      // If the triangle face belongs to only one element.
-      if (tets.size() == 1) {
-        _btri.push_back(_stri2tri[stri]);
-      }
     }
 
   }

@@ -53,7 +53,7 @@ class MicromagFileLoader;
  * Object that will load micromagnetic model files.
  */
 template <>
-class MicromagFileLoader<3> {
+class MicromagFileLoader<DIM3> {
 
  public:
 
@@ -67,7 +67,7 @@ class MicromagFileLoader<3> {
    * @param file_name the name of the file.
    * @return a new model object, this object will only contain Mesh information.
    */
-  static Model<3>
+  static Model<DIM3>
   read(const std::string &file_name) {
 
     v_list vcl;
