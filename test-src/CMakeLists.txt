@@ -85,7 +85,8 @@ target_link_libraries(test_sample_plane
 ##############################################################################
 
 # Integration test
-add_executable(integration_001 integration_001.cpp)
+add_executable(integration_001 integration_001.cpp
+        ../include/b_field_calculator.hpp)
 target_include_directories(integration_001
         PRIVATE ${LIBFABBRI_INCLUDE_DIR}
                 ${MPFR_INCLUDES}

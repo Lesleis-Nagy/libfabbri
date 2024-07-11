@@ -74,6 +74,8 @@ class MicromagFileLoader<3> {
     tet_list til;
     sm_list sml;
 
+    fv_list field;
+
     H5::H5File file(file_name, H5F_ACC_RDONLY);
 
     check_for_paths(file.getId());
@@ -82,7 +84,14 @@ class MicromagFileLoader<3> {
     read_data_set("/mesh/elements", file, til);
     read_data_set("/mesh/submesh", file, sml);
 
-    return {{vcl, til, sml}};
+    check_for_field(file.getId());
+
+    read_data_set("/fields/field0/vectors", file, field);
+
+    FieldList fields;
+    fields.add_field(Field{field});
+
+    return {{vcl, til, sml}, fields};
 
   }
 
@@ -210,6 +219,21 @@ class MicromagFileLoader<3> {
 
     if (!path_exists(id, "/mesh/submesh")) {
       throw MicromagFileLoaderException("Path '/mesh/submesh' missing.");
+    }
+
+  }
+
+  /**
+   * Check that field data exists.
+   * - `/fields/field0/vectors'
+   * are present in the input file.
+   * @param id the HDF5 file id.
+   */
+  static void
+  check_for_field(hid_t id) {
+
+    if (!path_exists(id, "/fields/field0/vectors")) {
+      throw MicromagFileLoaderException("Path '/fields/field0/vectors' missing.");
     }
 
   }

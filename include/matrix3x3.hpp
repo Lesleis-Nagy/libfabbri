@@ -27,7 +27,7 @@ public:
      */
     Matrix3x3(std::initializer_list<std::initializer_list<T>> m) {
 
-        assert(m.size() == 3 && "Number of rows must be 3.");
+        // assert(m.size() == 3 && "Number of rows must be 3.");
 
         auto outerIterator = m.begin();
         auto innerIterator = outerIterator->begin();
