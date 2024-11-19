@@ -41,7 +41,7 @@ class XDMFWriterException : std::exception {
 
 };
 
-template <size_t DIM>
+template <Dimension DIM>
 class XDMFFileWriter {
 
  public:

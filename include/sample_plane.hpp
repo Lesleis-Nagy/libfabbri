@@ -134,7 +134,7 @@ class SamplePlane {
 
     for (size_t i = 0; i < 2*n; ++i) {
 
-      result[i] = 1;
+      result[i] = {1};
 
     }
 

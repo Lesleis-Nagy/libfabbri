@@ -15,7 +15,7 @@
 /**
  * A model consists of a mesh and a field.
  */
-template <size_t DIM>
+template <Dimension DIM>
 class Model {
 
  public:

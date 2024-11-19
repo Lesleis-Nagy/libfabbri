@@ -6,7 +6,7 @@
 #define LIBFABBRI_INCLUDE_ALIASES_HPP_
 
 #include <unordered_map>
-#include <vector>
+#include <set>
 
 /**
  * A function that will produce a hash for an array of 4 values.
@@ -29,6 +29,10 @@ struct edge_hasher {
     return size_t_hash(arr[0]) ^ size_t_hash(arr[1]);
   }
 };
+
+/**
+ * Aliases.
+ */
 
 // Vertex.
 typedef std::array<double, 3> vert;
@@ -73,7 +77,10 @@ typedef std::vector<size_t> teti_list;
 typedef std::unordered_map<size_t, teti_list> tet_to_tets_map;
 
 // Sub-mesh index list.
-typedef std::vector<size_t> sm_list;
+typedef std::vector<std::set<size_t>> sm_list;
+
+// Sorted triangle to sub-mesh indices list.
+typedef std::unordered_map<tri, std::set<size_t>, tri_hasher> stri_to_smis_map;
 
 // Sorted triangle to tets map.
 typedef std::unordered_map<tri, teti_list, tri_hasher> stri_to_tets_map;
@@ -96,4 +103,12 @@ typedef std::vector<fv_list> fv_lists;
 // Scalar list
 typedef std::vector<double> s_list;
 
-#endif // LIBFABBRI_INCLUDE_ALIASES_HPP_
+/**
+ * Enumerations.
+ */
+enum Dimension {
+  DIM2 = 2,
+  DIM3 = 3
+};
+
+#endif //LIBFABBRI_INCLUDE_ALIASES_HPP_

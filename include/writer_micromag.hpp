@@ -46,7 +46,7 @@ class MicromagFileWriterException : std::exception {
 /**
  * Object that will write micromagnetic model files.
  */
-template <size_t DIM>
+template <Dimension DIM>
 class MicromagFileWriter {
 
  public:
