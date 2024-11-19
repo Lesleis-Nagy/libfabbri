@@ -44,4 +44,5 @@ set(RAPIDXML_INCLUDE_DIR "${LIBFABBRI_THIRD_PARTY_DIR}/rapidxml-v1.13/include")
 # Descend in to test directory.                                              #
 #----------------------------------------------------------------------------#
 
+enable_testing()
 add_subdirectory(${LIBFABBRI_TEST_SRC_DIR})

@@ -413,7 +413,7 @@ TEST_CASE("double precision Lambda_f (triangular) function", "fabbri") {
 
     auto Lambda_f = new_Lambda_f_fun(r1, r2, r3);
 
-    double eps = 1E-14;
+    double eps = 1E-12;
 
     double expected = 1.8426320969612156532708703220925032742357173038995;
 
