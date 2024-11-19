@@ -5,8 +5,8 @@
 #ifndef LIBFABBRI_INCLUDE_ALIASES_HPP_
 #define LIBFABBRI_INCLUDE_ALIASES_HPP_
 
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 /**
  * A function that will produce a hash for an array of 4 values.
@@ -17,7 +17,6 @@ struct tri_hasher {
     std::hash<size_t> size_t_hash;
     return size_t_hash(arr[0]) ^ size_t_hash(arr[1]) ^ size_t_hash(arr[2]);
   }
-
 };
 
 /**
@@ -29,7 +28,6 @@ struct edge_hasher {
     std::hash<size_t> size_t_hash;
     return size_t_hash(arr[0]) ^ size_t_hash(arr[1]);
   }
-
 };
 
 // Vertex.
@@ -98,4 +96,4 @@ typedef std::vector<fv_list> fv_lists;
 // Scalar list
 typedef std::vector<double> s_list;
 
-#endif //LIBFABBRI_INCLUDE_ALIASES_HPP_
+#endif // LIBFABBRI_INCLUDE_ALIASES_HPP_

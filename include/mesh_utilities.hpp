@@ -126,9 +126,9 @@ std::array<std::array<size_t, 3>, 4>
 faces(const std::array<size_t, 4> &tet) {
 
   return {tet[1], tet[2], tet[3],
-          tet[0], tet[2], tet[3],
+          tet[0], tet[3], tet[2],
           tet[0], tet[1], tet[3],
-          tet[0], tet[1], tet[2]};
+          tet[0], tet[2], tet[1]};
 
 }
 

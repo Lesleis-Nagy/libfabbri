@@ -5,6 +5,8 @@
 #ifndef LIBFABBRI_MATRIX3X3_HPP
 #define LIBFABBRI_MATRIX3X3_HPP
 
+#include <cassert>
+
 #include "vector3d.hpp"
 
 /**
@@ -27,7 +29,7 @@ public:
      */
     Matrix3x3(std::initializer_list<std::initializer_list<T>> m) {
 
-        // assert(m.size() == 3 && "Number of rows must be 3.");
+        assert(m.size() == 3 && "Number of rows must be 3.");
 
         auto outerIterator = m.begin();
         auto innerIterator = outerIterator->begin();
@@ -85,7 +87,7 @@ private:
 
 /**
  * Redirection operator to display the matrix.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param out the output stream.
  * @param m the matrix to display.
  * @return the output stream with a representation of the input matrix.
@@ -103,7 +105,7 @@ std::ostream &operator << (std::ostream &out, const Matrix3x3<T> m) {
 
 /**
  * Matrix addition operator.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param u the matrix on the left hand side of the sum.
  * @param v the matrix on the right hand side of the sum.
  * @return the sum of the two input matrices.
@@ -119,7 +121,7 @@ Matrix3x3<T> operator+ (const Matrix3x3<T> &u, const Matrix3x3<T> &v) {
 
 /**
  * Matrix subtraction operator.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param u the matrix on the left hand side of the operator.
  * @param v the matrix on the right hand side of the operator.
  * @return the difference of two input matrices.
@@ -135,7 +137,7 @@ Matrix3x3<T> operator- (const Matrix3x3<T> &u, const Matrix3x3<T> &v) {
 
 /**
  * Matrix-scalar product operator.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param v the matrix on the left hand side of the product.
  * @param lambda the scalar on the right hand side of the product.
  * @return the matrix-scalar product.
@@ -151,7 +153,7 @@ Matrix3x3<T> operator*(const Matrix3x3<T> &v, T lambda) {
 
 /**
  * Scalar-matrix product operator.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param lambda the scalar on the left hand side of the product.
  * @param v the matrix on the right hand side of the product.
  * @return the scalar-matrix product.
@@ -167,7 +169,7 @@ Matrix3x3<T> operator*(T lambda, const Matrix3x3<T> &v) {
 
 /**
  * Matrix-scalar division.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param v the matrix on the left hand side of the division.
  * @param lambda the scalar on the right hand side of the division.
  * @return the matrix-scalar division.
@@ -183,8 +185,7 @@ Matrix3x3<T> operator/(const Matrix3x3<T> &v, T lambda) {
 
 /**
  * Matrix-vector multiplication.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param m the matrix on the left hand side of the multiplication.
  * @param v the vector on the right hand side of the multiplication.
  * @return the matrix-vector multiplication.
@@ -200,8 +201,7 @@ Vector3D<T> operator*(const Matrix3x3<T> &m, const Vector3D<T> &v) {
 
 /**
  * Vector-matrix multiplication.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param v the vector on the left hand side of the multiplication.
  * @param m the matrix on the right hand side of the multiplication.
  * @return the matrix-vector multiplication.
@@ -217,8 +217,7 @@ Vector3D<T> operator*(const Vector3D<T> &v, const Matrix3x3<T> &m) {
 
 /**
  * Matrix-matrix multiplication.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param m0 the matrix on the left hand side of the multiplication.
  * @param m1 the matrix on the right hand side of the multiplication.
  * @return the matrix-matrix multiplication.
@@ -242,8 +241,7 @@ Matrix3x3<T> operator *(const Matrix3x3<T> &m0, const Matrix3x3<T> &m1) {
 
 /**
  * Matrix adjugate.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param m the matrix.
  * @return the matrix adjugate.
  */
@@ -266,8 +264,7 @@ Matrix3x3<T> adj(const Matrix3x3<T> &m) {
 
 /**
  * Matrix determinant.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param m the matrix.
  * @return the matrix determinant.
  */
@@ -282,8 +279,7 @@ T det(const Matrix3x3<T> &m) {
 
 /**
  * Matrix transpose.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param m the matrix.
  * @return the matrix transpose.
  */
@@ -298,8 +294,7 @@ Matrix3x3<T> tr(const Matrix3x3<T> &m) {
 
 /**
  * Matrix-matrix Frobenius (dot) product.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param u the matrix on the left hand side of the dot product.
  * @param v the matrix on the right hand side of the dot product.
  * @return the matrix-vector multiplication.
@@ -315,8 +310,7 @@ T dot(const Matrix3x3<T> &u, const Matrix3x3<T> &v) {
 
 /**
  * Matrix Frobenius norm.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param u the matrix to take the norm of.
  * @return the matrix Frobenius norm.
  */
@@ -329,8 +323,7 @@ T norm(const Matrix3x3<T> &u) {
 
 /**
  * Matrix diagonal.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param m the matrix from which to extract the diagonal.
  * @return the matrix diagonal.
  */
@@ -343,8 +336,7 @@ Vector3D<T> diag(const Matrix3x3<T> &m) {
 
 /**
  * Matrix trace.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param m the matrix for which to compute the trace.
  * @return the matrix trace.
  */
