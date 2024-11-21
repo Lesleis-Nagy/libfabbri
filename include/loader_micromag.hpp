@@ -72,7 +72,7 @@ class MicromagFileLoader<DIM3> {
 
     v_list vcl;
     tet_list til;
-    sm_list sml;
+    smi_list sml;
 
     fv_list field;
 
@@ -174,7 +174,7 @@ class MicromagFileLoader<DIM3> {
   static void
   read_data_set(const std::string &data_set_name,
                 H5::H5File &file,
-                sm_list &data) {
+                smi_list &data) {
 
     data.clear();
 

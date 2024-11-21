@@ -88,11 +88,33 @@ class MicromagFileWriter {
     // Write the elements.
     write_elements(file, model);
 
-    // Write the submesh indices.
+    // Write the sub-mesh indices.
     write_submesh_indices(file, model);
 
     // Write fields.
     write_fields(file, model);
+
+  }
+
+  /**
+ * Write the model's mesh to the file.
+ * @param file the HDF5 file handle.
+ * @param model the model.
+ */
+  static void
+  write_mesh(H5::H5File &file, const Mesh<DIM> &mesh) {
+
+    // Create a group for the mesh.
+    H5::Group grp_mesh(file.createGroup("/mesh"));
+
+    // Write the vertices.
+    write_vertices(file, mesh);
+
+    // Write the elements.
+    write_elements(file, mesh);
+
+    // Write the sub-mesh indices.
+    write_submesh_indices(file, mesh);
 
   }
 

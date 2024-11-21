@@ -117,7 +117,7 @@ std::array<T, 2> sort(const std::array<T, 2> &list) {
 
 }
 
-/**
+/*f*
  * Return a list of faces for the given input tetrahedron.
  * @param tet the input tetrahedron.
  * @return an array of 4 faces.

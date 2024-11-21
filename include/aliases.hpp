@@ -64,9 +64,6 @@ typedef std::array<size_t, 3> tri;
 // Triangle list.
 typedef std::vector<tri> tri_list;
 
-// Triangle index list.
-typedef std::vector<size_t> trii_list;
-
 // Tetrahedron.
 typedef std::array<size_t, 4> tet;
 
@@ -80,10 +77,10 @@ typedef std::vector<size_t> teti_list;
 typedef std::unordered_map<size_t, teti_list> tet_to_tets_map;
 
 // Sub-mesh index list.
-typedef std::vector<std::set<size_t>> sm_list;
+typedef std::vector<size_t> smi_list;
 
 // Sorted triangle to sub-mesh indices list.
-typedef std::unordered_map<tri, std::set<size_t>, tri_hasher> stri_to_smis_map;
+typedef std::unordered_map<tri, size_t, tri_hasher> stri_to_smi_map;
 
 // Sorted triangle to tets map.
 typedef std::unordered_map<tri, teti_list, tri_hasher> stri_to_tets_map;

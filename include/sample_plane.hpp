@@ -125,12 +125,12 @@ class SamplePlane {
 
   }
 
-  [[nodiscard]] sm_list
+  [[nodiscard]] smi_list
   sml() const {
 
     size_t n = (_nx - 1) * (_ny - 1);
 
-    sm_list result(2*n);
+    smi_list result(2*n);
 
     for (size_t i = 0; i < 2*n; ++i) {
 

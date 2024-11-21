@@ -33,7 +33,6 @@
 template <Dimension DIM>
 class Mesh;
 
-
 /**
  * An object that holds information about a three-dimensional mesh.
  */
@@ -46,9 +45,9 @@ class Mesh<DIM2> {
    * Constructor will create a new mesh.
    * @param vcl the (v)ertex (c)oordinate (l)ist.
    * @param cil the (c)onnectivity (i)ndex (l)ist.
-   * @param sml the (s)ub-(m)esh list.
+   * @param sml the (s)ub-(m)esh (i)ndex (l)ist.
    */
-  Mesh(v_list vcl, tri_list cil, sm_list sml) :
+  Mesh(v_list vcl, tri_list cil, smi_list sml) :
       _vcl(std::move(vcl)),
       _cil(std::move(cil)),
       _sml(std::move(sml)) {
@@ -92,7 +91,7 @@ class Mesh<DIM2> {
    * Retrieve the sub-mesh index list.
    * @return the sub-mesh index list.
    */
-  [[nodiscard]] const sm_list &
+  [[nodiscard]] const smi_list &
   sml() const {
 
     return _sml;
@@ -108,7 +107,7 @@ class Mesh<DIM2> {
   tri_list _cil;
 
   // Sub-mesh (index) list.
-  sm_list _sml;
+  smi_list _sml;
 
 };
 
@@ -126,7 +125,7 @@ class Mesh<DIM3> {
    * @param cil the (c)onnectivity (i)ndex (l)ist.
    * @param sml the (s)ub-(m)esh list.
    */
-  Mesh(v_list vcl, tet_list cil, sm_list sml) :
+  Mesh(v_list vcl, tet_list cil, smi_list sml) :
       _vcl(std::move(vcl)),
       _cil(std::move(cil)),
       _sml(std::move(sml)) {
@@ -165,7 +164,7 @@ class Mesh<DIM3> {
    * Retrieve the sub-mesh index list.
    * @return the sub-mesh index list.
    */
-  [[nodiscard]] const sm_list &
+  [[nodiscard]] const smi_list &
   sml() const {
 
     return _sml;
@@ -238,7 +237,7 @@ class Mesh<DIM3> {
 
     // Take a deep copy of mesh information.
     tri_list cil;
-    sm_list sml;
+    smi_list sml;
 
     // Populate the connectivity list (cil) and sub-mesh list (sml).
     for (const auto &kv : _stri2tets) {
@@ -246,23 +245,32 @@ class Mesh<DIM3> {
       auto stri = kv.first;
       auto tets = kv.second;
 
-      // If the triangle face belongs to only one element.
+      // If the triangle face belongs to only one element ...
       if (tets.size() == 1) {
+        // ... then it is a boundary face, so get the unsorted triangle-face
+        // (i.e. the triangle with its original winding) associated with the
+        // sorted triangle-face; and ...
         const auto &face = _stri2tri.find(stri)->second;
+
+        // ... push the unsorted-triangle indices to the connectivity index list
+        // of the 2D surface mesh that we're building.
         cil.push_back(face);
       }
 
       // If a triangle face belongs to only one element ...
       if (tets.size() == 1) {
-        // ... then it is a boundary face.
-        const auto &sub_mesh_ids = _stri2smis.find(stri)->second;
-        sml.push_back(sub_mesh_ids);
+        // ... then it is a boundary face, so get the sub-mesh index associated
+        // with this face; and ...
+        const auto &sub_mesh_id = _stri2smi.find(stri)->second;
+
+        // ... push that index to the sub-mesh indices of the 2D surface mesh
+        // that we're building.
+        sml.push_back(sub_mesh_id);
       }
 
     }
 
     v_list vcl(_vcl);
-
 
     return {vcl, cil, sml};
 
@@ -277,7 +285,7 @@ class Mesh<DIM3> {
   tet_list _cil;
 
   // Sub-mesh (index) list.
-  sm_list _sml;
+  smi_list _sml;
 
   // Mapping of (s)orted (tri)angle to (tet)rahedra.
   stri_to_tets_map _stri2tets;
@@ -287,7 +295,7 @@ class Mesh<DIM3> {
   stri_to_tri_map _stri2tri;
 
   // Mapping of (s)orted (tri)angles to (s)ub-(m)esh (i)ndices.
-  stri_to_smis_map _stri2smis;
+  stri_to_smi_map _stri2smi;
 
   // Mapping of (s)orted (edge) to (tet)rahedra.
   sedge_to_tets_map _sedge2tets;
@@ -323,7 +331,10 @@ class Mesh<DIM3> {
 
         auto sf = sort(f);
 
-        // Add a mapping from the sorted triangle face to the original.
+        // Add a mapping from the sorted triangle face to the original triangle.
+        // Recall that we do this because sorted triangle indices are optimal
+        // for testing the equality of two triangles but sorting triangle
+        // indices destroys their winding.
         _stri2tri[sf] = f;
 
         // If the sorted (triangle) face is *NOT* in _stri2tet ...
@@ -338,18 +349,12 @@ class Mesh<DIM3> {
           _stri2tets[sf].push_back(i);
         }
 
-        // If the sorted (triangle) face is *NOT* in _stri2smis ...
-        if (_stri2smis.find(sf) == _stri2smis.end()) {
-          // ... then create a new mapping from the sorted face to the
-          //     tetrahedron's submesh index.
-          _stri2smis[sf] = {_sml[i]};
-        } else {
-          // ... otherwise append the tetrahedron's sub-mesh index to the
-          //     mapping from sorted face to sub-mesh indices.
-          for (auto sidx : _sml[i]) {
-            _stri2smis[sf].insert(sidx);
-          }
-        }
+        // Add the sub-mesh index to the sorted triangle face index. NOTE:
+        // for internal triangles that span two sub-meshes, this quantity is
+        // undefined (since we don't know which sub-mesh index) was written
+        // first, however for boundary-face triangles the sub-mesh index will
+        // be well-defined.
+        _stri2smi[sf] = _sml[i];
 
       }
 

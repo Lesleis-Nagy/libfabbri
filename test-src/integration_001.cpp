@@ -18,7 +18,7 @@ main(int argc, char *argv[]) {
 
   auto model_surface = model.mesh().extract_surface_mesh();
 
-  MicromagFileWriter<DIM2>::write("surface.mmf", model_surface);
-  XDMFFileWriter<DIM2>::write("surface.xdmf", "surface.mmf", model_surface);
+  //MicromagFileWriter<DIM2>::write("surface.mmf", model_surface);
+  //XDMFFileWriter<DIM2>::write("surface.xdmf", "surface.mmf", model_surface);
 
 }
