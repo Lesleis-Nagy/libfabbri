@@ -5,6 +5,8 @@
 #ifndef LIBFABBRI_MATRIX4X4_HPP
 #define LIBFABBRI_MATRIX4X4_HPP
 
+#include <cassert>
+
 #include "vector4d.hpp"
 
 /**
@@ -105,8 +107,7 @@ private:
 
 /**
  * Redirection operator to display the matrix.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param out the output stream.
  * @param m the matrix to display.
  * @return the output stream with a representation of the input matrix.
@@ -125,8 +126,7 @@ std::ostream &operator << (std::ostream &out, const Matrix4x4<T> m) {
 
 /**
  * Matrix addition operator.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param u the matrix on the left hand side of the sum.
  * @param v the matrix on the right hand side of the sum.
  * @return the sum of the two input matrices.
@@ -144,8 +144,7 @@ Matrix4x4<T> operator+ (const Matrix4x4<T> &u, const Matrix4x4<T> &v) {
 
 /**
  * Matrix subtraction operator.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param u the matrix on the left hand side of the sum.
  * @param v the matrix on the right hand side of the sum.
  * @return the difference of the two input matrices.
@@ -163,8 +162,7 @@ Matrix4x4<T> operator- (const Matrix4x4<T> &u, const Matrix4x4<T> &v) {
 
 /**
  * Scalar-matrix product operator.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param lambda the scalar on the right hand side of the product.
  * @param v the matrix on the left hand side of the product.
  * @return the matrix-scalar product.
@@ -181,8 +179,7 @@ Matrix4x4<T> operator*(T lambda, const Matrix4x4<T> &v) {
 
 /**
  * Matrix-scalar product operator.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param v the matrix on the left hand side of the product.
  * @param lambda the scalar on the right hand side of the product.
  * @return the matrix-scalar product.
@@ -199,8 +196,7 @@ Matrix4x4<T> operator*(const Matrix4x4<T> &v, T lambda) {
 
 /**
  * Matrix-scalar division operator.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param v the matrix on the left hand side of the product.
  * @param lambda the scalar on the right hand side of the product.
  * @return the matrix-scalar division.
@@ -217,8 +213,7 @@ Matrix4x4<T> operator/(const Matrix4x4<T> &v, T lambda) {
 
 /**
  * Matrix-vector multiplication.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param m the matrix on the left hand side of the multiplication.
  * @param v the vector on the right hand side of the multiplication.
  * @return the matrix-vector multiplication.
@@ -235,8 +230,7 @@ Vector4D<T> operator*(const Matrix4x4<T> &m, const Vector4D<T> &v) {
 
 /**
  * Vector-matrix multiplication.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param v the vector on the left hand side of the multiplication.
  * @param m the matrix on the right hand side of the multiplication.
  * @return the matrix-vector multiplication.
@@ -253,8 +247,7 @@ Vector4D<T> operator*(const Vector4D<T> &v, const Matrix4x4<T> &m) {
 
 /**
  * Matrix-matrix multiplication.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param m0 the matrix on the left hand side of the multiplication.
  * @param m1 the matrix on the right hand side of the multiplication.
  * @return the matrix-matrix multiplication.
@@ -286,8 +279,7 @@ Matrix4x4<T> operator *(const Matrix4x4<T> &m0, const Matrix4x4<T> &m1) {
 
 /**
  * Matrix adjugate.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param m the matrix.
  * @return the matrix adjugate.
  */
@@ -320,8 +312,7 @@ Matrix4x4<T> adj(const Matrix4x4<T> &m) {
 
 /**
  * Matrix determinant.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param m the matrix.
  * @return the matrix determinant.
  */
@@ -345,8 +336,7 @@ T det(const Matrix4x4<T> &m) {
 
 /**
  * Matrix transpose.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param m the matrix.
  * @return the matrix transpose.
  */
@@ -362,7 +352,7 @@ Matrix4x4<T> tr(const Matrix4x4<T> &m) {
 
 /**
  * Matrix-matrix Frobenius (dot) product.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param m0 the matrix on the left hand side of the dot product.
  * @param m1 the matrix on the right hand side of the dot product.
  * @return the matrix-vector multiplication.
@@ -379,7 +369,7 @@ T dot(const Matrix4x4<T> &m0, const Matrix4x4<T> &m1) {
 
 /**
  * Matrix Frobenius product.
- * @tparam T the underlying data type for the calculation - usually 'double' or 'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param m the matrix.
  * @return the matrix Frobenius norm.
  */
@@ -392,8 +382,7 @@ T norm(const Matrix4x4<T> &m) {
 
 /**
  * Matrix diagonal.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param m the matrix from which to extract the diagonal.
  * @return the matrix diagonal.
  */
@@ -406,8 +395,7 @@ Vector4D<T> diag(const Matrix4x4<T> &m) {
 
 /**
  * Matrix trace.
- * @tparam T the underlying data type for the calculation - usually 'double' or
- *           'mpreal'.
+ * @tparam T the underlying data type for the calculation.
  * @param m the matrix for which to compute the trace.
  * @return the matrix trace.
  */

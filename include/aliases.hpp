@@ -5,7 +5,6 @@
 #ifndef LIBFABBRI_INCLUDE_ALIASES_HPP_
 #define LIBFABBRI_INCLUDE_ALIASES_HPP_
 
-#include <vector>
 #include <unordered_map>
 #include <set>
 
@@ -18,7 +17,6 @@ struct tri_hasher {
     std::hash<size_t> size_t_hash;
     return size_t_hash(arr[0]) ^ size_t_hash(arr[1]) ^ size_t_hash(arr[2]);
   }
-
 };
 
 /**
@@ -30,7 +28,6 @@ struct edge_hasher {
     std::hash<size_t> size_t_hash;
     return size_t_hash(arr[0]) ^ size_t_hash(arr[1]);
   }
-
 };
 
 /**
