@@ -14,31 +14,31 @@ add_test(NAME test_vector3d COMMAND test_vector3d)
 add_executable(test_vector4d test_vector4d.cpp)
 target_include_directories(test_vector4d
         PRIVATE ${LIBFABBRI_INCLUDE_DIR}
-        ${MPFR_INCLUDES}
-        ${CATCH_INCLUDE_DIR}
-        ${MPREAL_INCLUDE_DIR})
+                ${MPFR_INCLUDES}
+                ${CATCH_INCLUDE_DIR}
+                ${MPREAL_INCLUDE_DIR})
 target_link_libraries(test_vector4d
         ${MPFR_LIBRARIES})
 add_test(NAME test_vector4d COMMAND test_vector4d)
 
-# Test geometry3d.hpp
-add_executable(test_geometry3d test_geometry3d.cpp)
-target_include_directories(test_geometry3d
+# Test geometry.hpp
+add_executable(test_geometry test_geometry.cpp)
+target_include_directories(test_geometry
         PRIVATE ${LIBFABBRI_INCLUDE_DIR}
-        ${MPFR_INCLUDES}
-        ${CATCH_INCLUDE_DIR}
-        ${MPREAL_INCLUDE_DIR})
-target_link_libraries(test_geometry3d
+                ${MPFR_INCLUDES}
+                ${CATCH_INCLUDE_DIR}
+                ${MPREAL_INCLUDE_DIR})
+target_link_libraries(test_geometry
         ${MPFR_LIBRARIES})
-add_test(NAME test_geometry3d COMMAND test_geometry3d)
+add_test(NAME test_geometry COMMAND test_geometry)
 
 # Test matrix3x3.hpp
 add_executable(test_matrix3x3 test_matrix3x3.cpp)
 target_include_directories(test_matrix3x3
         PRIVATE ${LIBFABBRI_INCLUDE_DIR}
-        ${MPFR_INCLUDES}
-        ${CATCH_INCLUDE_DIR}
-        ${MPREAL_INCLUDE_DIR})
+                ${MPFR_INCLUDES}
+                ${CATCH_INCLUDE_DIR}
+                ${MPREAL_INCLUDE_DIR})
 target_link_libraries(test_matrix3x3
         ${MPFR_LIBRARIES})
 add_test(NAME test_matrix3x3 COMMAND test_matrix3x3)
@@ -47,9 +47,9 @@ add_test(NAME test_matrix3x3 COMMAND test_matrix3x3)
 add_executable(test_matrix4x4 test_matrix4x4.cpp)
 target_include_directories(test_matrix4x4
         PRIVATE ${LIBFABBRI_INCLUDE_DIR}
-        ${MPFR_INCLUDES}
-        ${CATCH_INCLUDE_DIR}
-        ${MPREAL_INCLUDE_DIR})
+                ${MPFR_INCLUDES}
+                ${CATCH_INCLUDE_DIR}
+                ${MPREAL_INCLUDE_DIR})
 target_link_libraries(test_matrix4x4
         ${MPFR_LIBRARIES})
 add_test(NAME test_matrix4x4 COMMAND test_matrix4x4)
@@ -58,9 +58,20 @@ add_test(NAME test_matrix4x4 COMMAND test_matrix4x4)
 add_executable(test_fabbri test_fabbri.cpp)
 target_include_directories(test_fabbri
         PRIVATE ${LIBFABBRI_INCLUDE_DIR}
-        ${MPFR_INCLUDES}
-        ${CATCH_INCLUDE_DIR}
-        ${MPREAL_INCLUDE_DIR})
+                ${MPFR_INCLUDES}
+                ${CATCH_INCLUDE_DIR}
+                ${MPREAL_INCLUDE_DIR})
 target_link_libraries(test_fabbri
         ${MPFR_LIBRARIES})
 add_test(NAME test_fabbri COMMAND test_fabbri)
+
+# Test recursive_octree.hpp
+add_executable(test_recursive_octree test_recursive_octree.cpp)
+target_include_directories(test_recursive_octree
+        PRIVATE ${LIBFABBRI_INCLUDE_DIR}
+                ${MPFR_INCLUDES}
+                ${CATCH_INCLUDE_DIR}
+                ${MPREAL_INCLUDE_DIR})
+target_link_libraries(test_recursive_octree
+        ${MPFR_LIBRARIES})
+add_test(NAME test_recursive_octree COMMAND test_recursive_octree)

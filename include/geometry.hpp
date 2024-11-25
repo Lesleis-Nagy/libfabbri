@@ -153,7 +153,7 @@ rotation4x4(const Vector3D<T> &v, const T &theta) {
       {m(0, 0), m(0, 1), m(0, 2), 0},
       {m(1, 0), m(1, 1), m(1, 2), 0},
       {m(2, 0), m(2, 1), m(2, 2), 0},
-      {      0,       0,       0, 1}
+      {0, 0, 0, 1}
   };
 
 }
@@ -176,9 +176,86 @@ rotation4x4(const Vector4D<T> &v, const T &theta) {
       {m(0, 0), m(0, 1), m(0, 2), 0},
       {m(1, 0), m(1, 1), m(1, 2), 0},
       {m(2, 0), m(2, 1), m(2, 2), 0},
-      {      0,       0,       0, 1}
+      {0, 0, 0, 1}
   };
 
 }
+
+/**
+ * A class that encapsulates an axis-aligned bounding box.
+ */
+template<typename T>
+struct AxisAlignedBoundingBox {
+
+ public:
+
+  AxisAlignedBoundingBox(T xmin, T xmax, T ymin, T ymax, T zmin, T zmax) :
+  _xmin(xmin), _xmax(xmax), _ymin(ymin), _ymax(ymax), _zmin(zmin), _zmax(zmax)
+  {}
+
+  /**
+   * Check if a point given by the x, y, z coordinates is inside this box.
+   * @tparam T the underlying data type for the calculation.
+   * @param x the x-coordinate of the test point.
+   * @param y the y-coordinate of the test point.
+   * @param z the z-coordinate of the test point.
+   * @return true if this box contains the point (x, y, z).
+   */
+  [[nodiscard]] bool
+  contains(const T &x, const T &y, const T &z) const {
+    return x >= _xmin && x <= _xmax &&
+           y >= _ymin && y <= _ymax &&
+           z >= _zmin && z <= _zmax;
+  }
+
+  /**
+   * Check if a point defined by a vector is inside this box.
+   * @tparam T the underlying data type for the calculation.
+   * @param r the test point.
+   * @return true if this box contains the point r.
+   */
+  [[nodiscard]] bool
+  contains(const Vector3D<T> &r) {
+    return contains(r.x(), r.y(), r.z());
+  }
+
+  /**
+   * Check if two bounding boxes overlap
+   * @param other the other box to check this box against.
+   * @return true if this box and the other box overlap, otherwise false.
+   */
+  bool
+  overlaps(const AxisAlignedBoundingBox &other) const {
+    return !(
+        _xmax < other._xmin || _xmin > other._xmax ||
+        _ymax < other._ymin || _ymin > other._ymax ||
+        _zmax < other._zmin || _zmin > other._zmax
+    );
+  }
+
+  [[nodiscard]]
+  T xmin() const { return _xmin; }
+
+  [[nodiscard]]
+  T xmax() const { return _xmax; }
+
+  [[nodiscard]]
+  T ymin() const { return _ymin; }
+
+  [[nodiscard]]
+  T ymax() const { return _ymax; }
+
+  [[nodiscard]]
+  T zmin() const { return _zmin; }
+
+  [[nodiscard]]
+  T zmax() const { return _zmax; }
+
+ private:
+
+  // The minimum/maximum coordinates defining the box.
+  T _xmin, _xmax, _ymin, _ymax, _zmin, _zmax;
+
+};
 
 #endif //LIBFABBRI_GEOMETRY3D_HPP
