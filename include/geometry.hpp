@@ -10,6 +10,24 @@
 #include "matrix4x4.hpp"
 
 /**
+ * Alias for a list/array of Vector3D objects.
+ */
+template <typename T>
+using VertexList = std::vector<Vector3D<T>>;
+
+/**
+ * Alias for an N length index-tuple.
+ */
+template <int N>
+using IndexTuple = std::array<size_t, N>;
+
+/**
+ * Alias for a list/array of N index-tuples.
+ */
+template <int N>
+using IndexTupleList = std::vector<IndexTuple<N>>;
+
+/**
  * Return the edge_length between two vector endpoints.
  * @tparam T the underlying data type for the calculation.
  * @param lhs vector representing the start point of the edge.
@@ -181,11 +199,12 @@ rotation4x4(const Vector4D<T> &v, const T &theta) {
 
 }
 
+
 /**
  * A class that encapsulates an axis-aligned bounding box.
  */
-template<typename T>
-struct AxisAlignedBoundingBox {
+template <typename T>
+class AxisAlignedBoundingBox {
 
  public:
 

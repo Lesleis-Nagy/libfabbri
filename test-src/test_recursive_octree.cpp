@@ -61,6 +61,7 @@ TEST_CASE("Octree: Subdivision and Redistribution", "[Octree]") {
 }
 
 TEST_CASE("Octree: Boundary Overlap and Edge Cases", "[Octree]") {
+
   AxisAlignedBoundingBox<double> boundary{0.0, 100.0, 0.0, 100.0, 0.0, 100.0};
   RecursiveOctree<double> octree(boundary, 4, 5);
 
@@ -91,9 +92,11 @@ TEST_CASE("Octree: Boundary Overlap and Edge Cases", "[Octree]") {
     REQUIRE(result[0].y() == Approx(50.0));
     REQUIRE(result[0].z() == Approx(50.0));
   }
+
 }
 
 TEST_CASE("Octree: Large Data Insertion", "[Octree]") {
+
   AxisAlignedBoundingBox<double>
       boundary{0.0, 1000.0, 0.0, 1000.0, 0.0, 1000.0};
   RecursiveOctree<double> octree(boundary, 10, 10);
@@ -111,6 +114,7 @@ TEST_CASE("Octree: Large Data Insertion", "[Octree]") {
 
     REQUIRE(result.size() == 1000);
   }
+
 }
 
 TEST_CASE("Octree: Output operator", "[Octree]") {
