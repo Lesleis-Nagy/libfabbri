@@ -1036,3 +1036,155 @@ TEST_CASE("Test matrix trace for 'multiprecision' type.", "Matrix3x3") {
     REQUIRE(fabs(actual - expected) < eps );
 
 }
+
+//###########################################################################//
+//# Test column matrix construction                                         #//
+//###########################################################################//
+
+TEST_CASE("Test column matrix for 'double' type.", "Matrix3x3") {
+  using std::string;
+  using Mat3x3 = Matrix3x3<double>;
+  using Vec3 = Vector3D<double>;
+
+  Vec3 v1 = {1.0, 2.0, 3.0};
+  Vec3 v2 = {4.0, 5.0, 6.0};
+  Vec3 v3 = {7.0, 8.0, 9.0};
+
+  Mat3x3 expected = {
+      { 1.0, 4.0, 7.0},
+      { 2.0, 5.0, 8.0},
+      { 3.0, 6.0, 9.0}
+  };
+
+  double eps = 1E-14;
+
+  Mat3x3 actual = column_matrix(v1, v2, v3);
+
+  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps );
+  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps );
+  REQUIRE(abs(actual(0, 2) - expected(0, 2)) < eps );
+
+  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps );
+  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps );
+  REQUIRE(abs(actual(1, 2) - expected(1, 2)) < eps );
+
+  REQUIRE(abs(actual(2, 0) - expected(2, 0)) < eps );
+  REQUIRE(abs(actual(2, 1) - expected(2, 1)) < eps );
+  REQUIRE(abs(actual(2, 2) - expected(2, 2)) < eps );
+
+}
+
+TEST_CASE("Test column matrix for 'multiprecision' type.", "Matrix3x3") {
+
+  using std::string;
+  using mpfr::mpreal;
+
+  using Mat3x3 = Matrix3x3<mpreal>;
+  using Vec3 = Vector3D<mpreal>;
+
+  const int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+  Vec3 v1 = {1.0, 2.0, 3.0};
+  Vec3 v2 = {4.0, 5.0, 6.0};
+  Vec3 v3 = {7.0, 8.0, 9.0};
+
+  Mat3x3 expected = {
+      { 1.0, 4.0, 7.0},
+      { 2.0, 5.0, 8.0},
+      { 3.0, 6.0, 9.0}
+  };
+
+  double eps = 1E-14;
+
+  Mat3x3 actual = column_matrix(v1, v2, v3);
+
+  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps );
+  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps );
+  REQUIRE(abs(actual(0, 2) - expected(0, 2)) < eps );
+
+  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps );
+  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps );
+  REQUIRE(abs(actual(1, 2) - expected(1, 2)) < eps );
+
+  REQUIRE(abs(actual(2, 0) - expected(2, 0)) < eps );
+  REQUIRE(abs(actual(2, 1) - expected(2, 1)) < eps );
+  REQUIRE(abs(actual(2, 2) - expected(2, 2)) < eps );
+
+}
+
+//###########################################################################//
+//# Test row matrix construction                                            #//
+//###########################################################################//
+
+TEST_CASE("Test row matrix for 'double' type.", "Matrix3x3") {
+  using std::string;
+  using Mat3x3 = Matrix3x3<double>;
+  using Vec3 = Vector3D<double>;
+
+  Vec3 v1 = {1.0, 2.0, 3.0};
+  Vec3 v2 = {4.0, 5.0, 6.0};
+  Vec3 v3 = {7.0, 8.0, 9.0};
+
+  Mat3x3 expected = {
+      { 1.0, 2.0, 3.0},
+      { 4.0, 5.0, 6.0},
+      { 7.0, 8.0, 9.0}
+  };
+
+  double eps = 1E-14;
+
+  Mat3x3 actual = row_matrix(v1, v2, v3);
+
+  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps );
+  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps );
+  REQUIRE(abs(actual(0, 2) - expected(0, 2)) < eps );
+
+  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps );
+  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps );
+  REQUIRE(abs(actual(1, 2) - expected(1, 2)) < eps );
+
+  REQUIRE(abs(actual(2, 0) - expected(2, 0)) < eps );
+  REQUIRE(abs(actual(2, 1) - expected(2, 1)) < eps );
+  REQUIRE(abs(actual(2, 2) - expected(2, 2)) < eps );
+
+}
+
+TEST_CASE("Test row matrix for 'multiprecision' type.", "Matrix3x3") {
+
+  using std::string;
+  using mpfr::mpreal;
+
+  using Mat3x3 = Matrix3x3<mpreal>;
+  using Vec3 = Vector3D<mpreal>;
+
+  const int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+  Vec3 v1 = {1.0, 2.0, 3.0};
+  Vec3 v2 = {4.0, 5.0, 6.0};
+  Vec3 v3 = {7.0, 8.0, 9.0};
+
+  Mat3x3 expected = {
+      { 1.0, 2.0, 3.0},
+      { 4.0, 5.0, 6.0},
+      { 7.0, 8.0, 9.0}
+  };
+
+  double eps = 1E-14;
+
+  Mat3x3 actual = row_matrix(v1, v2, v3);
+
+  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps );
+  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps );
+  REQUIRE(abs(actual(0, 2) - expected(0, 2)) < eps );
+
+  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps );
+  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps );
+  REQUIRE(abs(actual(1, 2) - expected(1, 2)) < eps );
+
+  REQUIRE(abs(actual(2, 0) - expected(2, 0)) < eps );
+  REQUIRE(abs(actual(2, 1) - expected(2, 1)) < eps );
+  REQUIRE(abs(actual(2, 2) - expected(2, 2)) < eps );
+
+}

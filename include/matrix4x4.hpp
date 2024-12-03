@@ -406,4 +406,50 @@ T trace(const Matrix4x4<T> &m) {
 
 }
 
+/**
+ * Create a column matrix from two input vectors.
+ * @param v1 the first vector
+ * @param v2 the second vector
+ * @param v3 the third vector
+ * @param v4 the fourth vector
+ * @return the column matrix formed from v1, v2, v3 & v4
+ */
+template<typename T>
+Matrix4x4<T> column_matrix(
+    const Vector4D<T> &v1,
+    const Vector4D<T> &v2,
+    const Vector4D<T> &v3,
+    const Vector4D<T> &v4
+) {
+  return {
+      {v1.x(), v2.x(), v3.x(), v4.x()},
+      {v1.y(), v2.y(), v3.y(), v4.y()},
+      {v1.z(), v2.z(), v3.z(), v4.z()},
+      {v1.w(), v2.w(), v3.w(), v4.w()}
+  };
+}
+
+/**
+ * Create a row matrix from two input vectors.
+ * @param v1 the first vector
+ * @param v2 the second vector
+ * @param v3 the third vector
+ * @param v4 the fourth vector
+ * @return the row matrix formed from v1, v2, v3 & v4
+ */
+template<typename T>
+Matrix4x4<T> row_matrix(
+    const Vector4D<T> &v1,
+    const Vector4D<T> &v2,
+    const Vector4D<T> &v3,
+    const Vector4D<T> &v4
+    ) {
+  return {
+      {v1.x(), v1.y(), v1.z(), v1.w()},
+      {v2.x(), v2.y(), v2.z(), v2.w()},
+      {v3.x(), v3.y(), v3.z(), v3.w()},
+      {v4.x(), v4.y(), v4.z(), v4.w()}
+  };
+}
+
 #endif //LIBFABBRI_MATRIX4X4_HPP

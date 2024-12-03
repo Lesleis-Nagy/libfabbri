@@ -304,4 +304,32 @@ T trace(const Matrix2x2<T> &m) {
 
 }
 
+/**
+ * Create a column matrix from two input vectors.
+ * @param v1 the first vector
+ * @param v2 the second vector
+ * @return the column matrix formed from v1 and v2
+ */
+template <typename T>
+Matrix2x2<T> column_matrix(const Vector2D<T> &v1, const Vector2D<T> &v2) {
+  return {
+      {v1.x(), v2.x()},
+      {v1.y(), v2.y()}
+  };
+}
+
+/**
+ * Create a row matrix from two input vectors.
+ * @param v1 the first vector
+ * @param v2 the second vector
+ * @return the row matrix formed from v1 and v2
+ */
+template <typename T>
+Matrix2x2<T> row_matrix(const Vector2D<T> &v1, const Vector2D<T> &v2) {
+  return {
+      {v1.x(), v1.y()},
+      {v2.x(), v2.y()}
+  };
+}
+
 #endif //LIBFABBRI_MATRIX2X2_HPP

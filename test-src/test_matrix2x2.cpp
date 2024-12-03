@@ -931,3 +931,123 @@ TEST_CASE("Test matrix trace for 'multiprecision' type.", "Matrix2x2") {
     REQUIRE(fabs(actual - expected) < eps );
 
 }
+
+//###########################################################################//
+//# Test column matrix construction                                         #//
+//###########################################################################//
+
+TEST_CASE("Test column matrix for 'double' type.", "Matrix2x2") {
+  using std::string;
+  using Mat2x2 = Matrix2x2<double>;
+  using Vec2 = Vector2D<double>;
+
+  Vec2 v1 = {1.0, 3.0};
+  Vec2 v2 = {2.0, 4.0};
+
+  Mat2x2 expected = {
+      { 1.0,  2.0},
+      { 3.0,  4.0}
+  };
+
+  double eps = 1E-14;
+
+  Mat2x2 actual = column_matrix(v1, v2);
+
+  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps );
+  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps );
+
+  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps );
+  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps );
+
+}
+
+TEST_CASE("Test column matrix for 'multiprecision' type.", "Matrix2x2") {
+
+  using std::string;
+  using mpfr::mpreal;
+
+  using Mat2x2 = Matrix2x2<mpreal>;
+  using Vec2 = Vector2D<mpreal>;
+
+  const int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+  Vec2 v1 = {1.0, 3.0};
+  Vec2 v2 = {2.0, 4.0};
+
+  Mat2x2 expected = {
+      { 1.0,  2.0},
+      { 3.0,  4.0}
+  };
+
+  double eps = 1E-14;
+
+  Mat2x2 actual = column_matrix(v1, v2);
+
+  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps );
+  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps );
+
+  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps );
+  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps );
+
+}
+
+//###########################################################################//
+//# Test row matrix construction                                            #//
+//###########################################################################//
+
+TEST_CASE("Test row matrix for 'double' type.", "Matrix2x2") {
+  using std::string;
+  using Mat2x2 = Matrix2x2<double>;
+  using Vec2 = Vector2D<double>;
+
+  Vec2 v1 = {1.0, 3.0};
+  Vec2 v2 = {2.0, 4.0};
+
+  Mat2x2 expected = {
+      { 1.0,  3.0},
+      { 2.0,  4.0}
+  };
+
+  double eps = 1E-14;
+
+  Mat2x2 actual = row_matrix(v1, v2);
+
+  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps );
+  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps );
+
+  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps );
+  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps );
+
+}
+
+TEST_CASE("Test row matrix for 'multiprecision' type.", "Matrix2x2") {
+
+  using std::string;
+  using mpfr::mpreal;
+
+  using Mat2x2 = Matrix2x2<mpreal>;
+  using Vec2 = Vector2D<mpreal>;
+
+  const int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+  Vec2 v1 = {1.0, 3.0};
+  Vec2 v2 = {2.0, 4.0};
+
+  Mat2x2 expected = {
+      { 1.0,  3.0},
+      { 2.0,  4.0}
+  };
+
+  double eps = 1E-14;
+
+  Mat2x2 actual = row_matrix(v1, v2);
+
+  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps );
+  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps );
+
+  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps );
+  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps );
+
+}

@@ -1212,3 +1212,195 @@ TEST_CASE("Test matrix trace for 'multiprecision' type.", "Matrix4x4") {
     REQUIRE(fabs(actual - expected) < eps );
 
 }
+
+//###########################################################################//
+//# Test column matrix construction                                         #//
+//###########################################################################//
+
+TEST_CASE("Test column matrix for 'double' type.", "Matrix4x4") {
+  using std::string;
+  using Mat4x4 = Matrix4x4<double>;
+  using Vec4 = Vector4D<double>;
+
+  Vec4 v1 = { 1.0,  2.0,  3.0,  4.0};
+  Vec4 v2 = { 5.0,  6.0,  7.0,  8.0};
+  Vec4 v3 = { 9.0, 10.0, 11.0, 12.0};
+  Vec4 v4 = {13.0, 14.0, 15.0, 16.0};
+
+  Mat4x4 expected = {
+      { 1.0, 5.0,  9.0, 13.0},
+      { 2.0, 6.0, 10.0, 14.0},
+      { 3.0, 7.0, 11.0, 15.0},
+      { 4.0, 8.0, 12.0, 16.0}
+  };
+
+  double eps = 1E-14;
+
+  Mat4x4 actual = column_matrix(v1, v2, v3, v4);
+
+  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps );
+  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps );
+  REQUIRE(abs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(abs(actual(0, 3) - expected(0, 3)) < eps );
+
+  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps );
+  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps );
+  REQUIRE(abs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(abs(actual(1, 3) - expected(1, 3)) < eps );
+
+  REQUIRE(abs(actual(2, 0) - expected(2, 0)) < eps );
+  REQUIRE(abs(actual(2, 1) - expected(2, 1)) < eps );
+  REQUIRE(abs(actual(2, 2) - expected(2, 2)) < eps );
+  REQUIRE(abs(actual(2, 3) - expected(2, 3)) < eps );
+
+  REQUIRE(abs(actual(3, 0) - expected(3, 0)) < eps );
+  REQUIRE(abs(actual(3, 1) - expected(3, 1)) < eps );
+  REQUIRE(abs(actual(3, 2) - expected(3, 2)) < eps );
+  REQUIRE(abs(actual(3, 3) - expected(3, 3)) < eps );
+
+}
+
+TEST_CASE("Test column matrix for 'multiprecision' type.", "Matrix4x4") {
+
+  using std::string;
+  using mpfr::mpreal;
+
+  using Mat4x4 = Matrix4x4<mpreal>;
+  using Vec4 = Vector4D<mpreal>;
+
+  const int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+  Vec4 v1 = { 1.0,  2.0,  3.0,  4.0};
+  Vec4 v2 = { 5.0,  6.0,  7.0,  8.0};
+  Vec4 v3 = { 9.0, 10.0, 11.0, 12.0};
+  Vec4 v4 = {13.0, 14.0, 15.0, 16.0};
+
+  Mat4x4 expected = {
+      { 1.0, 5.0,  9.0, 13.0},
+      { 2.0, 6.0, 10.0, 14.0},
+      { 3.0, 7.0, 11.0, 15.0},
+      { 4.0, 8.0, 12.0, 16.0}
+  };
+
+  double eps = 1E-14;
+
+  Mat4x4 actual = column_matrix(v1, v2, v3, v4);
+
+  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps );
+  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps );
+  REQUIRE(abs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(abs(actual(0, 3) - expected(0, 3)) < eps );
+
+  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps );
+  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps );
+  REQUIRE(abs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(abs(actual(1, 3) - expected(1, 3)) < eps );
+
+  REQUIRE(abs(actual(2, 0) - expected(2, 0)) < eps );
+  REQUIRE(abs(actual(2, 1) - expected(2, 1)) < eps );
+  REQUIRE(abs(actual(2, 2) - expected(2, 2)) < eps );
+  REQUIRE(abs(actual(2, 3) - expected(2, 3)) < eps );
+
+  REQUIRE(abs(actual(3, 0) - expected(3, 0)) < eps );
+  REQUIRE(abs(actual(3, 1) - expected(3, 1)) < eps );
+  REQUIRE(abs(actual(3, 2) - expected(3, 2)) < eps );
+  REQUIRE(abs(actual(3, 3) - expected(3, 3)) < eps );
+
+}
+
+//###########################################################################//
+//# Test row matrix construction                                            #//
+//###########################################################################//
+
+TEST_CASE("Test row matrix for 'double' type.", "Matrix4x4") {
+  using std::string;
+  using Mat4x4 = Matrix4x4<double>;
+  using Vec4 = Vector4D<double>;
+
+  Vec4 v1 = { 1.0,  2.0,  3.0,  4.0};
+  Vec4 v2 = { 5.0,  6.0,  7.0,  8.0};
+  Vec4 v3 = { 9.0, 10.0, 11.0, 12.0};
+  Vec4 v4 = {13.0, 14.0, 15.0, 16.0};
+
+  Mat4x4 expected = {
+      { 1.0,  2.0,  3.0,  4.0},
+      { 5.0,  6.0,  7.0,  8.0},
+      { 9.0, 10.0, 11.0, 12.0},
+      {13.0, 14.0, 15.0, 16.0}
+  };
+
+  double eps = 1E-14;
+
+  Mat4x4 actual = row_matrix(v1, v2, v3, v4);
+
+  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps );
+  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps );
+  REQUIRE(abs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(abs(actual(0, 3) - expected(0, 3)) < eps );
+
+  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps );
+  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps );
+  REQUIRE(abs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(abs(actual(1, 3) - expected(1, 3)) < eps );
+
+  REQUIRE(abs(actual(2, 0) - expected(2, 0)) < eps );
+  REQUIRE(abs(actual(2, 1) - expected(2, 1)) < eps );
+  REQUIRE(abs(actual(2, 2) - expected(2, 2)) < eps );
+  REQUIRE(abs(actual(2, 3) - expected(2, 3)) < eps );
+
+  REQUIRE(abs(actual(3, 0) - expected(3, 0)) < eps );
+  REQUIRE(abs(actual(3, 1) - expected(3, 1)) < eps );
+  REQUIRE(abs(actual(3, 2) - expected(3, 2)) < eps );
+  REQUIRE(abs(actual(3, 3) - expected(3, 3)) < eps );
+
+}
+
+TEST_CASE("Test row matrix for 'multiprecision' type.", "Matrix4x4") {
+
+  using std::string;
+  using mpfr::mpreal;
+
+  using Mat4x4 = Matrix4x4<mpreal>;
+  using Vec4 = Vector4D<mpreal>;
+
+  const int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+  Vec4 v1 = { 1.0,  2.0,  3.0,  4.0};
+  Vec4 v2 = { 5.0,  6.0,  7.0,  8.0};
+  Vec4 v3 = { 9.0, 10.0, 11.0, 12.0};
+  Vec4 v4 = {13.0, 14.0, 15.0, 16.0};
+
+  Mat4x4 expected = {
+      { 1.0,  2.0,  3.0,  4.0},
+      { 5.0,  6.0,  7.0,  8.0},
+      { 9.0, 10.0, 11.0, 12.0},
+      {13.0, 14.0, 15.0, 16.0}
+  };
+
+  double eps = 1E-14;
+
+  Mat4x4 actual = row_matrix(v1, v2, v3, v4);
+
+  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps );
+  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps );
+  REQUIRE(abs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(abs(actual(0, 3) - expected(0, 3)) < eps );
+
+  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps );
+  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps );
+  REQUIRE(abs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(abs(actual(1, 3) - expected(1, 3)) < eps );
+
+  REQUIRE(abs(actual(2, 0) - expected(2, 0)) < eps );
+  REQUIRE(abs(actual(2, 1) - expected(2, 1)) < eps );
+  REQUIRE(abs(actual(2, 2) - expected(2, 2)) < eps );
+  REQUIRE(abs(actual(2, 3) - expected(2, 3)) < eps );
+
+  REQUIRE(abs(actual(3, 0) - expected(3, 0)) < eps );
+  REQUIRE(abs(actual(3, 1) - expected(3, 1)) < eps );
+  REQUIRE(abs(actual(3, 2) - expected(3, 2)) < eps );
+  REQUIRE(abs(actual(3, 3) - expected(3, 3)) < eps );
+
+}
