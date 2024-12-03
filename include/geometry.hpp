@@ -5,7 +5,10 @@
 #ifndef LIBFABBRI_GEOMETRY3D_HPP
 #define LIBFABBRI_GEOMETRY3D_HPP
 
+#include "vector2d.hpp"
 #include "vector3d.hpp"
+#include "vector4d.hpp"
+#include "matrix2x2.hpp"
 #include "matrix3x3.hpp"
 #include "matrix4x4.hpp"
 

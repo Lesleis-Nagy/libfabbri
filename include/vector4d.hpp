@@ -14,8 +14,6 @@
 #include <ostream>
 #include <utility>
 
-#include "mpreal.h"
-
 /**
  * An implementation of a three dimensional cartesian vector.
  * @tparam T the underlying data type for the calculation - usually ‘double’ or
@@ -61,7 +59,7 @@ public:
     /**
      * Create a three dimensional zero-vector object.
      */
-    Vector4D(): _x{0.0, 0.0, 0.0, 0.0} {}
+    Vector4D(): _x{0.0, 0.0, 0.0, 0.0}, _dim(4) {}
 
     /**
      * Create a three dimensional vector object with the given x, y & z
@@ -97,9 +95,16 @@ public:
      */
     [[nodiscard]] inline T w() const { return _x[3]; }
 
+    /**
+     * Retrieve the dimension of the vector.
+     * @return the dimension of the vector.
+     */
+    [[nodiscard]] int dim() const { return _dim; }
+
 private:
 
     std::array<T, 4> _x;
+    int _dim;
 
     [[maybe_unused]] static T _eps;
     [[maybe_unused]] static T _eps_squared;
@@ -265,6 +270,24 @@ Vector4D<T> normalised(const Vector4D<T> &v) {
     T l = norm(v);
     return v / l;
 
+}
+
+/**
+ * Compute the additive fold of the vector.
+ * @return the additive fold (sum of all vector elements).
+ */
+template <typename T>
+T afold(const Vector4D<T> &v) {
+  return v.x() + v.y() + v.z() + v.w();
+}
+
+/**
+ * Compute the multiplicative fold of the vector.
+ * @return the multiplicative fold (product of all vector elements).
+ */
+template <typename T>
+T mfold(const Vector4D<T> &v) {
+  return v.x() * v.y() * v.z() * v.w();
 }
 
 #endif // LIBFABBRI_VECTOR4D_HPP

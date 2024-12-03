@@ -336,6 +336,17 @@ new_omega_tri_fun(const Vector3D<T> &r1,
 
 }
 
+template<typename T>
+PosToScalarMap<T>
+new_omega_quad_fun(const Vector3D<T> &r1,
+                   const Vector3D<T> &r2,
+                   const Vector3D<T> &r3,
+                   const Vector3D<T> &r4) {
+
+
+
+}
+
 /**
  * Return a function that will calculate the edge potential function
  * \f$w_\mathrm{e}\f$ eq. (18) for a line segment with endpoints

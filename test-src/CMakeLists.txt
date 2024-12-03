@@ -1,3 +1,13 @@
+# Test vector2d.hpp
+add_executable(test_vector2d test_vector2d.cpp)
+target_include_directories(test_vector2d
+        PRIVATE ${LIBFABBRI_INCLUDE_DIR}
+        ${MPFR_INCLUDES}
+        ${CATCH_INCLUDE_DIR}
+        ${MPREAL_INCLUDE_DIR})
+target_link_libraries(test_vector2d
+        ${MPFR_LIBRARIES})
+add_test(NAME test_vector2d COMMAND test_vector2d)
 
 # Test vector3d.hpp
 add_executable(test_vector3d test_vector3d.cpp)
@@ -31,6 +41,17 @@ target_include_directories(test_geometry
 target_link_libraries(test_geometry
         ${MPFR_LIBRARIES})
 add_test(NAME test_geometry COMMAND test_geometry)
+
+# Test matrix2x2.hpp
+add_executable(test_matrix2x2 test_matrix2x2.cpp)
+target_include_directories(test_matrix2x2
+        PRIVATE ${LIBFABBRI_INCLUDE_DIR}
+        ${MPFR_INCLUDES}
+        ${CATCH_INCLUDE_DIR}
+        ${MPREAL_INCLUDE_DIR})
+target_link_libraries(test_matrix2x2
+        ${MPFR_LIBRARIES})
+add_test(NAME test_matrix2x2 COMMAND test_matrix2x2)
 
 # Test matrix3x3.hpp
 add_executable(test_matrix3x3 test_matrix3x3.cpp)

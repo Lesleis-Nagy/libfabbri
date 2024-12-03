@@ -40,6 +40,10 @@ set(CATCH_INCLUDE_DIR "${LIBFABBRI_THIRD_PARTY_DIR}/catch2-v2.13.9/include")
 # RapidXML
 set(RAPIDXML_INCLUDE_DIR "${LIBFABBRI_THIRD_PARTY_DIR}/rapidxml-v1.13/include")
 
+# Tetgen
+set(TETGEN_INCLUDE_DIR "${LIBFABBRI_THIRD_PARTY_DIR}/tetgen-1.6.0")
+add_subdirectory(${TETGEN_INCLUDE_DIR})
+
 #----------------------------------------------------------------------------#
 # Descend in to test directory.                                              #
 #----------------------------------------------------------------------------#

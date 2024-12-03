@@ -80,15 +80,19 @@ class FreeTetrahedron : public Tetrahedron<T> {
 
   [[nodiscard]] virtual bool
   contains(const Vector3D<T> &r) const {
-    // Compute signed volumes of the four sub-tetrahedra
-    double v_total = std::abs(signed_volume(r0, r1, r2, r3));
-    double v1 = std::abs(signed_volume(p, r1, r2, r3));
-    double v2 = std::abs(signed_volume(r0, p, r2, r3));
-    double v3 = std::abs(signed_volume(r0, r1, p, r3));
-    double v4 = std::abs(signed_volume(r0, r1, r2, p));
 
-    // Check if the sum of sub-volumes equals the total volume
-    return std::abs(v_total - (v1 + v2 + v3 + v4)) < 1e-6; // Allow small numerical error
+    double v_total = volume();
+    FreeTetrahedron<T> t1{r, _r1, _r2, _r3};
+    FreeTetrahedron<T> t2{_r0, r, _r2, _r3};
+    FreeTetrahedron<T> t3{_r0, _r1, r, _r3};
+    FreeTetrahedron<T> t4{_r0, _r1, _r2, r};
+
+    double v1 = t1.volume();
+    double v2 = t2.volume();
+    double v3 = t3.volume();
+    double v4 = t4.volume();
+
+    return std::abs(v_total - (v1 + v2 + v3 + v4)) < 1e-10;
 
   };
 
@@ -149,6 +153,26 @@ class BoundTetrahedron : public Tetrahedron<T> {
     auto r0 = _vcl[n0], r1 = _vcl[n1], r2 = _vcl[n2], r3 = _vcl[n3];
     return (r0 + r1 + r2 + r3) / T(4);
   }
+
+  [[nodiscard]] virtual bool
+  contains(const Vector3D<T> &r) const {
+    auto [n0, n1, n2, n3] = _til[_index];
+    auto r0 = _vcl[n0], r1 = _vcl[n1], r2 = _vcl[n2], r3 = _vcl[n3];
+
+    double v_total = volume();
+    FreeTetrahedron<T> t1{r, r1, r2, r3};
+    FreeTetrahedron<T> t2{r0, r, r2, r3};
+    FreeTetrahedron<T> t3{r0, r1, r, r3};
+    FreeTetrahedron<T> t4{r0, r1, r2, r};
+
+    double v1 = t1.volume();
+    double v2 = t2.volume();
+    double v3 = t3.volume();
+    double v4 = t4.volume();
+
+    return std::abs(v_total - (v1 + v2 + v3 + v4)) < 1e-10;
+
+  };
 
  private:
 

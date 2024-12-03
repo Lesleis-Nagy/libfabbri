@@ -440,3 +440,83 @@ TEST_CASE("Test normalised() function for 'multiprecision' type.", "Vector4D") {
     REQUIRE( abs(actual.w() - expected.w()) < eps );
 
 }
+
+//###########################################################################//
+//# Test additive fold                                                      #//
+//###########################################################################//
+
+TEST_CASE("Test afold() function for 'double' type.", "Vector4D") {
+
+  using std::string;
+  using Vec4D = Vector4D<double>;
+
+  Vec4D::set_eps(1E-7);
+  Vec4D v = {1.0, 2.0, 3.0, 4.0};
+
+  double eps = 1E-14;
+  double expected = 10.0;
+  Vec4D actual = normalised(v);
+
+  REQUIRE( abs(afold(v) - expected) < eps );
+
+}
+
+TEST_CASE("Test afold() function for 'multiprecision' type.", "Vector4D") {
+
+  using std::string;
+  using mpfr::mpreal;
+
+  using Vec4D = Vector4D<mpreal>;
+  const int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+  Vec4D::set_eps(1E-20);
+  Vec4D v = {1.0, 2.0, 3.0, 4.0};
+
+  mpreal eps = 1E-40;
+  mpreal expected = 10.0;
+  Vec4D actual = normalised(v);
+
+  REQUIRE( abs(afold(v) - expected) < eps );
+
+}
+
+//###########################################################################//
+//# Test multiplicative fold                                                #//
+//###########################################################################//
+
+TEST_CASE("Test mfold() function for 'double' type.", "Vector4D") {
+
+  using std::string;
+  using Vec4D = Vector4D<double>;
+
+  Vec4D::set_eps(1E-7);
+  Vec4D v = {1.0, 2.0, 3.0, 4.0};
+
+  double eps = 1E-14;
+  double expected = 24.0;
+  Vec4D actual = normalised(v);
+
+  REQUIRE( abs(mfold(v) - expected) < eps );
+
+}
+
+TEST_CASE("Test mfold() function for 'multiprecision' type.", "Vector4D") {
+
+  using std::string;
+  using mpfr::mpreal;
+
+  using Vec4D = Vector4D<mpreal>;
+  const int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+  Vec4D::set_eps(1E-20);
+  Vec4D v = {1.0, 2.0, 3.0, 4.0};
+
+  mpreal eps = 1E-40;
+  mpreal expected = 24.0;
+  Vec4D actual = normalised(v);
+
+  REQUIRE( abs(mfold(v) - expected) < eps );
+
+}
