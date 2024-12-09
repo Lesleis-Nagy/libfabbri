@@ -13,10 +13,16 @@
 #include "matrix4x4.hpp"
 
 /**
+ * Alias for a list/array of Vector2D objects.
+ */
+template <typename T>
+using VertexList2D = std::vector<Vector2D<T>>;
+
+/**
  * Alias for a list/array of Vector3D objects.
  */
 template <typename T>
-using VertexList = std::vector<Vector3D<T>>;
+using VertexList3D = std::vector<Vector3D<T>>;
 
 /**
  * Alias for an N length index-tuple.

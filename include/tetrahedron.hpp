@@ -14,7 +14,11 @@ enum TetrahedronType {
 
 template<typename T>
 class Tetrahedron {
+
  public:
+
+  static void set_eps(T eps) { _eps = eps; }
+  static T eps() { return _eps; }
 
   explicit Tetrahedron(TetrahedronType type) : _type{type} {}
 
@@ -32,8 +36,12 @@ class Tetrahedron {
  private:
 
   TetrahedronType _type;
+  static T _eps;
 
 };
+
+template<typename T>
+T Tetrahedron<T>::_eps = 1E-10;
 
 /**
  * A class that encapsulates a free tetrahedron, which is a tetrahedron that is
@@ -55,17 +63,17 @@ class FreeTetrahedron : public Tetrahedron<T> {
   det() const {
     return ::det(
         Matrix4x4<T>{
-            {_r0.x(), _r0.y(), _r0.z(), 1.0},
-            {_r1.x(), _r1.y(), _r1.z(), 1.0},
-            {_r2.x(), _r2.y(), _r2.z(), 1.0},
-            {_r3.x(), _r3.y(), _r3.z(), 1.0}
+            {_r0.x(), _r0.y(), _r0.z(), T(1)},
+            {_r1.x(), _r1.y(), _r1.z(), T(1)},
+            {_r2.x(), _r2.y(), _r2.z(), T(1),
+            {_r3.x(), _r3.y(), _r3.z(), T(1)}
         }
     );
   }
 
   [[nodiscard]] virtual T
   signed_volume() const {
-    return (1.0 / 6.0) * det();
+    return det() / T(6);
   }
 
   [[nodiscard]] virtual T
@@ -81,18 +89,18 @@ class FreeTetrahedron : public Tetrahedron<T> {
   [[nodiscard]] virtual bool
   contains(const Vector3D<T> &r) const {
 
-    double v_total = volume();
+    T v_total = volume();
     FreeTetrahedron<T> t1{r, _r1, _r2, _r3};
     FreeTetrahedron<T> t2{_r0, r, _r2, _r3};
     FreeTetrahedron<T> t3{_r0, _r1, r, _r3};
     FreeTetrahedron<T> t4{_r0, _r1, _r2, r};
 
-    double v1 = t1.volume();
-    double v2 = t2.volume();
-    double v3 = t3.volume();
-    double v4 = t4.volume();
+    T v1 = t1.volume();
+    T v2 = t2.volume();
+    T v3 = t3.volume();
+    T v4 = t4.volume();
 
-    return std::abs(v_total - (v1 + v2 + v3 + v4)) < 1e-10;
+    return std::abs(v_total - (v1 + v2 + v3 + v4)) < Tetrahedron<T>::eps();
 
   };
 
@@ -112,7 +120,7 @@ class BoundTetrahedron : public Tetrahedron<T> {
 
  public:
 
-  BoundTetrahedron(const VertexList<T> &vcl,
+  BoundTetrahedron(const VertexList3D<T> &vcl,
                    const IndexTupleList<4> &til,
                    size_t index) :
       _vcl{vcl}, _til{til}, _index{index},
@@ -126,20 +134,21 @@ class BoundTetrahedron : public Tetrahedron<T> {
   [[nodiscard]] virtual T
   det() const {
     auto [n0, n1, n2, n3] = _til[_index];
-    auto r0 = _vcl[n0], r1 = _vcl[n1], r2 = _vcl[n2], r3 = _vcl[n3];
+    const auto &r0 = _vcl[n0], &r1 = _vcl[n1], &r2 = _vcl[n2], &r3 = _vcl[n3];
+
     return ::det(
         Matrix4x4<T>{
-            {r0.x(), r0.y(), r0.z(), 1.0},
-            {r1.x(), r1.y(), r1.z(), 1.0},
-            {r2.x(), r2.y(), r2.z(), 1.0},
-            {r3.x(), r3.y(), r3.z(), 1.0}
+            {r0.x(), r0.y(), r0.z(), T(1)},
+            {r1.x(), r1.y(), r1.z(), T(1)},
+            {r2.x(), r2.y(), r2.z(), T(1)},
+            {r3.x(), r3.y(), r3.z(), T(1)}
         }
     );
   }
 
   [[nodiscard]] virtual T
   signed_volume() const {
-    return (1.0 / 6.0) * det();
+    return det() / T(6);
   }
 
   [[nodiscard]] virtual T
@@ -150,33 +159,34 @@ class BoundTetrahedron : public Tetrahedron<T> {
   [[nodiscard]] virtual Vector3D<T>
   centroid() const {
     auto [n0, n1, n2, n3] = _til[_index];
-    auto r0 = _vcl[n0], r1 = _vcl[n1], r2 = _vcl[n2], r3 = _vcl[n3];
+    const auto &r0 = _vcl[n0], &r1 = _vcl[n1], &r2 = _vcl[n2], &r3 = _vcl[n3];
+
     return (r0 + r1 + r2 + r3) / T(4);
   }
 
   [[nodiscard]] virtual bool
   contains(const Vector3D<T> &r) const {
     auto [n0, n1, n2, n3] = _til[_index];
-    auto r0 = _vcl[n0], r1 = _vcl[n1], r2 = _vcl[n2], r3 = _vcl[n3];
+    const auto &r0 = _vcl[n0], &r1 = _vcl[n1], &r2 = _vcl[n2], &r3 = _vcl[n3];
 
-    double v_total = volume();
+    T v_total = volume();
     FreeTetrahedron<T> t1{r, r1, r2, r3};
     FreeTetrahedron<T> t2{r0, r, r2, r3};
     FreeTetrahedron<T> t3{r0, r1, r, r3};
     FreeTetrahedron<T> t4{r0, r1, r2, r};
 
-    double v1 = t1.volume();
-    double v2 = t2.volume();
-    double v3 = t3.volume();
-    double v4 = t4.volume();
+    T v1 = t1.volume();
+    T v2 = t2.volume();
+    T v3 = t3.volume();
+    T v4 = t4.volume();
 
-    return std::abs(v_total - (v1 + v2 + v3 + v4)) < 1e-10;
+    return std::abs(v_total - (v1 + v2 + v3 + v4)) < Tetrahedron<T>::eps();
 
   };
 
  private:
 
-  const VertexList<T> &_vcl;
+  const VertexList3D<T> &_vcl;
   const IndexTupleList<4> &_til;
   size_t _index;
 

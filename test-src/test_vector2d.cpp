@@ -273,6 +273,48 @@ TEST_CASE("Test vector dot product for 'multiprecision' type.", "Vector2D") {
 }
 
 //###########################################################################//
+//# Test vector cross product                                               #//
+//###########################################################################//
+
+TEST_CASE("Test vector cross product for 'double' type.", "Vector2D") {
+
+  using std::string;
+  using Vec2D = Vector2D<double>;
+
+  Vec2D u = {1.0, 2.0};
+  Vec2D v = {4.0, 5.0};
+
+  double expected = -3.0;
+
+  double eps = 1E-14;
+  double actual = cross(u, v);
+
+  REQUIRE( fabs(actual - expected) < eps );
+
+}
+
+TEST_CASE("Test vector cross product for 'multiprecision' type.", "Vector2D") {
+
+  using std::string;
+  using mpfr::mpreal;
+
+  using Vec2D = Vector2D<mpreal>;
+  const int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
+
+  Vec2D u = {1.0, 2.0};
+  Vec2D v = {4.0, 5.0};
+
+  mpreal expected = -3.0;
+
+  mpreal eps = 1E-14;
+  mpreal actual = cross(u, v);
+
+  REQUIRE( mpfr::abs(actual - expected) < eps );
+
+}
+
+//###########################################################################//
 //# Test vector norm                                                        #//
 //###########################################################################//
 

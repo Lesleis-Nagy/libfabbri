@@ -9,7 +9,9 @@
 
 enum CuboidType {
   FreeCuboidType,
-  BoundCuboidType
+  FreeAxisAlignedCuboidType,
+  BoundCuboidType,
+  BoundAxisAlignedCuboidType
 };
 
 template<typename T>
@@ -39,13 +41,13 @@ class Cuboid {
  * not formally part of a complex.
  */
 template<typename T>
-class FreeCuboid : public Cuboid<T> {
+class FreeAxisAlignedCuboid : public Cuboid<T> {
 
  public:
 
-  FreeCuboid(Vector3D<T> r_min, Vector3D<T> r_max) :
+  FreeAxisAlignedCuboid(Vector3D<T> r_min, Vector3D<T> r_max) :
       _r_min{r_min}, _r_max{r_max},
-      Cuboid<T>(FreeCuboidType) {}
+      Cuboid<T>(FreeAxisAlignedCuboidType) {}
 
   [[nodiscard]] virtual T
   signed_volume() const {
@@ -84,15 +86,15 @@ class FreeCuboid : public Cuboid<T> {
  * part of (bound to) a larger complex which gives it a unique index.
  */
 template<typename T>
-class BoundCuboid : public Cuboid<T> {
+class BoundAxisAlignedCuboid : public Cuboid<T> {
 
  public:
 
-  BoundCuboid(const VertexList<T> &vcl,
+  BoundAxisAlignedCuboid(const VertexList3D<T> &vcl,
               const IndexTupleList<2> &til,
               size_t index) :
       _vcl{vcl}, _til{til}, _index{index},
-      Cuboid<T>(BoundCuboidType) {}
+      Cuboid<T>(BoundAxisAlignedCuboidType) {}
 
   [[nodiscard]] virtual size_t
   index() const {
@@ -136,7 +138,7 @@ class BoundCuboid : public Cuboid<T> {
 
  private:
 
-  const VertexList<T> &_vcl;
+  const VertexList3D<T> &_vcl;
   const IndexTupleList<2> &_til;
   size_t _index;
 

@@ -61,7 +61,7 @@ TEST_CASE("Test FreeCuboid: contains()", "[FreeCuboid]") {
 
 TEST_CASE("Test BoundCuboid basic operations", "[BoundCuboid]") {
 
-  VertexList<double> vcl = {
+  VertexList3D<double> vcl = {
       {0.0, 0.0, 0.0},
       {1.0, 1.0, 1.0}
   };
@@ -90,7 +90,7 @@ TEST_CASE("Test BoundCuboid basic operations", "[BoundCuboid]") {
 
 TEST_CASE("Test BoundCuboid: contains()", "[BoundCuboid]") {
 
-  VertexList<double> vcl = {
+  VertexList3D<double> vcl = {
       {0.0, 0.0, 0.0},
       {1.0, 1.0, 1.0}
   };

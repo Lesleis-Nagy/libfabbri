@@ -30,7 +30,7 @@ TEST_CASE("Test FreeTetrahedron", "[FreeTetrahedron]") {
 
 TEST_CASE("Test BoundTetrahedron", "[BoundTetrahedron]") {
 
-  VertexList<double> vcl = {
+  VertexList3D<double> vcl = {
       {0.0, 0.0, 0.0},
       {1.0, 0.0, 0.0},
       {0.0, 1.0, 0.0},

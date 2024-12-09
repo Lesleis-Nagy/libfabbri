@@ -219,6 +219,20 @@ T dot(const Vector2D<T> &u, const Vector2D<T> &v) {
 }
 
 /**
+ * Vector cross product.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param u the vector on the left hand side of the cross product.
+ * @param v the scalar on the right hand side of the cross product.
+ * @return the vector cross product.
+ */template <typename T>
+T cross(const Vector2D<T> &u, const Vector2D<T> &v)  {
+
+  return u.x() * v.y() - u.y() * v.x();
+
+}
+
+/**
  * The norm of a vector
  * @tparam T the underlying data type for the calculation - usually 'double' or
  *           'mpreal'.
