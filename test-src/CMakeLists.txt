@@ -97,6 +97,17 @@ target_link_libraries(test_recursive_octree
         ${MPFR_LIBRARIES})
 add_test(NAME test_recursive_octree COMMAND test_recursive_octree)
 
+# Test octree.hpp
+add_executable(test_octree test_octree.cpp)
+target_include_directories(test_octree
+        PRIVATE ${LIBFABBRI_INCLUDE_DIR}
+        ${MPFR_INCLUDES}
+        ${CATCH_INCLUDE_DIR}
+        ${MPREAL_INCLUDE_DIR})
+target_link_libraries(test_octree
+        ${MPFR_LIBRARIES})
+add_test(NAME test_octree COMMAND test_octree)
+
 # Test tetrahedron.hpp
 add_executable(test_tetrahedron test_tetrahedron.cpp)
 target_include_directories(test_tetrahedron
@@ -108,13 +119,13 @@ target_link_libraries(test_tetrahedron
         ${MPFR_LIBRARIES})
 add_test(NAME test_tetrahedron COMMAND test_tetrahedron)
 
-# Test cuboid.hpp
-add_executable(test_cuboid test_cuboid.cpp)
-target_include_directories(test_cuboid
+# Test box.hpp
+add_executable(test_box test_box.cpp)
+target_include_directories(test_box
         PRIVATE ${LIBFABBRI_INCLUDE_DIR}
         ${MPFR_INCLUDES}
         ${CATCH_INCLUDE_DIR}
         ${MPREAL_INCLUDE_DIR})
-target_link_libraries(test_cuboid
+target_link_libraries(test_box
         ${MPFR_LIBRARIES})
-add_test(NAME test_cuboid COMMAND test_cuboid)
+add_test(NAME test_box COMMAND test_box)

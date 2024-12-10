@@ -11,12 +11,13 @@
 #include <vector>
 
 #include "geometry.hpp"
+#include "box.hpp"
 
 template <typename T>
 class RecursiveOctree {
  public:
 
-  RecursiveOctree(const AxisAlignedBoundingBox<T> &boundary,
+  RecursiveOctree(const Box<T> &boundary,
                   size_t maxObjects,
                   size_t maxDepth)
       : _boundary(boundary),
@@ -49,7 +50,7 @@ class RecursiveOctree {
   }
 
   [[nodiscard]] std::vector<Vector3D<T>>
-  query(const AxisAlignedBoundingBox<T> &region) const {
+  query(const Box<T> &region) const {
     std::vector<Vector3D<T>> result;
 
     if (!_boundary.overlaps(region)) {
@@ -78,7 +79,7 @@ class RecursiveOctree {
 
  private:
 
-  AxisAlignedBoundingBox<T> _boundary;
+  Box<T> _boundary;
   size_t _max_objects;
   size_t _max_depth;
   size_t _current_depth = 0;
@@ -95,33 +96,25 @@ class RecursiveOctree {
     T zmid = (_boundary.zmin() + _boundary.zmax()) / 2;
 
     _children[0] = std::make_unique<RecursiveOctree>(
-        AxisAlignedBoundingBox<T>{
-            _boundary.xmin(),
-            xmid,
-            _boundary.ymin(),
-            ymid,
-            _boundary.zmin(),
-            zmid
+        Box<T>{
+            {_boundary.xmin(),_boundary.ymin(),_boundary.zmin()},
+            {xmid, ymid, zmid}
         },
         _max_objects,
         _max_depth
     );
 
     _children[1] = std::make_unique<RecursiveOctree>(
-        AxisAlignedBoundingBox<T>{
-            xmid,
-            _boundary.xmax(),
-            _boundary.ymin(),
-            ymid,
-            _boundary.zmin(),
-            zmid
+        Box<T>{
+            {xmid, _boundary.ymin(), _boundary.zmin()},
+            {_boundary.xmax(), ymid, zmid}
             },
         _max_objects,
         _max_depth
     );
 
     _children[2] = std::make_unique<RecursiveOctree>(
-        AxisAlignedBoundingBox<T>{
+        Box<T>{
             _boundary.xmin(),
             xmid,
             ymid,
@@ -134,7 +127,7 @@ class RecursiveOctree {
     );
 
     _children[3] = std::make_unique<RecursiveOctree>(
-        AxisAlignedBoundingBox<T>{
+        Box<T>{
             xmid,
             _boundary.xmax(),
             ymid,
@@ -147,7 +140,7 @@ class RecursiveOctree {
     );
 
     _children[4] = std::make_unique<RecursiveOctree>(
-        AxisAlignedBoundingBox<T>{
+        Box<T>{
             _boundary.xmin(),
             xmid,
             _boundary.ymin(),
@@ -160,7 +153,7 @@ class RecursiveOctree {
     );
 
     _children[5] = std::make_unique<RecursiveOctree>(
-        AxisAlignedBoundingBox<T>{
+        Box<T>{
             xmid,
             _boundary.xmax(),
             _boundary.ymin(),
@@ -173,7 +166,7 @@ class RecursiveOctree {
     );
 
     _children[6] = std::make_unique<RecursiveOctree>(
-        AxisAlignedBoundingBox<T>{
+        Box<T>{
             _boundary.xmin(),
             xmid,
             ymid,
@@ -186,7 +179,7 @@ class RecursiveOctree {
     );
 
     _children[7] = std::make_unique<RecursiveOctree>(
-        AxisAlignedBoundingBox<T>{
+        Box<T>{
             xmid,
             _boundary.xmax(),
             ymid,

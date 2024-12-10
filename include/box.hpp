@@ -2,52 +2,55 @@
 // Created by Lesleis Nagy on 26/11/2024.
 //
 
-#ifndef LIBFABBRI_INCLUDE_CUBOID_HPP_
-#define LIBFABBRI_INCLUDE_CUBOID_HPP_
+#ifndef LIBFABBRI_INCLUDE_BOX_HPP_
+#define LIBFABBRI_INCLUDE_BOX_HPP_
 
 #include "geometry.hpp"
 
-enum CuboidType {
-  FreeCuboidType,
-  FreeAxisAlignedCuboidType,
-  BoundCuboidType,
-  BoundAxisAlignedCuboidType
+enum BoxType {
+  FreeBoxType,
+  BoundBoxType
 };
 
+/**
+ * A box is an axis-aligned cuboid.
+ */
 template<typename T>
-class Cuboid {
+class Box {
  public:
 
-  explicit Cuboid(CuboidType type) : _type{type} {}
+  explicit Box(BoxType type) : _type{type} {}
 
   [[nodiscard]] virtual T signed_volume() const = 0;
   [[nodiscard]] virtual T volume() const = 0;
   [[nodiscard]] virtual Vector3D<T> centroid() const = 0;
   [[nodiscard]] virtual bool contains(const Vector3D<T> &r) const = 0;
+  [[nodiscard]] virtual const Vector3D<T> & rmin() = 0;
+  [[nodiscard]] virtual const Vector3D<T> & rmax() = 0;
 
-  [[nodiscard]] CuboidType
+  [[nodiscard]] BoxType
   type() const {
     return _type;
   }
 
  private:
 
-  CuboidType _type;
+  BoxType _type;
 
 };
 
 /**
- * A class that encapsulates a free cuboid -- this is a cuboid that is
+ * A class that encapsulates a free box -- this is a box that is
  * not formally part of a complex.
  */
 template<typename T>
-class FreeAxisAlignedCuboid : public Cuboid<T> {
+class FreeBox : public Box<T> {
 
  public:
 
-  FreeAxisAlignedCuboid(Vector3D<T> r_min, Vector3D<T> r_max) :
+  FreeBox(Vector3D<T> r_min, Vector3D<T> r_max) :
       _r_min{r_min}, _r_max{r_max},
-      Cuboid<T>(FreeAxisAlignedCuboidType) {}
+      Box<T>(FreeBoxType) {}
 
   [[nodiscard]] virtual T
   signed_volume() const {
@@ -75,6 +78,16 @@ class FreeAxisAlignedCuboid : public Cuboid<T> {
     );
   }
 
+  [[nodiscard]] virtual const Vector3D<T> &
+  rmin() {
+    return _r_min;
+  }
+
+  [[nodiscard]] virtual const Vector3D<T> &
+  rmax() {
+    return _r_max;
+  }
+
  private:
 
   Vector3D<T> _r_min, _r_max;
@@ -82,19 +95,19 @@ class FreeAxisAlignedCuboid : public Cuboid<T> {
 };
 
 /**
- * Class that encapsulates a bound cuboid -- this is a cuboid that is
+ * Class that encapsulates a bound box -- this is a box that is
  * part of (bound to) a larger complex which gives it a unique index.
  */
 template<typename T>
-class BoundAxisAlignedCuboid : public Cuboid<T> {
+class BoundBox : public Box<T> {
 
  public:
 
-  BoundAxisAlignedCuboid(const VertexList3D<T> &vcl,
-              const IndexTupleList<2> &til,
-              size_t index) :
+  BoundBox(const VertexList3D<T> &vcl,
+           const IndexTupleList<2> &til,
+           size_t index) :
       _vcl{vcl}, _til{til}, _index{index},
-      Cuboid<T>(BoundAxisAlignedCuboidType) {}
+      Box<T>(BoundBoxType) {}
 
   [[nodiscard]] virtual size_t
   index() const {
@@ -136,6 +149,18 @@ class BoundAxisAlignedCuboid : public Cuboid<T> {
     );
   }
 
+  [[nodiscard]] virtual const Vector3D<T> &
+  rmin() {
+    auto [n_min, n_max] = _til[_index];
+    return _vcl[n_min];
+  }
+
+  [[nodiscard]] virtual const Vector3D<T> &
+  rmax() {
+    auto [n_min, n_max] = _til[_index];
+    return _vcl[n_max];
+  }
+
  private:
 
   const VertexList3D<T> &_vcl;
@@ -144,4 +169,4 @@ class BoundAxisAlignedCuboid : public Cuboid<T> {
 
 };
 
-#endif //LIBFABBRI_INCLUDE_CUBOID_HPP_
+#endif //LIBFABBRI_INCLUDE_BOX_HPP_

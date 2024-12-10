@@ -7,11 +7,11 @@
 
 #include <iostream>
 
-#include "cuboid.hpp"
+#include "box.hpp"
 
-TEST_CASE("Test FreeCuboid basic operations", "[FreeCuboid]") {
+TEST_CASE("Test FreeBox basic operations", "[FreeBox]") {
 
-  Cuboid<double> *cub = new FreeCuboid<double>{
+  Box<double> *cub = new FreeBox<double>{
       {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0}
   };
 
@@ -23,13 +23,13 @@ TEST_CASE("Test FreeCuboid basic operations", "[FreeCuboid]") {
   REQUIRE(centroid.y() == Approx(0.5));
   REQUIRE(centroid.z() == Approx(0.5));
 
-  REQUIRE(cub->type() == FreeCuboidType);
+  REQUIRE(cub->type() == FreeBoxType);
 
 }
 
-TEST_CASE("Test FreeCuboid: contains()", "[FreeCuboid]") {
+TEST_CASE("Test FreeBox: contains()", "[FreeBox]") {
 
-  Cuboid<double> *cub = new FreeCuboid<double>{
+  Box<double> *cub = new FreeBox<double>{
       {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0}
   };
 
@@ -59,7 +59,7 @@ TEST_CASE("Test FreeCuboid: contains()", "[FreeCuboid]") {
 
 }
 
-TEST_CASE("Test BoundCuboid basic operations", "[BoundCuboid]") {
+TEST_CASE("Test BoundBox basic operations", "[BoundBox]") {
 
   VertexList3D<double> vcl = {
       {0.0, 0.0, 0.0},
@@ -70,7 +70,7 @@ TEST_CASE("Test BoundCuboid basic operations", "[BoundCuboid]") {
       {0, 1}
   };
 
-  Cuboid<double> *cub = new BoundCuboid<double> {vcl, til, 0};
+  Box<double> *cub = new BoundBox<double> {vcl, til, 0};
 
   REQUIRE(cub->signed_volume() == Approx(1.0));
   REQUIRE(cub->volume() == Approx(1.0));
@@ -80,15 +80,15 @@ TEST_CASE("Test BoundCuboid basic operations", "[BoundCuboid]") {
   REQUIRE(centroid.y() == Approx(0.5));
   REQUIRE(centroid.z() == Approx(0.5));
 
-  REQUIRE(cub->type() == BoundCuboidType);
+  REQUIRE(cub->type() == BoundBoxType);
 
-  // Since we know this is a BoundCuboid, cast it to a BoundCuboid
+  // Since we know this is a BoundBox, cast it to a BoundBox
   // and make sure the index is correct.
-  REQUIRE(((BoundCuboid<double>*)cub)->index() == 0);
+  REQUIRE(((BoundBox<double>*)cub)->index() == 0);
 
 }
 
-TEST_CASE("Test BoundCuboid: contains()", "[BoundCuboid]") {
+TEST_CASE("Test BoundBox: contains()", "[BoundBox]") {
 
   VertexList3D<double> vcl = {
       {0.0, 0.0, 0.0},
@@ -99,7 +99,7 @@ TEST_CASE("Test BoundCuboid: contains()", "[BoundCuboid]") {
       {0, 1}
   };
 
-  Cuboid<double> *cub = new BoundCuboid<double>{vcl, til, 0};
+  Box<double> *cub = new BoundBox<double>{vcl, til, 0};
 
   REQUIRE(cub->contains({0.5, 0.5, 0.5}) == true);
 

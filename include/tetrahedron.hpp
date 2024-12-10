@@ -5,7 +5,10 @@
 #ifndef LIBFABBRI_INCLUDE_TETRAHEDRON_HPP_
 #define LIBFABBRI_INCLUDE_TETRAHEDRON_HPP_
 
+#include <algorithm>
+
 #include "geometry.hpp"
+#include "box.hpp"
 
 enum TetrahedronType {
   FreeTetrahedronType,
@@ -27,6 +30,8 @@ class Tetrahedron {
   [[nodiscard]] virtual T volume() const = 0;
   [[nodiscard]] virtual Vector3D<T> centroid() const = 0;
   [[nodiscard]] virtual bool contains(const Vector3D<T> &r) const = 0;
+  [[nodiscard]] virtual bool isin(const Box<T> &cuboid) const = 0;
+  [[nodiscard]] virtual bool collides(const Tetrahedron<T> &tetrahedron) const = 0;
 
   [[nodiscard]] TetrahedronType
   type() const {
@@ -65,7 +70,7 @@ class FreeTetrahedron : public Tetrahedron<T> {
         Matrix4x4<T>{
             {_r0.x(), _r0.y(), _r0.z(), T(1)},
             {_r1.x(), _r1.y(), _r1.z(), T(1)},
-            {_r2.x(), _r2.y(), _r2.z(), T(1),
+            {_r2.x(), _r2.y(), _r2.z(), T(1)},
             {_r3.x(), _r3.y(), _r3.z(), T(1)}
         }
     );
@@ -104,6 +109,53 @@ class FreeTetrahedron : public Tetrahedron<T> {
 
   };
 
+  [[nodiscard]] virtual bool
+  isin(const Box<T> &cuboid) const {
+    const auto &rmin = cuboid.rmin();
+    const auto &rmax = cuboid.rmax();
+
+    // Test the xs
+    if (_r0.x() < rmin.x()
+        || _r1.x() < rmin.x()
+        || _r2.x() < rmin.x()
+        || _r3.x() < rmin.x()
+        || _r0.x() > rmax.x()
+        || _r1.x() > rmax.x()
+        || _r2.x() > rmax.x()
+        || _r3.x() > rmax.x())
+      return false;
+
+    // Test the ys
+    if (_r0.y() < rmin.y()
+        || _r1.y() < rmin.y()
+        || _r2.y() < rmin.y()
+        || _r3.y() < rmin.y()
+        || _r0.y() > rmax.y()
+        || _r1.y() > rmax.y()
+        || _r2.y() > rmax.y()
+        || _r3.y() > rmax.y())
+      return false;
+
+    // Test the zs
+    if (_r0.z() < rmin.z()
+        || _r1.z() < rmin.z()
+        || _r2.z() < rmin.z()
+        || _r3.z() < rmin.z()
+        || _r0.z() > rmax.z()
+        || _r1.z() > rmax.z()
+        || _r2.z() > rmax.z()
+        || _r3.z() > rmax.z())
+      return false;
+
+    return true;
+
+  }
+
+  [[nodiscard]] virtual bool
+  collides(const Tetrahedron<T> &tetrahedron) const {
+    // TODO: Implement this.
+    return false;
+  }
 
  private:
 
@@ -126,14 +178,54 @@ class BoundTetrahedron : public Tetrahedron<T> {
       _vcl{vcl}, _til{til}, _index{index},
       Tetrahedron<T>(BoundTetrahedronType) {}
 
-  [[nodiscard]] virtual size_t
+  [[nodiscard]]  size_t
   index() const {
     return _index;
   }
 
+  [[nodiscard]] int
+  n0() const {
+    return _til[_index][0];
+  }
+
+  [[nodiscard]] int
+  n1() const {
+    return _til[_index][1];
+  }
+
+  [[nodiscard]] int
+  n2() const {
+    return _til[_index][2];
+  }
+
+  [[nodiscard]] int
+  n3() const {
+    return _til[_index][3];
+  }
+
+  [[nodiscard]] const IndexTuple<4> &
+  vertex_indices() const {
+    return _til[_index];
+  }
+
+  [[nodiscard]] const IndexTuple<4>
+  sorted_index_vertices() const {
+    IndexTuple<4> iv = vertex_indices();
+
+    oswap(iv[0], iv[2]);
+    oswap(iv[1], iv[3]);
+
+    oswap(iv[0], iv[1]);
+    oswap(iv[2], iv[3]);
+
+    oswap(iv[1], iv[2]);
+
+    return iv;
+  }
+
   [[nodiscard]] virtual T
   det() const {
-    auto [n0, n1, n2, n3] = _til[_index];
+    auto [n0, n1, n2, n3] = vertex_indices();
     const auto &r0 = _vcl[n0], &r1 = _vcl[n1], &r2 = _vcl[n2], &r3 = _vcl[n3];
 
     return ::det(
@@ -158,7 +250,7 @@ class BoundTetrahedron : public Tetrahedron<T> {
 
   [[nodiscard]] virtual Vector3D<T>
   centroid() const {
-    auto [n0, n1, n2, n3] = _til[_index];
+    auto [n0, n1, n2, n3] = vertex_indices();
     const auto &r0 = _vcl[n0], &r1 = _vcl[n1], &r2 = _vcl[n2], &r3 = _vcl[n3];
 
     return (r0 + r1 + r2 + r3) / T(4);
@@ -184,11 +276,97 @@ class BoundTetrahedron : public Tetrahedron<T> {
 
   };
 
+  [[nodiscard]] virtual bool
+  isin(const Box<T> &cuboid) const {
+    const auto &rmin = cuboid.rmin();
+    const auto &rmax = cuboid.rmax();
+    auto [n0, n1, n2, n3] = vertex_indices();
+    const auto &r0 = _vcl[n0], &r1 = _vcl[n1], &r2 = _vcl[n2], &r3 = _vcl[n3];
+
+    // Test the xs
+    if (r0.x() < rmin.x()
+        || r1.x() < rmin.x()
+        || r2.x() < rmin.x()
+        || r3.x() < rmin.x()
+        || r0.x() > rmax.x()
+        || r1.x() > rmax.x()
+        || r2.x() > rmax.x()
+        || r3.x() > rmax.x())
+      return false;
+
+    // Test the ys
+    if (r0.y() < rmin.y()
+        || r1.y() < rmin.y()
+        || r2.y() < rmin.y()
+        || r3.y() < rmin.y()
+        || r0.y() > rmax.y()
+        || r1.y() > rmax.y()
+        || r2.y() > rmax.y()
+        || r3.y() > rmax.y())
+      return false;
+
+    // Test the zs
+    if (r0.z() < rmin.z()
+        || r1.z() < rmin.z()
+        || r2.z() < rmin.z()
+        || r3.z() < rmin.z()
+        || r0.z() > rmax.z()
+        || r1.z() > rmax.z()
+        || r2.z() > rmax.z()
+        || r3.z() > rmax.z())
+      return false;
+
+    return true;
+
+  }
+
+  [[nodiscard]] virtual bool
+  collides(const Tetrahedron<T> &tetrahedron) const {
+    switch (tetrahedron.type()) {
+      case FreeTetrahedronType:
+        // TODO: implement this
+        break;
+
+      case BoundTetrahedronType:
+        // For bound tetrahedra, we can simply use the indices of the vertexes.
+        const auto &other = (BoundTetrahedron &) tetrahedron;
+        auto t = this->sorted_vertex_indices();
+        auto o = other.sorted_vertex_indices();
+
+        return (t[0] == o[0] && t[1] == o[1] && t[2] == o[2])
+            || (t[0] == o[0] && t[1] == o[2] && t[2] == o[3])
+            || (t[0] == o[0] && t[1] == o[1] && t[2] == o[3])
+            || (t[0] == o[1] && t[1] == o[2] && t[2] == o[3])
+
+            || (t[0] == o[0] && t[2] == o[1] && t[3] == o[2])
+            || (t[0] == o[0] && t[2] == o[2] && t[3] == o[3])
+            || (t[0] == o[0] && t[2] == o[1] && t[3] == o[3])
+            || (t[0] == o[1] && t[2] == o[2] && t[3] == o[3])
+
+            || (t[0] == o[0] && t[1] == o[1] && t[3] == o[2])
+            || (t[0] == o[0] && t[1] == o[2] && t[3] == o[3])
+            || (t[0] == o[0] && t[1] == o[1] && t[3] == o[3])
+            || (t[0] == o[1] && t[1] == o[2] && t[3] == o[3])
+
+            || (t[1] == o[0] && t[2] == o[1] && t[3] == o[2])
+            || (t[1] == o[0] && t[2] == o[2] && t[3] == o[3])
+            || (t[1] == o[0] && t[2] == o[1] && t[3] == o[3])
+            || (t[1] == o[1] && t[2] == o[2] && t[3] == o[3])
+            ;
+    }
+  }
+
  private:
 
   const VertexList3D<T> &_vcl;
   const IndexTupleList<4> &_til;
   size_t _index;
+
+  void oswap(int &a, int &b) {
+    if (a > b) {
+      std::swap(a, b);
+    }
+  }
 
 };
 
