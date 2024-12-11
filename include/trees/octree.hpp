@@ -1,6 +1,8 @@
-//
-// Created by Lesleis Nagy on 09/12/2024.
-//
+/**
+ * @file octree.hpp
+ * @author L. Nagy
+ * @brief Octree functions and classes.
+ */
 
 #ifndef LIBFABBRI_INCLUDE_TREES_OCTREE_HPP_
 #define LIBFABBRI_INCLUDE_TREES_OCTREE_HPP_
@@ -21,6 +23,9 @@ enum OctreePosition {
   OCTREE_POSITION_FTL = 7,   // Octree, front top left
 };
 
+/**
+ * The octree node.
+ */
 template<typename T>
 struct OctreeNode {
 

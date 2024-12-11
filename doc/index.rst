@@ -19,6 +19,7 @@ library :cite:p:`catch2:2017`.
    :caption: Contents:
 
    libfabbri_library
+   octree_library
    bibliography
 
 Indices and tables
