@@ -2,11 +2,6 @@
 // Created by Lesleis Nagy on 26/07/2022.
 //
 
-/**
- * @file vector2d.hpp
- * @author L. Nagy
- */
-
 #ifndef LIBFABBRI_VECTOR2D_HPP
 #define LIBFABBRI_VECTOR2D_HPP
 
@@ -219,12 +214,12 @@ T dot(const Vector2D<T> &u, const Vector2D<T> &v) {
 }
 
 /**
- * Vector cross product.
+ * A two-dimensional pseudo-cross product.
  * @tparam T the underlying data type for the calculation - usually 'double' or
  *           'mpreal'.
  * @param u the vector on the left hand side of the cross product.
  * @param v the scalar on the right hand side of the cross product.
- * @return the vector cross product.
+ * @return the pseudo-cross product of two two-dimensional vectors.
  */template <typename T>
 T cross(const Vector2D<T> &u, const Vector2D<T> &v)  {
 

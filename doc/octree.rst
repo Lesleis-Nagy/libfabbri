@@ -132,6 +132,5 @@ octants, along with the sum-code are shown in :numref:`sum-codes`.
     | 7        | front      | top        | right      | FTR          |
     +----------+------------+------------+------------+--------------+
 
-.. toctree::
+.. doxygenfile:: octree.hpp
 
-    octree_class

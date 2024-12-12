@@ -22,6 +22,9 @@ extensions = [
     'sphinx.ext.imgmath',
     'sphinx.ext.todo',
     'sphinxcontrib.bibtex',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.autodoc',
+    'sphinx.ext.viewcode',
     'breathe',
 ]
 

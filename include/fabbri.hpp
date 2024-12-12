@@ -1,8 +1,6 @@
-/**
- * @file fabbri.hpp
- * @author L. Nagy
- * @brief Functions.
- */
+//
+// Created by Lesleis Nagy on 18/03/2024.
+//
 
 #ifndef LIBFABBRI_FABBRI_HPP
 #define LIBFABBRI_FABBRI_HPP
@@ -16,13 +14,13 @@
 #include "matrix4x4.hpp"
 
 /**
- * An object that represents a function to map positions to scalars.
+ * An object that represents a function that will map positions to scalars.
  */
 template <typename T>
 using PosToScalarMap = std::function<T(const Vector3D<T> &)>;
 
 /**
- * An object that represents a function to map positions to vectors.
+ * An object that represents a function that will map positions to vectors.
  */
 template<typename T>
 using PosToVectorMap = std::function<Vector3D<T>(const Vector3D<T> &)>;
@@ -42,9 +40,10 @@ template<typename T>
 using MagPosToVectorMap = std::function<Vector3D<T>(const Vector3D<T> &, const Vector3D<T> &)>;
 
 /**
- * Return the Jacobian of the linear variation of four vectors V1, V2, V3 & V4
- * defined on the corners of a tetrahedron with coordinates r1, r2, r3 & r4
- * respectively.
+ * Return the Jacobian of the linear variation of four vectors \f$\bm{V}_1\f$,
+ * \f$\bm{V}_2\f$, \f$\bm{V}_3\f$ & \f$\bm{V}_4\f$
+ * defined on the corners of a tetrahedron with coordinates \f$r_1\f$,
+ * \f$r_2\f$, \f$r_3\f$ & \f$r_4\f$ respectively.
  *
  * @tparam T the underlying data type for the calculation - usually 'double'.
  *           or 'mpreal'.
@@ -175,8 +174,22 @@ DV(const Vector3D<T> &r1, const Vector3D<T> &r2,
 
 /**
  * Return the curl of the linearly varying vector field defined over a
- * tetrahedron with vertices r1, r2, r3, r4; and vector field values
- * V1(r1), V2(r2), V3(r3) & V4(r4).
+ * tetrahedron with vertices \f$r_1\f$, \f$r_2\f$, \f$r_3\f$, \f$r_4\f$ and
+ * vector field values \f$\bm{V}_1(r_1)\f$, \f$\bm{V}_2(r_2)\f$,
+ * \f$\bm{V}_3(r_3)\f$ & \f$\bm{V}_4(r_4)\f$.
+ *
+ * @tparam T the underlying data type for the calculation - usually 'double'.
+ *           or 'mpreal'.
+ * @param r1 the first vertex of the tetrahedron.
+ * @param r2 the second vertex of the tetrahedron.
+ * @param r3 the third vertex of the tetrahedron.
+ * @param r4 the fourth vertex of the tetrahedron.
+ * @param V1 the field vector at the first vertex of the tetrahedron.
+ * @param V2 the field vector at the second vertex of the tetrahedron.
+ * @param V3 the field vector at the third vertex of the tetrahedron.
+ * @param V4 the field vector at the fourth vertex of the tetrahedron.
+ *
+ * @return the curl of the linearly varying vector field \f$\bm{V}\f$.
  */
 template <typename T>
 Vector3D<T>
@@ -298,7 +311,7 @@ curl(const Vector3D<T> &r1, const Vector3D<T> &r2,
 /**
  * Return a function that will calculate the solid angle \f$\Omega\f$ subtended
  * by the triangle with vertices \f$r_1\f$, \f$r_2\f$ & \f$r_3\f$ as a function
- * of space - see eq. (21) in Fabbri, 2008.
+ * of space. See equation (21) in \cite fabbri:2008.
  *
  * @tparam T the underlying data type for the calculation - usually 'double'
  *           or 'mpreal'.
@@ -336,21 +349,10 @@ new_omega_tri_fun(const Vector3D<T> &r1,
 
 }
 
-template<typename T>
-PosToScalarMap<T>
-new_omega_quad_fun(const Vector3D<T> &r1,
-                   const Vector3D<T> &r2,
-                   const Vector3D<T> &r3,
-                   const Vector3D<T> &r4) {
-
-
-
-}
-
 /**
  * Return a function that will calculate the edge potential function
- * \f$w_\mathrm{e}\f$ eq. (18) for a line segment with endpoints
- * \f$r_1\f$ & \f$r_2\f$ (Fabbri, 2008).
+ * \f$w_\mathrm{e}\f$ for a line segment with endpoints
+ * \f$r_1\f$ & \f$r_2\f$. See equation (18) in \cite fabbri:2008.
  * @tparam T the underlying data type for the calculation - usually 'double'
  *           or 'mpreal'.
  * @param r1 the first point of a line segment.

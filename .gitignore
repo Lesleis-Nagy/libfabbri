@@ -11,6 +11,7 @@ cmake-release-*
 
 doc/xml
 doc/html
+doc/latex/
 doc/_build
 doc/Doxyfile.bak
 
