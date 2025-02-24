@@ -132,5 +132,34 @@ octants, along with the sum-code are shown in :numref:`sum-codes`.
     | 7        | front      | top        | right      | FTR          |
     +----------+------------+------------+------------+--------------+
 
+Each sub-division is defined by its own :math:`\vecrmin` and :math:`\vecrmax`
+vertices. Referring to :numref:`front-cuboids` and :numref:`back-cuboids` and
+the label codes in :numref:`sum-codes` the position vertices for each sub-cuboid
+are
+
+.. table:: The minimum and maximum position vectors, :math:`\vecrmin` and :math:`\vecrmax`, of each sub-cuboid
+    :widths: auto
+    :name: vecmin-and-vecmax
+
+    +------------+---------------------+---------------------+
+    | label code | :math:`\vecrmin`    | :math:`\vecrmax`    |
+    +============+=====================+=====================+
+    | BBL        | :math:`\bm{r}_{0}`  | :math:`\bm{r}_{13}` |
+    +------------+---------------------+---------------------+
+    | BBR        | :math:`\bm{r}_{1}`  | :math:`\bm{r}_{14}` |
+    +------------+---------------------+---------------------+
+    | BTL        | :math:`\bm{r}_{9}`  | :math:`\bm{r}_{22}` |
+    +------------+---------------------+---------------------+
+    | BTR        | :math:`\bm{r}_{10}` | :math:`\bm{r}_{23}` |
+    +------------+---------------------+---------------------+
+    | FBL        | :math:`\bm{r}_{3}`  | :math:`\bm{r}_{16}` |
+    +------------+---------------------+---------------------+
+    | FBR        | :math:`\bm{r}_{4}`  | :math:`\bm{r}_{17}` |
+    +------------+---------------------+---------------------+
+    | FTL        | :math:`\bm{r}_{12}` | :math:`\bm{r}_{25}` |
+    +------------+---------------------+---------------------+
+    | FTR        | :math:`\bm{r}_{13}` | :math:`\bm{r}_{26}` |
+    +------------+---------------------+---------------------+
+
 .. doxygenfile:: octree.hpp
 
