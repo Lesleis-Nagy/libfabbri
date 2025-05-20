@@ -25,6 +25,18 @@ template <typename T>
 using VertexList3D = std::vector<Vector3D<T>>;
 
 /**
+ * Alias for a list/array of Vector3D objects.
+ */
+template <typename T>
+using VectorList3D = std::vector<Vector3D<T>>;
+
+/**
+ * Alias for a list/array of VectorList3D objects.
+ */
+template <typename T>
+using VectorListList3D = std::vector<VectorList3D<T>>;
+
+/**
  * Alias for an N length index-tuple.
  */
 template <int N>

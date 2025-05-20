@@ -31,7 +31,7 @@ class Tetrahedron {
   [[nodiscard]] virtual Vector3D<T> centroid() const = 0;
   [[nodiscard]] virtual bool contains(const Vector3D<T> &r) const = 0;
   [[nodiscard]] virtual bool isin(const Box<T> &cuboid) const = 0;
-  [[nodiscard]] virtual bool collides(const Tetrahedron<T> &tetrahedron) const = 0;
+  //[[nodiscard]] virtual bool collides(const Tetrahedron<T> &tetrahedron) const = 0;
 
   [[nodiscard]] TetrahedronType
   type() const {
@@ -151,11 +151,13 @@ class FreeTetrahedron : public Tetrahedron<T> {
 
   }
 
+  /*
   [[nodiscard]] virtual bool
   collides(const Tetrahedron<T> &tetrahedron) const {
     // TODO: Implement this.
     return false;
   }
+  */
 
  private:
 
@@ -320,13 +322,13 @@ class BoundTetrahedron : public Tetrahedron<T> {
 
   }
 
+  /*
   [[nodiscard]] virtual bool
   collides(const Tetrahedron<T> &tetrahedron) const {
     switch (tetrahedron.type()) {
       case FreeTetrahedronType:
         // TODO: implement this
         break;
-
       case BoundTetrahedronType:
         // For bound tetrahedra, we can simply use the indices of the vertexes.
         const auto &other = (BoundTetrahedron &) tetrahedron;
@@ -355,6 +357,7 @@ class BoundTetrahedron : public Tetrahedron<T> {
             ;
     }
   }
+  */
 
  private:
 

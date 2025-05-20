@@ -25,8 +25,8 @@ class Box {
   [[nodiscard]] virtual T volume() const = 0;
   [[nodiscard]] virtual Vector3D<T> centroid() const = 0;
   [[nodiscard]] virtual bool contains(const Vector3D<T> &r) const = 0;
-  [[nodiscard]] virtual const Vector3D<T> & rmin() = 0;
-  [[nodiscard]] virtual const Vector3D<T> & rmax() = 0;
+  [[nodiscard]] virtual const Vector3D<T> & rmin() const = 0;
+  [[nodiscard]] virtual const Vector3D<T> & rmax() const = 0;
 
   [[nodiscard]] BoxType
   type() const {

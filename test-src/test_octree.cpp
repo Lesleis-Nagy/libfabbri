@@ -9,6 +9,7 @@
 
 #include "trees/octree.hpp"
 
+
 TEST_CASE("is_leaf()", "[OctreeNode]") {
 
   VertexList3D<double> vcl = {
@@ -465,11 +466,20 @@ TEST_CASE("Octree: Basic tree construction", "[Octree]") {
       {0, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}
   };
 
+  VectorListList3D<double> fields = {
+      {
+          {1.0, 0.0, 0.0},
+          {0.0, 1.0, 0.0},
+          {0.0, 0.0, 1.0},
+          {sqrt(1.0 / 3.0), sqrt(1.0 / 3.0), sqrt(1.0 / 3.0)}
+      }
+  };
+
   IndexTupleList<4> til = {
       {0, 1, 2, 3}
   };
 
-  Octree<double, 3, 4> octree(vcl, til);
+  Octree<double, 3, 4> octree(vcl, fields, til);
 
 }
 
@@ -491,6 +501,8 @@ TEST_CASE("Octree: find_leaf_index_containing_tet_index", "[Octree]") {
       {-0.50000, 0.50000, -0.50000},
       {-0.50000, -0.50000, -0.50000},
   };
+
+  VectorListList3D<double> fields = {};
 
   IndexTupleList<4> til = {
       {13, 10, 0, 8},
@@ -519,6 +531,7 @@ TEST_CASE("Octree: find_leaf_index_containing_tet_index", "[Octree]") {
       {13, 12, 9, 11},
   };
 
+  // These are the test centroids of the input tetrahedra.
   VertexList3D<double> centroids = {
       {0.00000, -0.12606, -0.12500},
       {-0.37606, -0.25000, -0.12500},
@@ -552,21 +565,23 @@ TEST_CASE("Octree: find_leaf_index_containing_tet_index", "[Octree]") {
       2, 2, 1, 1
   };
 
-  Octree<double, 4, 4> octree(vcl, til);
+  Octree<double, 4, 4> octree(vcl, fields, til);
 
   for (int tid = 0; tid < centroids.size(); ++tid) {
-    // Find leaf element in the tree that contains tid.
+    // Find the leaf-element in the tree that contains the tetraheron (centroid) index `tid`
     auto node_value = octree.find_leaf_containing_tet_index(tid);
 
-    // Make sure the leaf could be found.
+    // Make sure the leaf could be found
     REQUIRE(node_value.has_value());
 
     const auto &node = node_value.value().get();
 
+    // Get the x/y/z coordinate of the test-centroid
     double rc_x = centroids[tid].x();
     double rc_y = centroids[tid].y();
     double rc_z = centroids[tid].z();
 
+    // Make sure that the test-centroid is within the box representing the leaf
     REQUIRE(node.r_min().x() <= rc_x);
     REQUIRE(rc_x <= node.r_max().x());
     REQUIRE(node.r_min().y() <= rc_y);
@@ -574,7 +589,16 @@ TEST_CASE("Octree: find_leaf_index_containing_tet_index", "[Octree]") {
     REQUIRE(node.r_min().z() <= rc_z);
     REQUIRE(rc_z <= node.r_max().z());
 
+    // Make sure the box containing the test-centroid is at the correct depth
     REQUIRE(node.depth() == depth[tid]);
-  }
 
+    // Make sure that the box containing the test-centroid has the correct dimensions
+    auto extents = node.extents();
+    auto root_extent = octree.root().extents();
+
+    auto expected_dx = root_extent.x() / pow(2.0, node.depth());
+    auto actual_dx = extents.x();
+
+    REQUIRE(abs(expected_dx - actual_dx) < 1E-12);
+  }
 }

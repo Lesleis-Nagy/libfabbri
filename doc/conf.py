@@ -81,4 +81,3 @@ subprocess.call("make clean", shell=True)
 subprocess.call("doxygen Doxyfile", shell=True)
 breathe_projects = { "libfabbri": "xml" }
 breathe_default_project = "libfabbri"
-
