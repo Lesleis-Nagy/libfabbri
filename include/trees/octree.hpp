@@ -91,6 +91,9 @@ format_array_as_table(const std::vector<T> &values, int columns) {
   return ss_table.str();
 }
 
+template<typename T, int MAX_PER_NODE, int MAX_DEPTH>
+class Octree;
+
 /**
  * An octree node helper class.
  * @tparam T the underlying data type for the calculation - usually 'double' or
@@ -98,7 +101,10 @@ format_array_as_table(const std::vector<T> &values, int columns) {
  */
 template<typename T>
 class OctreeNode {
+  template <typename, int, int> friend class Octree;
+
  public:
+
   /**
    * The basic constructor creates an empty Octree node.
    * @param vcl the vertex coordinate list.
@@ -445,6 +451,14 @@ class OctreeNode {
   }
 
   /**
+   * Retrieve the volume of the node.
+   */
+  [[nodiscard]] double
+  volume() const {
+    return volume_;
+  }
+
+  /**
    * Retrieve the r_min value.
    * @return r_min the smallest extent of the box.
    */
@@ -471,18 +485,6 @@ class OctreeNode {
     return r_max_ - r_min_;
   }
 
-  void
-  net_moments(const VectorListList3D<T> &fields) {
-    if (is_leaf()) {
-      for (auto tidx : tet_indices_) {
-        BoundTetrahedron tet(vcl_, til_, (int)tidx);
-        volume_ += tet.volume();
-      }
-    } else {
-      volume_ +=
-    }
-  }
-
  private:
 
   int index_;
@@ -500,6 +502,18 @@ class OctreeNode {
   T volume_ = 0;
 
   std::array<int, 8> children_{-1, -1, -1, -1, -1, -1, -1, -1};
+
+  //*********************************************************************************************//
+  //* Private member functions                                                                  *//
+  //*********************************************************************************************//
+
+  void compute_volume() {
+    for (size_t tid = 0; tid < til_.size(); ++tid) {
+      BoundTetrahedron<T> bv(vcl_, til_, tid);
+      volume_ += bv.volume();
+    }
+  }
+
 };
 
 template<typename T, int MAX_PER_NODE, int MAX_DEPTH>
@@ -539,7 +553,7 @@ class Octree {
     finalize();
   }
 
-  [[nodiscard]] const OctreeNode<T>&
+  [[nodiscard]] const OctreeNode<T> &
   root() const {
     return nodes_[0];
   }
@@ -838,31 +852,44 @@ class Octree {
    */
   void
   finalize() {
-    // Push the root octree node on to a stack.
-    std::stack<int> stack;
-    std::set<int> visited;
-    stack.push(0);
+    struct StackFrame {
+      int nidx;
+      bool visited;
+    };
+    std::stack<StackFrame> stack;
+
+    stack.push({0, false});
 
     // Keep going until the stack is empty.
     while (!stack.empty()) {
-      auto node_index = stack.top();
+      auto frame = stack.top();
       stack.pop();
 
-      
+      auto &node = nodes_[frame.nidx];
 
-      auto &node = nodes_[node_index];
+      if (node.is_leaf()) {
+        node.compute_volume();
+        continue;
+      }
 
-      node.net_moments(fields_);
-
-      // Process the children of this node.
-      for (auto child_node_index : node.children()) {
-        if (child_node_index >= 0) {
-          stack.push(child_node_index);
+      if (frame.visited) {
+        // All children have been visited
+        auto result = node.volume();
+        for (const auto &cidx : node.children()) {
+          result += nodes_[cidx].volume();
+        }
+        node.volume_ = result;
+      } else {
+        // Not all children have been visited yet, push this node back with the visited flag set
+        stack.push({frame.nidx, true});
+        for (const auto cidx : node.children()) {
+          if (cidx >= 0) {
+            stack.push({cidx, false});
+          }
         }
       }
     }
   }
-
 };
 
 #endif //LIBFABBRI_INCLUDE_TREES_OCTREE_HPP_

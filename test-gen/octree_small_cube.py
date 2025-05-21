@@ -1,5 +1,7 @@
 import os, sys, re
 
+import numpy as np
+
 class Mesh:
     def __init__(self, dimensions, nvert, ntri, indexing, vcl, til, sub):
         self.dimensions = dimensions
@@ -48,10 +50,10 @@ def read_mesh(file_name, write_line=False):
                 print(f"{line_counter:04d}: {line.strip()}")
 
             if line_counter > 1 \
-                    and (dimensions is None \
-                    or nvert is None \
-                    or ntri is None \
-                    or indexing is None):
+                    and (dimensions is None
+                         or nvert is None
+                         or ntri is None
+                         or indexing is None):
                 print("Error: no header found on first line")
                 sys.exit(1)
 
@@ -109,11 +111,22 @@ if __name__ == "__main__":
     data = read_mesh("small_cube.txt")
 
     print(
-        f"dims: {data.dimensions}, " \
-            f"nvert: {data.nvert}, " \
-            f"ntri: {data.ntri}, " \
-            f"indexing: {data.indexing}")
+        f"dims: {data.dimensions}, "
+        f"nvert: {data.nvert}, "
+        f"ntri: {data.ntri}, "
+        f"indexing: {data.indexing}")
 
+    print(f"Vertices")
+    for v in data.vcl:
+        print(f"{v[0]:20.15f} {v[1]:20.15f} {v[2]:20.15f}")
+    print("")
+
+    print(f"Elements")
+    for n in data.til:
+        print(f"{n[0]:5d} {n[1]:5d} {n[2]:5d} {n[3]:5d}")
+    print("")
+
+    print(f"Centroids")
     counter = 0
     for t in data.til:
         v0 = data.vcl[t[0] - 1]
@@ -128,3 +141,19 @@ if __name__ == "__main__":
         print(f"{counter:4d} {r_c[0]:10.5f}, {r_c[1]:10.5f}, {r_c[2]:10.5f}")
 
         counter = counter + 1
+    print("")
+
+    print("Volumes")
+    for counter, t in enumerate(data.til):
+        v0 = np.array(data.vcl[t[0] - 1])
+        v1 = np.array(data.vcl[t[1] - 1])
+        v2 = np.array(data.vcl[t[2] - 1])
+        v3 = np.array(data.vcl[t[3] - 1])
+
+        a = v1 - v0
+        b = v2 - v0
+        c = v3 - v0
+
+        volume = abs(np.dot(a, np.cross(b, c))) / 6.0
+
+        print(f"{counter:4d} {volume:20.15f}")
