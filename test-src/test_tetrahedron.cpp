@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "tetrahedron.hpp"
+#include "../include/amiga/tetrahedron.hpp"
 
 TEST_CASE("Test FreeTetrahedron", "[FreeTetrahedron]") {
 

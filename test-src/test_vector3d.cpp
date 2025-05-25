@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include <vector3d.hpp>
+#include <../include/amiga/vector3d.hpp>
 #include "mpreal.h"
 
 //###########################################################################//

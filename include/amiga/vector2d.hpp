@@ -16,7 +16,7 @@
 template <typename T>
 class Vector2D {
 
-public:
+  public:
 
     /**
      * Set the regularisation-epsilon value for **all** Vector2D objects of this
@@ -25,8 +25,8 @@ public:
      */
     static void set_eps(T new_eps) {
 
-        _eps = new_eps;
-        _eps_squared = new_eps * new_eps;
+      _eps = new_eps;
+      _eps_squared = new_eps * new_eps;
 
     }
 
@@ -36,7 +36,7 @@ public:
      */
     static T eps() {
 
-        return _eps;
+      return _eps;
 
     }
 
@@ -46,7 +46,7 @@ public:
      */
     static T eps_squared() {
 
-        return _eps_squared;
+      return _eps_squared;
 
     }
 
@@ -89,7 +89,7 @@ public:
     [[nodiscard]] int dim() const { return _dim; }
 
 
-private:
+  private:
 
     std::array<T, 2> _x;
     int _dim;
@@ -118,8 +118,8 @@ T Vector2D<T>::_eps_squared = 1E-14;
 template <typename T>
 std::ostream &operator << (std::ostream &out, const Vector2D<T> v) {
 
-    out << "<" << v.x() << ", " << v.y() << ">";
-    return out;
+  out << "<" << v.x() << ", " << v.y() << ">";
+  return out;
 
 }
 
@@ -134,7 +134,7 @@ std::ostream &operator << (std::ostream &out, const Vector2D<T> v) {
 template <typename T>
 Vector2D<T> operator+ (const Vector2D<T> &u, const Vector2D<T> &v) {
 
-    return {u.x() + v.x(), u.y() + v.y() };
+  return {u.x() + v.x(), u.y() + v.y() };
 
 }
 
@@ -149,7 +149,7 @@ Vector2D<T> operator+ (const Vector2D<T> &u, const Vector2D<T> &v) {
 template <typename T>
 Vector2D<T> operator- (const Vector2D<T> &u, const Vector2D<T> &v) {
 
-    return {u.x() - v.x(), u.y() - v.y() };
+  return {u.x() - v.x(), u.y() - v.y() };
 
 }
 
@@ -164,7 +164,7 @@ Vector2D<T> operator- (const Vector2D<T> &u, const Vector2D<T> &v) {
 template <typename T>
 Vector2D<T> operator*(const Vector2D<T> &v, T lambda) {
 
-    return {lambda * v.x(), lambda * v.y() };
+  return {lambda * v.x(), lambda * v.y() };
 
 }
 
@@ -179,7 +179,7 @@ Vector2D<T> operator*(const Vector2D<T> &v, T lambda) {
 template <typename T>
 Vector2D<T> operator*(T lambda, const Vector2D<T> &v) {
 
-    return {lambda * v.x(), lambda * v.y() };
+  return {lambda * v.x(), lambda * v.y() };
 
 }
 
@@ -194,7 +194,7 @@ Vector2D<T> operator*(T lambda, const Vector2D<T> &v) {
 template <typename T>
 Vector2D<T> operator/(const Vector2D<T> &v, T lambda) {
 
-    return {v.x() / lambda, v.y() / lambda };
+  return {v.x() / lambda, v.y() / lambda };
 
 }
 
@@ -209,7 +209,7 @@ Vector2D<T> operator/(const Vector2D<T> &v, T lambda) {
 template <typename T>
 T dot(const Vector2D<T> &u, const Vector2D<T> &v) {
 
-    return u.x() * v.x() + u.y() * v.y();
+  return u.x() * v.x() + u.y() * v.y();
 
 }
 
@@ -237,7 +237,7 @@ T cross(const Vector2D<T> &u, const Vector2D<T> &v)  {
 template <typename T>
 T norm(const Vector2D<T> &v) {
 
-    return sqrt(dot(v, v) + Vector2D<T>::eps_squared());
+  return sqrt(dot(v, v) + Vector2D<T>::eps_squared());
 
 }
 
@@ -251,7 +251,7 @@ T norm(const Vector2D<T> &v) {
 template <typename T>
 T norm_squared(const Vector2D<T> &v) {
 
-    return dot(v, v);
+  return dot(v, v);
 
 }
 
@@ -265,8 +265,8 @@ T norm_squared(const Vector2D<T> &v) {
 template <typename T>
 Vector2D<T> normalised(const Vector2D<T> &v) {
 
-    T l = norm(v);
-    return v / l;
+  T l = norm(v);
+  return v / l;
 
 }
 

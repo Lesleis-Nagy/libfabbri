@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include <matrix4x4.hpp>
+#include <../include/amiga/matrix4x4.hpp>
 #include "mpreal.h"
 
 //###########################################################################//

@@ -2,8 +2,8 @@
 // Created by Lesleis Nagy on 26/07/2022.
 //
 
-#ifndef LIBFABBRI_VECTOR4D_HPP
-#define LIBFABBRI_VECTOR4D_HPP
+#ifndef LIBFABBRI_VECTOR3D_HPP
+#define LIBFABBRI_VECTOR3D_HPP
 
 #include <array>
 #include <ostream>
@@ -15,19 +15,19 @@
  *           ‘mpreal’.
  */
 template <typename T>
-class Vector4D {
+class Vector3D {
 
-public:
+  public:
 
     /**
-     * Set the regularisation-epsilon value for **all** Vector4D objects of this
+     * Set the regularisation-epsilon value for **all** Vector3D objects of this
      * type.
      * @param new_eps the new regularisation-epsilon.
      */
     static void set_eps(T new_eps) {
 
-        _eps = new_eps;
-        _eps_squared = new_eps * new_eps;
+      _eps = new_eps;
+      _eps_squared = new_eps * new_eps;
 
     }
 
@@ -37,7 +37,7 @@ public:
      */
     static T eps() {
 
-        return _eps;
+      return _eps;
 
     }
 
@@ -47,14 +47,14 @@ public:
      */
     static T eps_squared() {
 
-        return _eps_squared;
+      return _eps_squared;
 
     }
 
     /**
      * Create a three dimensional zero-vector object.
      */
-    Vector4D(): _x{0.0, 0.0, 0.0, 0.0}, _dim(4) {}
+    Vector3D(): _x{0.0, 0.0, 0.0}, _dim(3) {}
 
     /**
      * Create a three dimensional vector object with the given x, y & z
@@ -62,9 +62,8 @@ public:
      * @param x the vector x component.
      * @param y the vector y component.
      * @param z the vector z component.
-     * @param w the vector w component.
      */
-    Vector4D(T x, T y, T z, T w): _x{x, y, z, w} {}
+    Vector3D(T x, T y, T z): _x{x, y, z} {}
 
     /**
      * Retrieve the vector's x-component.
@@ -85,10 +84,11 @@ public:
     [[nodiscard]] inline T z() const { return _x[2]; }
 
     /**
-     * Retrieve the vector's w-component.
-     * @return the vector's w-component.
+     * Retrieve the vector's ith component.
+     * @param idx the index of the component.
+     * @return the vector component.
      */
-    [[nodiscard]] inline T w() const { return _x[3]; }
+    [[nodiscard]] T operator()(size_t idx) const { return _x[idx]; }
 
     /**
      * Retrieve the dimension of the vector.
@@ -96,9 +96,9 @@ public:
      */
     [[nodiscard]] int dim() const { return _dim; }
 
-private:
+  private:
 
-    std::array<T, 4> _x;
+    std::array<T, 3> _x;
     int _dim;
 
     [[maybe_unused]] static T _eps;
@@ -109,10 +109,10 @@ private:
 // Initialize static eps & eps_squared values to defaults for double precision
 // arithmetic.
 template <typename T>
-T Vector4D<T>::_eps = 1E-7;
+T Vector3D<T>::_eps = 1E-7;
 
 template <typename T>
-T Vector4D<T>::_eps_squared = 1E-14;
+T Vector3D<T>::_eps_squared = 1E-14;
 
 /**
  * Redirection operator to display the vector.
@@ -123,14 +123,10 @@ T Vector4D<T>::_eps_squared = 1E-14;
  * @return the output stream with a representation of the input vector.
  */
 template <typename T>
-std::ostream &operator << (std::ostream &out, const Vector4D<T> v) {
+std::ostream &operator << (std::ostream &out, const Vector3D<T> v) {
 
-    out << "<" << v.x() << ", "
-               << v.y() << ", "
-               << v.z() << ", "
-               << v.w() << ">";
-
-    return out;
+  out << "<" << v.x() << ", " << v.y() << ", " << v.z() << ">";
+  return out;
 
 }
 
@@ -143,9 +139,9 @@ std::ostream &operator << (std::ostream &out, const Vector4D<T> v) {
  * @return the sum of the two input vectors.
  */
 template <typename T>
-Vector4D<T> operator+ (const Vector4D<T> &u, const Vector4D<T> &v) {
+Vector3D<T> operator+ (const Vector3D<T> &u, const Vector3D<T> &v) {
 
-    return {u.x() + v.x(), u.y() + v.y(), u.z() + v.z(), u.w() + v.w()};
+  return {u.x() + v.x(), u.y() + v.y(), u.z() + v.z() };
 
 }
 
@@ -158,9 +154,9 @@ Vector4D<T> operator+ (const Vector4D<T> &u, const Vector4D<T> &v) {
  * @return the difference of two input vectors.
  */
 template <typename T>
-Vector4D<T> operator- (const Vector4D<T> &u, const Vector4D<T> &v) {
+Vector3D<T> operator- (const Vector3D<T> &u, const Vector3D<T> &v) {
 
-    return {u.x() - v.x(), u.y() - v.y(), u.z() - v.z(),  u.w() - v.w()};
+  return {u.x() - v.x(), u.y() - v.y(), u.z() - v.z() };
 
 }
 
@@ -173,9 +169,9 @@ Vector4D<T> operator- (const Vector4D<T> &u, const Vector4D<T> &v) {
  * @return the vector-scalar product.
  */
 template <typename T>
-Vector4D<T> operator*(const Vector4D<T> &v, T lambda) {
+Vector3D<T> operator*(const Vector3D<T> &v, T lambda) {
 
-    return {v.x() * lambda, v.y() * lambda, v.z() * lambda, v.w() * lambda};
+  return {lambda * v.x(), lambda * v.y(), lambda * v.z() };
 
 }
 
@@ -188,9 +184,9 @@ Vector4D<T> operator*(const Vector4D<T> &v, T lambda) {
  * @return the scalar-vector product.
  */
 template <typename T>
-Vector4D<T> operator*(T lambda, const Vector4D<T> &v) {
+Vector3D<T> operator*(T lambda, const Vector3D<T> &v) {
 
-    return {lambda * v.x(), lambda * v.y(), lambda * v.z(), lambda * v.w()};
+  return {lambda * v.x(), lambda * v.y(), lambda * v.z() };
 
 }
 
@@ -203,9 +199,9 @@ Vector4D<T> operator*(T lambda, const Vector4D<T> &v) {
  * @return the vector-scalar division.
  */
 template <typename T>
-Vector4D<T> operator/(const Vector4D<T> &v, T lambda) {
+Vector3D<T> operator/(const Vector3D<T> &v, T lambda) {
 
-    return {v.x() / lambda, v.y() / lambda, v.z() / lambda, v.w() / lambda};
+  return {v.x() / lambda, v.y() / lambda, v.z() / lambda };
 
 }
 
@@ -218,9 +214,25 @@ Vector4D<T> operator/(const Vector4D<T> &v, T lambda) {
  * @return the vector dot product.
  */
 template <typename T>
-T dot(const Vector4D<T> &u, const Vector4D<T> &v) {
+T dot(const Vector3D<T> &u, const Vector3D<T> &v) {
 
-    return u.x() * v.x() + u.y() * v.y() + u.z() * v.z() + u.w() * v.w();
+  return u.x() * v.x() + u.y() * v.y() + u.z() * v.z();
+
+}
+
+/**
+ * Vector cross product.
+ * @tparam T the underlying data type for the calculation - usually 'double' or
+ *           'mpreal'.
+ * @param u the vector on the left hand side of the cross product.
+ * @param v the scalar on the right hand side of the cross product.
+ * @return the vector cross product.
+ */template <typename T>
+Vector3D<T> cross(const Vector3D<T> &u, const Vector3D<T> &v)  {
+
+  return {u.y() * v.z() - u.z() * v.y(),
+    -u.x() * v.z() + u.z() * v.x(),
+    u.x() * v.y() - u.y() * v.x()  };
 
 }
 
@@ -232,9 +244,9 @@ T dot(const Vector4D<T> &u, const Vector4D<T> &v) {
  * @return the norm of the input vector.
  */
 template <typename T>
-T norm(const Vector4D<T> &v) {
+T norm(const Vector3D<T> &v) {
 
-    return sqrt(dot(v, v) + Vector4D<T>::eps_squared());
+  return sqrt(dot(v, v) + Vector3D<T>::eps_squared());
 
 }
 
@@ -246,9 +258,9 @@ T norm(const Vector4D<T> &v) {
  * @return the norm-squared of the input vector.
  */
 template <typename T>
-T norm_squared(const Vector4D<T> &v) {
+T norm_squared(const Vector3D<T> &v) {
 
-    return dot(v, v);
+  return dot(v, v);
 
 }
 
@@ -259,11 +271,11 @@ T norm_squared(const Vector4D<T> &v) {
  * @param v the vector that we seek to normalise.
  * @return the normalised input vector.
  */
- template <typename T>
-Vector4D<T> normalised(const Vector4D<T> &v) {
+template <typename T>
+Vector3D<T> normalised(const Vector3D<T> &v) {
 
-    T l = norm(v);
-    return v / l;
+  T l = norm(v);
+  return v / l;
 
 }
 
@@ -272,8 +284,8 @@ Vector4D<T> normalised(const Vector4D<T> &v) {
  * @return the additive fold (sum of all vector elements).
  */
 template <typename T>
-T afold(const Vector4D<T> &v) {
-  return v.x() + v.y() + v.z() + v.w();
+T afold(const Vector3D<T> &v) {
+  return v.x() + v.y() + v.z();
 }
 
 /**
@@ -281,8 +293,8 @@ T afold(const Vector4D<T> &v) {
  * @return the multiplicative fold (product of all vector elements).
  */
 template <typename T>
-T mfold(const Vector4D<T> &v) {
-  return v.x() * v.y() * v.z() * v.w();
+T mfold(const Vector3D<T> &v) {
+  return v.x() * v.y() * v.z();
 }
 
-#endif // LIBFABBRI_VECTOR4D_HPP
+#endif // LIBFABBRI_VECTOR3D_HPP

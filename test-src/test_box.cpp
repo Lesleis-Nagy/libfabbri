@@ -7,9 +7,10 @@
 
 #include <iostream>
 
-#include "box.hpp"
+#include "amiga/box.hpp"
 
 TEST_CASE("Test FreeBox basic operations", "[FreeBox]") {
+  using namespace amiga;
 
   Box<double> *cub = new FreeBox<double>{
       {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0}
@@ -28,6 +29,7 @@ TEST_CASE("Test FreeBox basic operations", "[FreeBox]") {
 }
 
 TEST_CASE("Test FreeBox: contains()", "[FreeBox]") {
+  using namespace amiga;
 
   Box<double> *cub = new FreeBox<double>{
       {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0}
@@ -60,6 +62,7 @@ TEST_CASE("Test FreeBox: contains()", "[FreeBox]") {
 }
 
 TEST_CASE("Test BoundBox basic operations", "[BoundBox]") {
+  using namespace amiga;
 
   VertexList3D<double> vcl = {
       {0.0, 0.0, 0.0},
@@ -70,7 +73,7 @@ TEST_CASE("Test BoundBox basic operations", "[BoundBox]") {
       {0, 1}
   };
 
-  Box<double> *cub = new BoundBox<double> {vcl, til, 0};
+  Box<double> *cub = new BoundBox {vcl, til, 0};
 
   REQUIRE(cub->signed_volume() == Approx(1.0));
   REQUIRE(cub->volume() == Approx(1.0));
@@ -89,6 +92,7 @@ TEST_CASE("Test BoundBox basic operations", "[BoundBox]") {
 }
 
 TEST_CASE("Test BoundBox: contains()", "[BoundBox]") {
+  using namespace amiga;
 
   VertexList3D<double> vcl = {
       {0.0, 0.0, 0.0},
@@ -99,7 +103,7 @@ TEST_CASE("Test BoundBox: contains()", "[BoundBox]") {
       {0, 1}
   };
 
-  Box<double> *cub = new BoundBox<double>{vcl, til, 0};
+  Box<double> *cub = new BoundBox{vcl, til, 0};
 
   REQUIRE(cub->contains({0.5, 0.5, 0.5}) == true);
 

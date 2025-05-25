@@ -7,175 +7,187 @@
 
 #include <iostream>
 
-#include <matrix3x3.hpp>
+#include <amiga/matrix3x3.hpp>
 #include "mpreal.h"
 
-//###########################################################################//
-//# Test addition                                                           #//
-//###########################################################################//
+//###############################################################################################//
+//# Test addition                                                                               #//
+//###############################################################################################//
 
 TEST_CASE("Test matrix addition for 'double' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
 
-    using std::string;
-    using Mat3x3 = Matrix3x3<double>;
+  using Mat3x3 = Matrix3x3<double>;
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Mat3x3 m1 = {
-            {10.0, 11.0, 12.0},
-            {13.0, 14.0, 15.0},
-            {16.0, 17.0, 18.0}};
+  Mat3x3 m1 = {
+    {10.0, 11.0, 12.0},
+    {13.0, 14.0, 15.0},
+    {16.0, 17.0, 18.0}
+  };
 
-    Mat3x3 expected = {
-            {11.0, 13.0, 15.0},
-            {17.0, 19.0, 21.0},
-            {23.0, 25.0, 27.0}};
+  Mat3x3 expected = {
+    {11.0, 13.0, 15.0},
+    {17.0, 19.0, 21.0},
+    {23.0, 25.0, 27.0}
+  };
 
-    double eps = 1E-14;
+  double eps = 1E-14;
 
-    Mat3x3 actual = m0 + m1;
+  Mat3x3 actual = m0 + m1;
 
-    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
-    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
-    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps);
 
-    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
-    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
-    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps);
 
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 TEST_CASE("Test matrix addition for 'multiprecision' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
+  using mpfr::mpreal;
 
-    using std::string;
-    using mpfr::mpreal;
+  using Mat3x3 = Matrix3x3<mpreal>;
 
-    using Mat3x3 = Matrix3x3<mpreal>;
-    const int digits = 50;
-    mpreal::set_default_prec(mpfr::digits2bits(digits));
+  constexpr int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Mat3x3 m1 = {
-            {10.0, 11.0, 12.0},
-            {13.0, 14.0, 15.0},
-            {16.0, 17.0, 18.0}};
+  Mat3x3 m1 = {
+    {10.0, 11.0, 12.0},
+    {13.0, 14.0, 15.0},
+    {16.0, 17.0, 18.0}
+  };
 
-    Mat3x3 expected = {
-            {11.0, 13.0, 15.0},
-            {17.0, 19.0, 21.0},
-            {23.0, 25.0, 27.0}};
+  Mat3x3 expected = {
+    {11.0, 13.0, 15.0},
+    {17.0, 19.0, 21.0},
+    {23.0, 25.0, 27.0}
+  };
 
-    double eps = 1E-14;
+  double eps = 1E-14;
 
-    Mat3x3 actual = m0 + m1;
+  Mat3x3 actual = m0 + m1;
 
-    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
-    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
-    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps);
 
-    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
-    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
-    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps);
 
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
-//###########################################################################//
-//# Test subtraction                                                        #//
-//###########################################################################//
+//###############################################################################################//
+//# Test subtraction                                                                            #//
+//###############################################################################################//
 
 TEST_CASE("Test matrix subtraction for 'double' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
 
-    using std::string;
-    using Mat3x3 = Matrix3x3<double>;
+  using Mat3x3 = Matrix3x3<double>;
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Mat3x3 m1 = {
-            {10.0, 11.0, 12.0},
-            {13.0, 14.0, 15.0},
-            {16.0, 17.0, 18.0}};
+  Mat3x3 m1 = {
+    {10.0, 11.0, 12.0},
+    {13.0, 14.0, 15.0},
+    {16.0, 17.0, 18.0}
+  };
 
-    Mat3x3 expected = {
-            { 9.0,  9.0, 9.0},
-            { 9.0,  9.0, 9.0},
-            { 9.0,  9.0, 9.0}};
+  Mat3x3 expected = {
+    {9.0, 9.0, 9.0},
+    {9.0, 9.0, 9.0},
+    {9.0, 9.0, 9.0}
+  };
 
-    double eps = 1E-14;
+  double eps = 1E-14;
 
-    Mat3x3 actual = m1 - m0;
+  Mat3x3 actual = m1 - m0;
 
-    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
-    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
-    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps);
 
-    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
-    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
-    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps);
 
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 TEST_CASE("Test matrix subtraction for 'multiprecision' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
+  using mpfr::mpreal;
 
-    using std::string;
-    using mpfr::mpreal;
+  using Mat3x3 = Matrix3x3<mpreal>;
 
-    using Mat3x3 = Matrix3x3<mpreal>;
-    const int digits = 50;
-    mpreal::set_default_prec(mpfr::digits2bits(digits));
+  constexpr int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Mat3x3 m1 = {
-            {10.0, 11.0, 12.0},
-            {13.0, 14.0, 15.0},
-            {16.0, 17.0, 18.0}};
+  Mat3x3 m1 = {
+    {10.0, 11.0, 12.0},
+    {13.0, 14.0, 15.0},
+    {16.0, 17.0, 18.0}
+  };
 
-    Mat3x3 expected = {
-            { 9.0,  9.0, 9.0},
-            { 9.0,  9.0, 9.0},
-            { 9.0,  9.0, 9.0}};
+  Mat3x3 expected = {
+    {9.0, 9.0, 9.0},
+    {9.0, 9.0, 9.0},
+    {9.0, 9.0, 9.0}
+  };
 
-    double eps = 1E-14;
+  double eps = 1E-14;
 
-    Mat3x3 actual = m1 - m0;
+  Mat3x3 actual = m1 - m0;
 
-    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
-    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
-    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps);
 
-    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
-    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
-    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps);
 
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 //###########################################################################//
@@ -183,77 +195,81 @@ TEST_CASE("Test matrix subtraction for 'multiprecision' type.", "Matrix3x3") {
 //###########################################################################//
 
 TEST_CASE("Test scalar-matrix multiplication for 'double' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
 
-    using std::string;
-    using Mat3x3 = Matrix3x3<double>;
+  using Mat3x3 = Matrix3x3<double>;
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    double lambda = 2.0;
+  double lambda = 2.0;
 
-    Mat3x3 expected = {
-            { 2.0,  4.0,  6.0},
-            { 8.0, 10.0, 12.0},
-            {14.0, 16.0, 18.0}};
+  Mat3x3 expected = {
+    {2.0, 4.0, 6.0},
+    {8.0, 10.0, 12.0},
+    {14.0, 16.0, 18.0}
+  };
 
-    double eps = 1E-14;
+  double eps = 1E-14;
 
-    Mat3x3 actual = lambda * m0;
+  Mat3x3 actual = lambda * m0;
 
-    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
-    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
-    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps);
 
-    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
-    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
-    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps);
 
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 TEST_CASE("Test scalar-matrix multiplication for 'multiprecision' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
+  using mpfr::mpreal;
 
-    using std::string;
-    using mpfr::mpreal;
+  using Mat3x3 = Matrix3x3<mpreal>;
 
-    using Mat3x3 = Matrix3x3<mpreal>;
-    const int digits = 50;
-    mpreal::set_default_prec(mpfr::digits2bits(digits));
+  constexpr int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    mpreal lambda = 2.0;
+  mpreal lambda = 2.0;
 
-    Mat3x3 expected = {
-            { 2.0,  4.0,  6.0},
-            { 8.0, 10.0, 12.0},
-            {14.0, 16.0, 18.0}};
+  Mat3x3 expected = {
+    {2.0, 4.0, 6.0},
+    {8.0, 10.0, 12.0},
+    {14.0, 16.0, 18.0}
+  };
 
-    double eps = 1E-14;
+  double eps = 1E-14;
 
-    Mat3x3 actual = lambda * m0;
+  Mat3x3 actual = lambda * m0;
 
-    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
-    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
-    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps);
 
-    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
-    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
-    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps);
 
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 //###########################################################################//
@@ -261,77 +277,81 @@ TEST_CASE("Test scalar-matrix multiplication for 'multiprecision' type.", "Matri
 //###########################################################################//
 
 TEST_CASE("Test matrix-scalar multiplication for 'double' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
 
-    using std::string;
-    using Mat3x3 = Matrix3x3<double>;
+  using Mat3x3 = Matrix3x3<double>;
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    double lambda = 2.0;
+  double lambda = 2.0;
 
-    Mat3x3 expected = {
-            { 2.0,  4.0,  6.0},
-            { 8.0, 10.0, 12.0},
-            {14.0, 16.0, 18.0}};
+  Mat3x3 expected = {
+    {2.0, 4.0, 6.0},
+    {8.0, 10.0, 12.0},
+    {14.0, 16.0, 18.0}
+  };
 
-    double eps = 1E-14;
+  double eps = 1E-14;
 
-    Mat3x3 actual = m0 * lambda;
+  Mat3x3 actual = m0 * lambda;
 
-    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
-    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
-    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps);
 
-    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
-    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
-    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps);
 
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 TEST_CASE("Test matrix-scalar multiplication for 'multiprecision' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
+  using mpfr::mpreal;
 
-    using std::string;
-    using mpfr::mpreal;
+  using Mat3x3 = Matrix3x3<mpreal>;
 
-    using Mat3x3 = Matrix3x3<mpreal>;
-    const int digits = 50;
-    mpreal::set_default_prec(mpfr::digits2bits(digits));
+  constexpr int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    mpreal lambda = 2.0;
+  mpreal lambda = 2.0;
 
-    Mat3x3 expected = {
-            { 2.0,  4.0,  6.0},
-            { 8.0, 10.0, 12.0},
-            {14.0, 16.0, 18.0}};
+  Mat3x3 expected = {
+    {2.0, 4.0, 6.0},
+    {8.0, 10.0, 12.0},
+    {14.0, 16.0, 18.0}
+  };
 
-    double eps = 1E-14;
+  double eps = 1E-14;
 
-    Mat3x3 actual = m0 * lambda;
+  Mat3x3 actual = m0 * lambda;
 
-    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
-    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
-    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps);
 
-    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
-    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
-    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps);
 
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 //###########################################################################//
@@ -339,77 +359,81 @@ TEST_CASE("Test matrix-scalar multiplication for 'multiprecision' type.", "Matri
 //###########################################################################//
 
 TEST_CASE("Test matrix-scalar division for 'double' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
 
-    using std::string;
-    using Mat3x3 = Matrix3x3<double>;
+  using Mat3x3 = Matrix3x3<double>;
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    double lambda = 2.0;
+  double lambda = 2.0;
 
-    Mat3x3 expected = {
-            { 0.5,  1.0,  1.5},
-            { 2.0,  2.5,  3.0},
-            { 3.5,  4.0,  4.5}};
+  Mat3x3 expected = {
+    {0.5, 1.0, 1.5},
+    {2.0, 2.5, 3.0},
+    {3.5, 4.0, 4.5}
+  };
 
-    double eps = 1E-14;
+  double eps = 1E-14;
 
-    Mat3x3 actual = m0 / lambda;
+  Mat3x3 actual = m0 / lambda;
 
-    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
-    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
-    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps);
 
-    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
-    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
-    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps);
 
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 TEST_CASE("Test matrix-scalar division for 'multiprecision' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
+  using mpfr::mpreal;
 
-    using std::string;
-    using mpfr::mpreal;
+  using Mat3x3 = Matrix3x3<mpreal>;
 
-    using Mat3x3 = Matrix3x3<mpreal>;
-    const int digits = 50;
-    mpreal::set_default_prec(mpfr::digits2bits(digits));
+  constexpr int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    mpreal lambda = 2.0;
+  mpreal lambda = 2.0;
 
-    Mat3x3 expected = {
-            { 0.5,  1.0,  1.5},
-            { 2.0,  2.5,  3.0},
-            { 3.5,  4.0,  4.5}};
+  Mat3x3 expected = {
+    {0.5, 1.0, 1.5},
+    {2.0, 2.5, 3.0},
+    {3.5, 4.0, 4.5}
+  };
 
-    double eps = 1E-14;
+  double eps = 1E-14;
 
-    Mat3x3 actual = m0 / lambda;
+  Mat3x3 actual = m0 / lambda;
 
-    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
-    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
-    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps);
 
-    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
-    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
-    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps);
 
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 //###########################################################################//
@@ -417,66 +441,67 @@ TEST_CASE("Test matrix-scalar division for 'multiprecision' type.", "Matrix3x3")
 //###########################################################################//
 
 TEST_CASE("Test matrix-vector multiplication for 'double' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
 
-    using std::string;
-    using Vec3 = Vector3D<double>;
-    using Mat3x3 = Matrix3x3<double>;
+  using Vec3 = Vector3D<double>;
+  using Mat3x3 = Matrix3x3<double>;
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  const Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Vec3 v = {1.0, 2.0, 3.0};
+  const Vec3 v = {1.0, 2.0, 3.0};
 
-    Vec3 expected = {
-            1.0*1.0 + 2.0*2.0 + 3.0*3.0, // 14.0
-            4.0*1.0 + 5.0*2.0 + 6.0*3.0, // 32.0
-            7.0*1.0 + 8.0*2.0 + 9.0*3.0  // 50.0
-    };
+  const Vec3 expected = {
+    1.0 * 1.0 + 2.0 * 2.0 + 3.0 * 3.0, // 14.0
+    4.0 * 1.0 + 5.0 * 2.0 + 6.0 * 3.0, // 32.0
+    7.0 * 1.0 + 8.0 * 2.0 + 9.0 * 3.0 // 50.0
+  };
 
-    double eps = 1E-14;
+  constexpr double eps = 1E-14;
 
-    Vec3 actual = m0 * v;
+  const Vec3 actual = m0 * v;
 
-    REQUIRE(fabs(actual.x() - expected.x()) < eps );
-    REQUIRE(fabs(actual.y() - expected.y()) < eps );
-    REQUIRE(fabs(actual.z() - expected.z()) < eps );
-
+  REQUIRE(fabs(actual.x() - expected.x()) < eps);
+  REQUIRE(fabs(actual.y() - expected.y()) < eps);
+  REQUIRE(fabs(actual.z() - expected.z()) < eps);
 }
 
 TEST_CASE("Test matrix-vector multiplication for 'multiprecision' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
+  using mpfr::mpreal;
 
-    using std::string;
-    using mpfr::mpreal;
+  using Vec3 = Vector3D<double>;
+  using Mat3x3 = Matrix3x3<double>;
 
-    using Vec3 = Vector3D<double>;
-    using Mat3x3 = Matrix3x3<double>;
+  constexpr int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
 
-    const int digits = 50;
-    mpreal::set_default_prec(mpfr::digits2bits(digits));
+  const Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  const Vec3 v = {1.0, 2.0, 3.0};
 
-    Vec3 v = {1.0, 2.0, 3.0};
+  const Vec3 expected = {
+    1.0 * 1.0 + 2.0 * 2.0 + 3.0 * 3.0, // 14.0
+    4.0 * 1.0 + 5.0 * 2.0 + 6.0 * 3.0, // 32.0
+    7.0 * 1.0 + 8.0 * 2.0 + 9.0 * 3.0 // 50.0
+  };
 
-    Vec3 expected = {
-            1.0*1.0 + 2.0*2.0 + 3.0*3.0, // 14.0
-            4.0*1.0 + 5.0*2.0 + 6.0*3.0, // 32.0
-            7.0*1.0 + 8.0*2.0 + 9.0*3.0  // 50.0
-    };
+  constexpr double eps = 1E-14;
 
-    double eps = 1E-14;
+  const Vec3 actual = m0 * v;
 
-    Vec3 actual = m0 * v;
-
-    REQUIRE(fabs(actual.x() - expected.x()) < eps );
-    REQUIRE(fabs(actual.y() - expected.y()) < eps );
-    REQUIRE(fabs(actual.z() - expected.z()) < eps );
-
+  REQUIRE(fabs(actual.x() - expected.x()) < eps);
+  REQUIRE(fabs(actual.y() - expected.y()) < eps);
+  REQUIRE(fabs(actual.z() - expected.z()) < eps);
 }
 
 //###########################################################################//
@@ -484,58 +509,59 @@ TEST_CASE("Test matrix-vector multiplication for 'multiprecision' type.", "Matri
 //###########################################################################//
 
 TEST_CASE("Test vector-matrix multiplication for 'double' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
 
-    using std::string;
-    using Vec3 = Vector3D<double>;
-    using Mat3x3 = Matrix3x3<double>;
+  using Vec3 = Vector3D<double>;
+  using Mat3x3 = Matrix3x3<double>;
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  const Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Vec3 v = {1.0, 2.0, 3.0};
+  const Vec3 v = {1.0, 2.0, 3.0};
 
-    Vec3 expected = {30.0, 36.0, 42.0};
+  const Vec3 expected = {30.0, 36.0, 42.0};
 
-    double eps = 1E-14;
+  constexpr double eps = 1E-14;
 
-    Vec3 actual = v * m0;
+  const Vec3 actual = v * m0;
 
-    REQUIRE(fabs(actual.x() - expected.x()) < eps );
-    REQUIRE(fabs(actual.y() - expected.y()) < eps );
-    REQUIRE(fabs(actual.z() - expected.z()) < eps );
-
+  REQUIRE(fabs(actual.x() - expected.x()) < eps);
+  REQUIRE(fabs(actual.y() - expected.y()) < eps);
+  REQUIRE(fabs(actual.z() - expected.z()) < eps);
 }
 
 TEST_CASE("Test vector-matrix multiplication for 'multiprecision' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
+  using mpfr::mpreal;
 
-    using std::string;
-    using mpfr::mpreal;
+  using Vec3 = Vector3D<double>;
+  using Mat3x3 = Matrix3x3<double>;
 
-    using Vec3 = Vector3D<double>;
-    using Mat3x3 = Matrix3x3<double>;
+  constexpr int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
 
-    const int digits = 50;
-    mpreal::set_default_prec(mpfr::digits2bits(digits));
+  const Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  const Vec3 v = {1.0, 2.0, 3.0};
 
-    Vec3 v = {1.0, 2.0, 3.0};
+  const Vec3 expected = {30.0, 36.0, 42.0};
 
-    Vec3 expected = {30.0, 36.0, 42.0};
+  const mpreal eps = 1E-14;
 
-    mpreal eps = 1E-14;
+  const Vec3 actual = v * m0;
 
-    Vec3 actual = v * m0;
-
-    REQUIRE(fabs(actual.x() - expected.x()) < eps );
-    REQUIRE(fabs(actual.y() - expected.y()) < eps );
-    REQUIRE(fabs(actual.z() - expected.z()) < eps );
-
+  REQUIRE(fabs(actual.x() - expected.x()) < eps);
+  REQUIRE(fabs(actual.y() - expected.y()) < eps);
+  REQUIRE(fabs(actual.z() - expected.z()) < eps);
 }
 
 //###########################################################################//
@@ -543,84 +569,89 @@ TEST_CASE("Test vector-matrix multiplication for 'multiprecision' type.", "Matri
 //###########################################################################//
 
 TEST_CASE("Test matrix-matrix multiplication for 'double' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
 
-    using std::string;
-    using Mat3x3 = Matrix3x3<double>;
+  using Mat3x3 = Matrix3x3<double>;
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Mat3x3 m1 = {
-            {10.0, 11.0, 12.0},
-            {13.0, 14.0, 15.0},
-            {16.0, 17.0, 18.0}};
+  Mat3x3 m1 = {
+    {10.0, 11.0, 12.0},
+    {13.0, 14.0, 15.0},
+    {16.0, 17.0, 18.0}
+  };
 
-    Mat3x3 expected = {
-            { 84.0,  90.0,  96.0},
-            {201.0, 216.0, 231.0},
-            {318.0, 342.0, 366.0}};
+  Mat3x3 expected = {
+    {84.0, 90.0, 96.0},
+    {201.0, 216.0, 231.0},
+    {318.0, 342.0, 366.0}
+  };
 
-    double eps = 1E-14;
+  double eps = 1E-14;
 
-    Mat3x3 actual = m0 * m1;
+  Mat3x3 actual = m0 * m1;
 
-    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
-    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
-    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps);
 
-    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
-    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
-    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps);
 
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 TEST_CASE("Test matrix-matrix multiplication for 'multiprecision' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
+  using mpfr::mpreal;
 
-    using std::string;
-    using mpfr::mpreal;
+  using Mat3x3 = Matrix3x3<double>;
 
-    using Mat3x3 = Matrix3x3<double>;
+  constexpr int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
 
-    const int digits = 50;
-    mpreal::set_default_prec(mpfr::digits2bits(digits));
+  Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  Mat3x3 m1 = {
+    {10.0, 11.0, 12.0},
+    {13.0, 14.0, 15.0},
+    {16.0, 17.0, 18.0}
+  };
 
-    Mat3x3 m1 = {
-            {10.0, 11.0, 12.0},
-            {13.0, 14.0, 15.0},
-            {16.0, 17.0, 18.0}};
+  Mat3x3 expected = {
+    {84.0, 90.0, 96.0},
+    {201.0, 216.0, 231.0},
+    {318.0, 342.0, 366.0}
+  };
 
-    Mat3x3 expected = {
-            { 84.0,  90.0,  96.0},
-            {201.0, 216.0, 231.0},
-            {318.0, 342.0, 366.0}};
+  mpreal eps = 1E-14;
 
-    mpreal eps = 1E-14;
+  Mat3x3 actual = m0 * m1;
 
-    Mat3x3 actual = m0 * m1;
+  REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps);
 
-    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
-    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
-    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps);
 
-    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
-    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
-    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
-
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 //###########################################################################//
@@ -628,74 +659,77 @@ TEST_CASE("Test matrix-matrix multiplication for 'multiprecision' type.", "Matri
 //###########################################################################//
 
 TEST_CASE("Test matrix adjugate for 'double' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
 
-    using std::string;
-    using Mat3x3 = Matrix3x3<double>;
+  using Mat3x3 = Matrix3x3<double>;
 
-    Mat3x3 m = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  Mat3x3 m = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Mat3x3 expected = {
-            {-3.0,  6.0,  -3.0},
-            { 6.0, -12.0,  6.0},
-            {-3.0,  6.0,  -3.0}};
+  Mat3x3 expected = {
+    {-3.0, 6.0, -3.0},
+    {6.0, -12.0, 6.0},
+    {-3.0, 6.0, -3.0}
+  };
 
-    double eps = 1E-14;
+  double eps = 1E-14;
 
-    Mat3x3 actual = adj(m);
+  Mat3x3 actual = adj(m);
 
-    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
-    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
-    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps);
 
-    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
-    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
-    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps);
 
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 TEST_CASE("Test matrix adjugate for 'multiprecision' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
+  using mpfr::mpreal;
 
-    using std::string;
-    using mpfr::mpreal;
+  using Mat3x3 = Matrix3x3<double>;
 
-    using Mat3x3 = Matrix3x3<double>;
+  constexpr int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
 
-    const int digits = 50;
-    mpreal::set_default_prec(mpfr::digits2bits(digits));
+  Mat3x3 m = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Mat3x3 m = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  Mat3x3 expected = {
+    {-3.0, 6.0, -3.0},
+    {6.0, -12.0, 6.0},
+    {-3.0, 6.0, -3.0}
+  };
 
-    Mat3x3 expected = {
-            {-3.0,  6.0,  -3.0},
-            { 6.0, -12.0,  6.0},
-            {-3.0,  6.0,  -3.0}};
+  mpreal eps = 1E-14;
 
-    mpreal eps = 1E-14;
+  Mat3x3 actual = adj(m);
 
-    Mat3x3 actual = adj(m);
+  REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps);
 
-    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
-    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
-    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps);
 
-    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
-    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
-    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
-
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 //###########################################################################//
@@ -703,48 +737,49 @@ TEST_CASE("Test matrix adjugate for 'multiprecision' type.", "Matrix3x3") {
 //###########################################################################//
 
 TEST_CASE("Test matrix determinant for 'double' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
 
-    using std::string;
-    using Mat3x3 = Matrix3x3<double>;
+  using Mat3x3 = Matrix3x3<double>;
 
-    Mat3x3 m = {
-            { 1.0,  2.0,  3.0},
-            { 0.0,  5.0,  6.0},
-            { 0.0,  0.0,  9.0}};
+  const Mat3x3 m = {
+    {1.0, 2.0, 3.0},
+    {0.0, 5.0, 6.0},
+    {0.0, 0.0, 9.0}
+  };
 
-    double expected = 45.0;
+  constexpr double expected = 45.0;
 
-    double eps = 1E-14;
+  constexpr double eps = 1E-14;
 
-    double actual = det(m);
+  const double actual = det(m);
 
-    REQUIRE(fabs(actual - expected) < eps );
-
+  REQUIRE(fabs(actual - expected) < eps);
 }
 
 TEST_CASE("Test matrix determinant for 'multiprecision' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
+  using mpfr::mpreal;
 
-    using std::string;
-    using mpfr::mpreal;
+  using Mat3x3 = Matrix3x3<double>;
 
-    using Mat3x3 = Matrix3x3<double>;
+  constexpr int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
 
-    const int digits = 50;
-    mpreal::set_default_prec(mpfr::digits2bits(digits));
+  const Mat3x3 m = {
+    {1.0, 2.0, 3.0},
+    {0.0, 5.0, 6.0},
+    {0.0, 0.0, 9.0}
+  };
 
-    Mat3x3 m = {
-            { 1.0,  2.0,  3.0},
-            { 0.0,  5.0,  6.0},
-            { 0.0,  0.0,  9.0}};
+  const mpreal expected = 45.0;
 
-    mpreal expected = 45.0;
+  const mpreal eps = 1E-14;
 
-    mpreal eps = 1E-14;
+  const mpreal actual = det(m);
 
-    mpreal actual = det(m);
-
-    REQUIRE(fabs(actual - expected) < eps );
-
+  REQUIRE(fabs(actual - expected) < eps);
 }
 
 //###########################################################################//
@@ -752,70 +787,77 @@ TEST_CASE("Test matrix determinant for 'multiprecision' type.", "Matrix3x3") {
 //###########################################################################//
 
 TEST_CASE("Test matrix transpose for 'double' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
 
-    using std::string;
-    using Mat3x3 = Matrix3x3<double>;
+  using Mat3x3 = Matrix3x3<double>;
 
-    Mat3x3 m = {{ 1.0, 2.0, 3.0},
-                { 4.0, 5.0, 6.0},
-                { 7.0, 8.0, 9.0}};
+  Mat3x3 m = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Mat3x3 expected = {{1.0, 4.0, 7.0},
-                       {2.0, 5.0, 8.0},
-                       {3.0, 6.0, 9.0}};
+  Mat3x3 expected = {
+    {1.0, 4.0, 7.0},
+    {2.0, 5.0, 8.0},
+    {3.0, 6.0, 9.0}
+  };
 
-    double eps = 1E-14;
+  double eps = 1E-14;
 
-    Mat3x3 actual = tr(m);
+  Mat3x3 actual = tr(m);
 
-    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
-    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
-    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps);
 
-    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
-    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
-    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps);
 
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 TEST_CASE("Test matrix transpose for 'multiprecision' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
+  using mpfr::mpreal;
 
-    using std::string;
-    using mpfr::mpreal;
+  using Mat3x3 = Matrix3x3<mpreal>;
 
-    using Mat3x3 = Matrix3x3<mpreal>;
+  constexpr int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
 
-    const int digits = 50;
-    mpreal::set_default_prec(mpfr::digits2bits(digits));
+  Mat3x3 m = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Mat3x3 m = {{ 1.0, 2.0, 3.0},
-                { 4.0, 5.0, 6.0},
-                { 7.0, 8.0, 9.0}};
+  Mat3x3 expected = {
+    {1.0, 4.0, 7.0},
+    {2.0, 5.0, 8.0},
+    {3.0, 6.0, 9.0}
+  };
 
-    Mat3x3 expected = {{1.0, 4.0, 7.0},
-                       {2.0, 5.0, 8.0},
-                       {3.0, 6.0, 9.0}};
+  mpreal eps = 1E-14;
 
-    mpreal eps = 1E-14;
+  Mat3x3 actual = tr(m);
 
-    Mat3x3 actual = tr(m);
+  REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps);
 
-    REQUIRE(fabs(actual(0, 0) - expected(0, 0)) < eps );
-    REQUIRE(fabs(actual(0, 1) - expected(0, 1)) < eps );
-    REQUIRE(fabs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps);
 
-    REQUIRE(fabs(actual(1, 0) - expected(1, 0)) < eps );
-    REQUIRE(fabs(actual(1, 1) - expected(1, 1)) < eps );
-    REQUIRE(fabs(actual(1, 2) - expected(1, 2)) < eps );
-
-    REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps );
-    REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps );
-    REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(fabs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(fabs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(fabs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 //###########################################################################//
@@ -823,62 +865,67 @@ TEST_CASE("Test matrix transpose for 'multiprecision' type.", "Matrix3x3") {
 //###########################################################################//
 
 TEST_CASE("Test matrix-matrix Frobenius product for 'double' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
 
-    using std::string;
-    using Mat3x3 = Matrix3x3<double>;
+  using Mat3x3 = Matrix3x3<double>;
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  const Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Mat3x3 m1 = {
-            {10.0, 11.0, 12.0},
-            {13.0, 14.0, 15.0},
-            {16.0, 17.0, 18.0}};
+  const Mat3x3 m1 = {
+    {10.0, 11.0, 12.0},
+    {13.0, 14.0, 15.0},
+    {16.0, 17.0, 18.0}
+  };
 
-    double expected = 1.0*10.0 + 2.0*11.0 + 3.0*12.0 +
-                      4.0*13.0 + 5.0*14.0 + 6.0*15.0 +
-                      7.0*16.0 + 8.0*17.0 + 9.0*18.0;  // 690.0
+  constexpr double expected =
+      1.0 * 10.0 + 2.0 * 11.0 + 3.0 * 12.0 +
+      4.0 * 13.0 + 5.0 * 14.0 + 6.0 * 15.0 +
+      7.0 * 16.0 + 8.0 * 17.0 + 9.0 * 18.0; // 690.0
 
-    double eps = 1E-14;
+  constexpr double eps = 1E-14;
 
-    double actual = dot(m0, m1);
+  const double actual = dot(m0, m1);
 
-    REQUIRE(fabs(actual - expected) < eps);
-
+  REQUIRE(fabs(actual - expected) < eps);
 }
 
 TEST_CASE("Test matrix-matrix Frobenius product for 'multiprecision' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
+  using mpfr::mpreal;
 
-    using std::string;
-    using mpfr::mpreal;
+  using Mat3x3 = Matrix3x3<double>;
 
-    using Mat3x3 = Matrix3x3<double>;
+  constexpr int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
 
-    const int digits = 50;
-    mpreal::set_default_prec(mpfr::digits2bits(digits));
+  const Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  const Mat3x3 m1 = {
+    {10.0, 11.0, 12.0},
+    {13.0, 14.0, 15.0},
+    {16.0, 17.0, 18.0}
+  };
 
-    Mat3x3 m1 = {
-            {10.0, 11.0, 12.0},
-            {13.0, 14.0, 15.0},
-            {16.0, 17.0, 18.0}};
+  constexpr double expected =
+      1.0 * 10.0 + 2.0 * 11.0 + 3.0 * 12.0 +
+      4.0 * 13.0 + 5.0 * 14.0 + 6.0 * 15.0 +
+      7.0 * 16.0 + 8.0 * 17.0 + 9.0 * 18.0; // 690.0
 
-    double expected = 1.0*10.0 + 2.0*11.0 + 3.0*12.0 +
-                      4.0*13.0 + 5.0*14.0 + 6.0*15.0 +
-                      7.0*16.0 + 8.0*17.0 + 9.0*18.0;  // 690.0
+  constexpr double eps = 1E-14;
 
-    double eps = 1E-14;
+  const double actual = dot(m0, m1);
 
-    double actual = dot(m0, m1);
-
-    REQUIRE(fabs(actual - expected) < eps);
-
+  REQUIRE(fabs(actual - expected) < eps);
 }
 
 //###########################################################################//
@@ -886,52 +933,57 @@ TEST_CASE("Test matrix-matrix Frobenius product for 'multiprecision' type.", "Ma
 //###########################################################################//
 
 TEST_CASE("Test matrix Frobenius norm for 'double' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
 
-    using std::string;
-    using Mat3x3 = Matrix3x3<double>;
+  using Mat3x3 = Matrix3x3<double>;
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  const Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    double expected = sqrt(1.0*1.0 + 2.0*2.0 + 3.0*3.0 +
-                           4.0*4.0 + 5.0*5.0 + 6.0*6.0 +
-                           7.0*7.0 + 8.0*8.0 + 9.0*9.0);  // 16.881943016134134
+  const double expected = sqrt(
+    1.0 * 1.0 + 2.0 * 2.0 + 3.0 * 3.0 +
+    4.0 * 4.0 + 5.0 * 5.0 + 6.0 * 6.0 +
+    7.0 * 7.0 + 8.0 * 8.0 + 9.0 * 9.0
+  ); // 16.881943016134134
 
-    double eps = 1E-14;
+  constexpr double eps = 1E-14;
 
-    double actual = norm(m0);
+  const double actual = norm(m0);
 
-    REQUIRE(fabs(actual - expected) < eps);
-
+  REQUIRE(fabs(actual - expected) < eps);
 }
 
 TEST_CASE("Test matrix Frobenius norm for 'multiprecision' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
+  using mpfr::mpreal;
 
-    using std::string;
-    using mpfr::mpreal;
+  using Mat3x3 = Matrix3x3<mpreal>;
 
-    using Mat3x3 = Matrix3x3<mpreal>;
+  constexpr int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
 
-    const int digits = 50;
-    mpreal::set_default_prec(mpfr::digits2bits(digits));
+  const Mat3x3 m0 = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Mat3x3 m0 = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  const auto expected = mpfr::sqrt(
+    1.0 * 1.0 + 2.0 * 2.0 + 3.0 * 3.0 +
+    4.0 * 4.0 + 5.0 * 5.0 + 6.0 * 6.0 +
+    7.0 * 7.0 + 8.0 * 8.0 + 9.0 * 9.0
+  ); // 16.881943016134134
 
-    auto expected = mpfr::sqrt(1.0*1.0 + 2.0*2.0 + 3.0*3.0 +
-                               4.0*4.0 + 5.0*5.0 + 6.0*6.0 +
-                               7.0*7.0 + 8.0*8.0 + 9.0*9.0);  // 16.881943016134134
+  const mpreal eps = 1E-14;
 
-    mpreal eps = 1E-14;
+  const mpreal actual = norm(m0);
 
-    mpreal actual = norm(m0);
-
-    REQUIRE(fabs(actual - expected) < eps);
-
+  REQUIRE(fabs(actual - expected) < eps);
 }
 
 //###########################################################################//
@@ -939,53 +991,55 @@ TEST_CASE("Test matrix Frobenius norm for 'multiprecision' type.", "Matrix3x3") 
 //###########################################################################//
 
 TEST_CASE("Test matrix diagonal for 'double' type.", "Matrix3x3") {
-    using std::string;
-    using Mat3x3 = Matrix3x3<double>;
-    using Vec3 = Vector3D<double>;
+  using namespace amiga;
+  using std::string;
 
-    Mat3x3 m = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  using Mat3x3 = Matrix3x3<double>;
+  using Vec3 = Vector3D<double>;
 
-    Vec3 expected = {1.0, 5.0, 9.0};
+  const Mat3x3 m = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    double eps = 1E-14;
+  const Vec3 expected = {1.0, 5.0, 9.0};
 
-    Vec3 actual = diag(m);
+  constexpr double eps = 1E-14;
 
-    REQUIRE(fabs(actual.x() - expected.x()) < eps );
-    REQUIRE(fabs(actual.y() - expected.y()) < eps );
-    REQUIRE(fabs(actual.z() - expected.z()) < eps );
+  const Vec3 actual = diag(m);
 
+  REQUIRE(fabs(actual.x() - expected.x()) < eps);
+  REQUIRE(fabs(actual.y() - expected.y()) < eps);
+  REQUIRE(fabs(actual.z() - expected.z()) < eps);
 }
 
 TEST_CASE("Test matrix diagonal for 'multiprecision' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
+  using mpfr::mpreal;
 
-    using std::string;
-    using mpfr::mpreal;
+  using Mat3x3 = Matrix3x3<mpreal>;
+  using Vec3 = Vector3D<mpreal>;
 
-    using Mat3x3 = Matrix3x3<mpreal>;
-    using Vec3 = Vector3D<mpreal>;
+  constexpr int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
 
-    const int digits = 50;
-    mpreal::set_default_prec(mpfr::digits2bits(digits));
+  const Mat3x3 m = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Mat3x3 m = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  const Vec3 expected = {1.0, 5.0, 9.0};
 
-    Vec3 expected = {1.0, 5.0, 9.0};
+  constexpr double eps = 1E-14;
 
-    double eps = 1E-14;
+  const Vec3 actual = diag(m);
 
-    Vec3 actual = diag(m);
-
-    REQUIRE(fabs(actual.x() - expected.x()) < eps );
-    REQUIRE(fabs(actual.y() - expected.y()) < eps );
-    REQUIRE(fabs(actual.z() - expected.z()) < eps );
-
+  REQUIRE(fabs(actual.x() - expected.x()) < eps);
+  REQUIRE(fabs(actual.y() - expected.y()) < eps);
+  REQUIRE(fabs(actual.z() - expected.z()) < eps);
 }
 
 //###########################################################################//
@@ -993,48 +1047,49 @@ TEST_CASE("Test matrix diagonal for 'multiprecision' type.", "Matrix3x3") {
 //###########################################################################//
 
 TEST_CASE("Test matrix trace for 'double' type.", "Matrix3x3") {
-    using std::string;
-    using Mat3x3 = Matrix3x3<double>;
+  using namespace amiga;
+  using std::string;
 
-    Mat3x3 m = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  using Mat3x3 = Matrix3x3<double>;
 
-    double expected = 15.0;
+  const Mat3x3 m = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    double eps = 1E-14;
+  constexpr double expected = 15.0;
 
-    double actual = trace(m);
+  constexpr double eps = 1E-14;
 
-    REQUIRE(fabs(actual - expected) < eps );
+  const double actual = trace(m);
 
+  REQUIRE(fabs(actual - expected) < eps);
 }
 
 TEST_CASE("Test matrix trace for 'multiprecision' type.", "Matrix3x3") {
+  using namespace amiga;
+  using std::string;
+  using mpfr::mpreal;
 
-    using std::string;
-    using mpfr::mpreal;
+  using Mat3x3 = Matrix3x3<mpreal>;
 
-    using Mat3x3 = Matrix3x3<mpreal>;
-    using Vec3 = Vector3D<mpreal>;
+  constexpr int digits = 50;
+  mpreal::set_default_prec(mpfr::digits2bits(digits));
 
-    const int digits = 50;
-    mpreal::set_default_prec(mpfr::digits2bits(digits));
+  const Mat3x3 m = {
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
+  };
 
-    Mat3x3 m = {
-            { 1.0,  2.0,  3.0},
-            { 4.0,  5.0,  6.0},
-            { 7.0,  8.0,  9.0}};
+  const mpreal expected = 15.0;
 
-    mpreal expected = 15.0;
+  const mpreal eps = 1E-14;
 
-    mpreal eps = 1E-14;
+  const mpreal actual = trace(m);
 
-    mpreal actual = trace(m);
-
-    REQUIRE(fabs(actual - expected) < eps );
-
+  REQUIRE(fabs(actual - expected) < eps);
 }
 
 //###########################################################################//
@@ -1042,7 +1097,9 @@ TEST_CASE("Test matrix trace for 'multiprecision' type.", "Matrix3x3") {
 //###########################################################################//
 
 TEST_CASE("Test column matrix for 'double' type.", "Matrix3x3") {
+  using namespace amiga;
   using std::string;
+
   using Mat3x3 = Matrix3x3<double>;
   using Vec3 = Vector3D<double>;
 
@@ -1051,38 +1108,37 @@ TEST_CASE("Test column matrix for 'double' type.", "Matrix3x3") {
   Vec3 v3 = {7.0, 8.0, 9.0};
 
   Mat3x3 expected = {
-      { 1.0, 4.0, 7.0},
-      { 2.0, 5.0, 8.0},
-      { 3.0, 6.0, 9.0}
+    {1.0, 4.0, 7.0},
+    {2.0, 5.0, 8.0},
+    {3.0, 6.0, 9.0}
   };
 
   double eps = 1E-14;
 
   Mat3x3 actual = column_matrix(v1, v2, v3);
 
-  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps );
-  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps );
-  REQUIRE(abs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(abs(actual(0, 2) - expected(0, 2)) < eps);
 
-  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps );
-  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps );
-  REQUIRE(abs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(abs(actual(1, 2) - expected(1, 2)) < eps);
 
-  REQUIRE(abs(actual(2, 0) - expected(2, 0)) < eps );
-  REQUIRE(abs(actual(2, 1) - expected(2, 1)) < eps );
-  REQUIRE(abs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(abs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(abs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(abs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 TEST_CASE("Test column matrix for 'multiprecision' type.", "Matrix3x3") {
-
+  using namespace amiga;
   using std::string;
   using mpfr::mpreal;
 
   using Mat3x3 = Matrix3x3<mpreal>;
   using Vec3 = Vector3D<mpreal>;
 
-  const int digits = 50;
+  constexpr int digits = 50;
   mpreal::set_default_prec(mpfr::digits2bits(digits));
 
   Vec3 v1 = {1.0, 2.0, 3.0};
@@ -1090,27 +1146,26 @@ TEST_CASE("Test column matrix for 'multiprecision' type.", "Matrix3x3") {
   Vec3 v3 = {7.0, 8.0, 9.0};
 
   Mat3x3 expected = {
-      { 1.0, 4.0, 7.0},
-      { 2.0, 5.0, 8.0},
-      { 3.0, 6.0, 9.0}
+    {1.0, 4.0, 7.0},
+    {2.0, 5.0, 8.0},
+    {3.0, 6.0, 9.0}
   };
 
   double eps = 1E-14;
 
   Mat3x3 actual = column_matrix(v1, v2, v3);
 
-  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps );
-  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps );
-  REQUIRE(abs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(abs(actual(0, 2) - expected(0, 2)) < eps);
 
-  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps );
-  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps );
-  REQUIRE(abs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(abs(actual(1, 2) - expected(1, 2)) < eps);
 
-  REQUIRE(abs(actual(2, 0) - expected(2, 0)) < eps );
-  REQUIRE(abs(actual(2, 1) - expected(2, 1)) < eps );
-  REQUIRE(abs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(abs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(abs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(abs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 //###########################################################################//
@@ -1118,7 +1173,9 @@ TEST_CASE("Test column matrix for 'multiprecision' type.", "Matrix3x3") {
 //###########################################################################//
 
 TEST_CASE("Test row matrix for 'double' type.", "Matrix3x3") {
+  using namespace amiga;
   using std::string;
+
   using Mat3x3 = Matrix3x3<double>;
   using Vec3 = Vector3D<double>;
 
@@ -1127,38 +1184,37 @@ TEST_CASE("Test row matrix for 'double' type.", "Matrix3x3") {
   Vec3 v3 = {7.0, 8.0, 9.0};
 
   Mat3x3 expected = {
-      { 1.0, 2.0, 3.0},
-      { 4.0, 5.0, 6.0},
-      { 7.0, 8.0, 9.0}
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
   };
 
   double eps = 1E-14;
 
   Mat3x3 actual = row_matrix(v1, v2, v3);
 
-  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps );
-  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps );
-  REQUIRE(abs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(abs(actual(0, 2) - expected(0, 2)) < eps);
 
-  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps );
-  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps );
-  REQUIRE(abs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(abs(actual(1, 2) - expected(1, 2)) < eps);
 
-  REQUIRE(abs(actual(2, 0) - expected(2, 0)) < eps );
-  REQUIRE(abs(actual(2, 1) - expected(2, 1)) < eps );
-  REQUIRE(abs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(abs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(abs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(abs(actual(2, 2) - expected(2, 2)) < eps);
 }
 
 TEST_CASE("Test row matrix for 'multiprecision' type.", "Matrix3x3") {
-
+  using namespace amiga;
   using std::string;
   using mpfr::mpreal;
 
   using Mat3x3 = Matrix3x3<mpreal>;
   using Vec3 = Vector3D<mpreal>;
 
-  const int digits = 50;
+  constexpr int digits = 50;
   mpreal::set_default_prec(mpfr::digits2bits(digits));
 
   Vec3 v1 = {1.0, 2.0, 3.0};
@@ -1166,25 +1222,24 @@ TEST_CASE("Test row matrix for 'multiprecision' type.", "Matrix3x3") {
   Vec3 v3 = {7.0, 8.0, 9.0};
 
   Mat3x3 expected = {
-      { 1.0, 2.0, 3.0},
-      { 4.0, 5.0, 6.0},
-      { 7.0, 8.0, 9.0}
+    {1.0, 2.0, 3.0},
+    {4.0, 5.0, 6.0},
+    {7.0, 8.0, 9.0}
   };
 
   double eps = 1E-14;
 
   Mat3x3 actual = row_matrix(v1, v2, v3);
 
-  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps );
-  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps );
-  REQUIRE(abs(actual(0, 2) - expected(0, 2)) < eps );
+  REQUIRE(abs(actual(0, 0) - expected(0, 0)) < eps);
+  REQUIRE(abs(actual(0, 1) - expected(0, 1)) < eps);
+  REQUIRE(abs(actual(0, 2) - expected(0, 2)) < eps);
 
-  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps );
-  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps );
-  REQUIRE(abs(actual(1, 2) - expected(1, 2)) < eps );
+  REQUIRE(abs(actual(1, 0) - expected(1, 0)) < eps);
+  REQUIRE(abs(actual(1, 1) - expected(1, 1)) < eps);
+  REQUIRE(abs(actual(1, 2) - expected(1, 2)) < eps);
 
-  REQUIRE(abs(actual(2, 0) - expected(2, 0)) < eps );
-  REQUIRE(abs(actual(2, 1) - expected(2, 1)) < eps );
-  REQUIRE(abs(actual(2, 2) - expected(2, 2)) < eps );
-
+  REQUIRE(abs(actual(2, 0) - expected(2, 0)) < eps);
+  REQUIRE(abs(actual(2, 1) - expected(2, 1)) < eps);
+  REQUIRE(abs(actual(2, 2) - expected(2, 2)) < eps);
 }
