@@ -9,6 +9,7 @@
 #include <ostream>
 #include <utility>
 
+namespace amiga {
 /**
  * An implementation of a three dimensional cartesian vector.
  * @tparam T the underlying data type for the calculation - usually ‘double’ or
@@ -284,5 +285,6 @@ template <typename T>
 T mfold(const Vector4D<T> &v) {
   return v.x() * v.y() * v.z() * v.w();
 }
+} // namespace amiga
 
 #endif // LIBFABBRI_VECTOR4D_HPP

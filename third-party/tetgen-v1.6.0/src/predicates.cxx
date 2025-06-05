@@ -123,7 +123,7 @@
 #include <fpu_control.h>
 #endif /* LINUX */
 
-#include "../tetgen.h"
+#include "tetgen.h"
 
 #ifdef USE_CGAL_PREDICATES
   #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>

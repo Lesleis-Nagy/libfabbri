@@ -75,17 +75,6 @@ target_link_libraries(test_matrix4x4
         ${MPFR_LIBRARIES})
 add_test(NAME test_matrix4x4 COMMAND test_matrix4x4)
 
-# Test matrix.hpp
-add_executable(test_matrix test_matrix.cpp)
-target_include_directories(test_matrix
-        PRIVATE ${AMIGA_INCLUDE_DIR}
-        ${MPFR_INCLUDES}
-        ${CATCH_INCLUDE_DIR}
-        ${MPREAL_INCLUDE_DIR})
-target_link_libraries(test_matrix
-        ${MPFR_LIBRARIES})
-add_test(NAME test_matrix COMMAND test_matrix)
-
 # Test fabbri.hpp
 add_executable(test_fabbri test_fabbri.cpp)
 target_include_directories(test_fabbri

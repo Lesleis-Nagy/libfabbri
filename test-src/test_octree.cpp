@@ -10,15 +10,17 @@
 #include "amiga/trees/octree.hpp"
 
 TEST_CASE("is_leaf()", "[OctreeNode]") {
-    VertexList3D<double> vcl = {
+    using namespace amiga;
+
+    const VertexList3D<double> vcl = {
         {0, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}
     };
 
-    IndexTupleList<4> til = {
+    const IndexTupleList<4> til = {
         {0, 1, 2, 3}
     };
 
-    OctreeNode<double> node(
+    const OctreeNode<double> node(
         vcl,
         til,
         {0.0, 0.0, 0.0},
@@ -32,6 +34,8 @@ TEST_CASE("is_leaf()", "[OctreeNode]") {
 }
 
 TEST_CASE("is_right_child()", "[OctreeNode]") {
+    using namespace amiga;
+
     VertexList3D<double> vcl = {
         {0, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}
     };
@@ -69,6 +73,8 @@ TEST_CASE("is_right_child()", "[OctreeNode]") {
 }
 
 TEST_CASE("is_top_child()", "[OctreeNode]") {
+    using namespace amiga;
+
     VertexList3D<double> vcl = {
         {0, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}
     };
@@ -106,6 +112,8 @@ TEST_CASE("is_top_child()", "[OctreeNode]") {
 }
 
 TEST_CASE("is_front_child()", "[OctreeNode]") {
+    using namespace amiga;
+
     VertexList3D<double> vcl = {
         {0, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}
     };
@@ -143,6 +151,8 @@ TEST_CASE("is_front_child()", "[OctreeNode]") {
 }
 
 TEST_CASE("which_child()", "[OctreeNode]") {
+    using namespace amiga;
+
     VertexList3D<double> vcl = {
         {0, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}
     };
@@ -180,6 +190,8 @@ TEST_CASE("which_child()", "[OctreeNode]") {
 }
 
 TEST_CASE("which_child() - indices", "[OctreeNode]") {
+    using namespace amiga;
+
     VertexList3D<double> vcl = {
         {0.50000, -0.00424, 0.00000},
         {-0.00424, -0.50000, 0.00000},
@@ -261,6 +273,8 @@ TEST_CASE("which_child() - indices", "[OctreeNode]") {
 }
 
 TEST_CASE("centroid()", "[OctreeNode]") {
+    using namespace amiga;
+
     VertexList3D<double> vcl = {
         {0.50000, -0.00424, 0.00000},
         {-0.00424, -0.50000, 0.00000},
@@ -352,6 +366,8 @@ TEST_CASE("centroid()", "[OctreeNode]") {
 }
 
 TEST_CASE("child_corners()", "[OctreeNode]") {
+    using namespace amiga;
+
     VertexList3D<double> vcl = {
         {0, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}
     };
@@ -470,6 +486,8 @@ TEST_CASE("child_corners()", "[OctreeNode]") {
 }
 
 TEST_CASE("Octree: Basic tree construction", "[Octree]") {
+    using namespace amiga;
+
     VertexList3D<double> vcl = {
         {0, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}
     };
@@ -491,6 +509,8 @@ TEST_CASE("Octree: Basic tree construction", "[Octree]") {
 }
 
 TEST_CASE("Octree: find_leaf_index_containing_tet_index", "[Octree]") {
+    using namespace amiga;
+
     VertexList3D<double> vcl = {
         {0.037168885097203, 0.037168885097203, 0.500000000000000},
         {0.000000000000000, -0.500000000000000, 0.500000000000000},

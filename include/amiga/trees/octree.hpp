@@ -8,25 +8,26 @@
 #include "amiga/geometry.hpp"
 #include "amiga/tetrahedron.hpp"
 
+namespace amiga {
 /**
  * The sum-code.
  */
 enum OctreeSumCode {
-  /// Octree sum-code for back, bottom, left sub-cuboid.
+  /// Octree sum-code for back, bottom, left subcuboid.
   OCTREE_POSITION_BBL = 0,
-  /// Octree sum-code for back, bottom, right sub-cuboid.
+  /// Octree sum-code for back, bottom, right subcuboid.
   OCTREE_POSITION_BBR = 1,
-  /// Octree sum-code for back, top, left sub-cuboid.
+  /// Octree sum-code for back, top, left subcuboid.
   OCTREE_POSITION_BTL = 2,
-  /// Octree sum-code for back, top, right sub-cuboid.
+  /// Octree sum-code for back, top, right subcuboid.
   OCTREE_POSITION_BTR = 3,
-  /// Octree sum-code for front, bottom, left sub-cuboid.
+  /// Octree sum-code for front, bottom, left subcuboid.
   OCTREE_POSITION_FBL = 4,
-  /// Octree sum-code for front, bottom, right sub-cuboid.
+  /// Octree sum-code for front, bottom, right subcuboid.
   OCTREE_POSITION_FBR = 5,
-  /// Octree sum-code for front, top, left sub-cuboid.
+  /// Octree sum-code for front, top, left subcuboid.
   OCTREE_POSITION_FTL = 6,
-  /// Octree sum-code for front, top, right sub-cuboid.
+  /// Octree sum-code for front, top, right subcuboid.
   OCTREE_POSITION_FTR = 7,
 };
 
@@ -183,13 +184,13 @@ class OctreeNode {
       if ((r_min_.x() <= r.x()) && (r.x() < r_mid.x())) {
         // Left
         return 0;
-      } else if ((r_mid.x() <= r.x()) && (r.x() <= r_max_.x())) {
+      }
+      if ((r_mid.x() <= r.x()) && (r.x() <= r_max_.x())) {
         // Right
         return 1;
-      } else {
-        throw std::runtime_error(
-          "Proposed position vector is not in the tree!");
       }
+      throw std::runtime_error(
+        "Proposed position vector is not in the tree!");
     }
 
     /**
@@ -205,13 +206,14 @@ class OctreeNode {
       if ((r_min_.y() <= r.y()) && (r.y() < r_mid.y())) {
         // Bottom
         return 0;
-      } else if ((r_mid.y() <= r.y()) && (r.y() <= r_max_.y())) {
+      }
+      if ((r_mid.y() <= r.y()) && (r.y() <= r_max_.y())) {
         // Top
         return 2;
-      } else {
-        throw std::runtime_error(
-          "Proposed position vector is not in the tree!");
       }
+      throw std::runtime_error(
+        "Proposed position vector is not in the tree!"
+      );
     }
 
     /**
@@ -227,13 +229,14 @@ class OctreeNode {
       if ((r_min_.z() <= r.z()) && (r.z() < r_mid.z())) {
         // Bottom
         return 0;
-      } else if ((r_mid.z() <= r.z()) && (r.z() <= r_max_.z())) {
+      }
+      if ((r_mid.z() <= r.z()) && (r.z() <= r_max_.z())) {
         // Top
         return 4;
-      } else {
-        throw std::runtime_error(
-          "Proposed position vector is not in the tree!");
       }
+      throw std::runtime_error(
+        "Proposed position vector is not in the tree!"
+      );
     }
 
     /**
@@ -243,9 +246,9 @@ class OctreeNode {
      */
     [[nodiscard]] OctreeSumCode
     which_child(const Vector3D<T>& r) const {
-      int left = is_right_child(r);
-      int top = is_top_child(r);
-      int front = is_front_child(r);
+      const int left = is_right_child(r);
+      const int top = is_top_child(r);
+      const int front = is_front_child(r);
 
       return static_cast<OctreeSumCode>(left + top + front);
     }
@@ -254,10 +257,10 @@ class OctreeNode {
      * Compute the sum-code index of the child that a proposed vertex is in.
      * of this node.
      * @param i the index of the vertex.
-     * @return the osctree sum-code of the i-th vertex.
+     * @return the octree sum-code of the i-th vertex.
      */
     [[nodiscard]] OctreeSumCode
-    which_child(size_t i) const {
+    which_child(const size_t i) const {
       auto r_c = centroid(i);
       return which_child(r_c);
     }
@@ -269,7 +272,7 @@ class OctreeNode {
      *        the dimensions.
      */
     [[nodiscard]] std::pair<Vector3D<T>, Vector3D<T> >
-    child_corners(OctreeSumCode p) {
+    child_corners(const OctreeSumCode p) {
       auto r_mid = (r_min_ + r_max_) / T(2);
       switch (p) {
         case OCTREE_POSITION_BBR:
@@ -322,7 +325,7 @@ class OctreeNode {
      * @return the centroid of the tetrahedron with index i.
      */
     [[nodiscard]] Vector3D<T>
-    centroid(int i) const {
+    centroid(const int i) const {
       auto [n0, n1, n2, n3] = til_[i];
       return (vcl_[n0] + vcl_[n1] + vcl_[n2] + vcl_[n3]) / T(4);
     }
@@ -333,7 +336,7 @@ class OctreeNode {
      * @param tet_index the tetrahedron index to add.
      */
     void
-    add_tet_index(int tet_index) {
+    add_tet_index(const int tet_index) {
       tet_indices_.push_back(tet_index);
     }
 
@@ -369,7 +372,7 @@ class OctreeNode {
      * @param index the octree node's index.
      */
     void
-    set_index(int index) {
+    set_index(const int index) {
       index_ = index;
     }
 
@@ -387,7 +390,7 @@ class OctreeNode {
      * @param parent the new parent index
      */
     void
-    set_parent(int parent) {
+    set_parent(const int parent) {
       parent_ = parent;
     }
 
@@ -405,12 +408,12 @@ class OctreeNode {
      * @param depth the new depth.
      */
     void
-    set_depth(int depth) {
+    set_depth(const int depth) {
       depth_ = depth;
     }
 
     [[nodiscard]] int
-    child(OctreeSumCode sum_code) const {
+    child(const OctreeSumCode sum_code) const {
       return children_[sum_code];
     }
 
@@ -438,7 +441,7 @@ class OctreeNode {
      * @param index the new value of the child index.
      */
     void
-    set_child(OctreeSumCode sum_code, int index) {
+    set_child(const OctreeSumCode sum_code, const int index) {
       children_[sum_code] = index;
     }
 
@@ -477,7 +480,7 @@ class OctreeNode {
     }
 
     /**
-     * Retreive the extents of the node
+     * Retrieve the extents of the node
      * @return extents
      */
     [[nodiscard]] Vector3D<T>
@@ -517,9 +520,13 @@ class OctreeNode {
 template<typename T, int MAX_PER_NODE, int MAX_DEPTH>
 class Octree {
   public:
-    Octree(const VertexList3D<T>& vcl,
-           const VectorListList3D<T>& fields,
-           const IndexTupleList<4>& til) : vcl_(vcl), fields_(fields), til_(til) {
+    Octree(
+      const VertexList3D<T>& vcl,
+      const VectorListList3D<T>& fields,
+      const IndexTupleList<4>& til
+    ) : vcl_(vcl),
+        fields_(fields),
+        til_(til) {
       T r_min_x = vcl_[0].x();
       T r_min_y = vcl_[0].y();
       T r_min_z = vcl_[0].z();
@@ -528,7 +535,6 @@ class Octree {
       T r_max_z = vcl_[0].z();
 
       // Compute the extents of the first octree node.
-      Vector3D<T> r_max = vcl_[0];
       for (const auto& r : vcl_) {
         if (r.x() < r_min_x) r_min_x = r.x();
         if (r.y() < r_min_y) r_min_y = r.y();
@@ -564,7 +570,7 @@ class Octree {
      * @return the vector position of the centroid.
      */
     [[nodiscard]] Vector3D<T>
-    centroid(size_t tid) const {
+    centroid(const size_t tid) const {
       auto [n0, n1, n2, n3] = til_[tid];
       return (vcl_[n0] + vcl_[n1] + vcl_[n2] + vcl_[n3]) / T(4);
     }
@@ -581,7 +587,6 @@ class Octree {
         const auto& node = nodes_[node_index];
 
         if (node.is_leaf()) {
-          bool contains = false;
           for (auto tet_id2 : node.tet_indices()) {
             if (tet_id2 == tet_id) {
               return node.index();
@@ -599,13 +604,12 @@ class Octree {
     }
 
     [[nodiscard]] std::optional<std::reference_wrapper<const OctreeNode<T>> >
-    find_leaf_containing_tet_index(int tet_id) {
+    find_leaf_containing_tet_index(const int tet_id) {
       int leaf_index = find_leaf_index_containing_tet_index(tet_id);
       if (leaf_index == -1) {
         return std::nullopt;
-      } else {
-        return nodes_[leaf_index];
       }
+      return nodes_[leaf_index];
     }
 
     /**
@@ -615,8 +619,8 @@ class Octree {
     void
     write_dot(const std::string& file_name) const {
       // Open the file.
-      std::ofstream fout_dot(file_name);
-      if (!fout_dot.is_open()) {
+      std::ofstream os(file_name);
+      if (!os.is_open()) {
         std::cerr << "Error:";
         std::cerr << " could not open file: '" << file_name << "'" << std::endl;
         return;
@@ -681,32 +685,31 @@ class Octree {
       }
 
       // Write the directed graph
-      fout_dot << "digraph G{" << std::endl;
-      fout_dot << "    " <<
+      os << "digraph G{" << std::endl;
+      os << "    " <<
           "graph [splines=ortho, rankdir=LR, nodesep=0.5, overlap=false];" <<
           std::endl;
-      fout_dot << "    " << "node [shape=box];" << std::endl;
+      os << "    " << "node [shape=box];" << std::endl;
 
       // Write nodes
       for (const auto& str_node : nodes) {
-        fout_dot << str_node << std::endl;
+        os << str_node << std::endl;
       }
 
       // Write directed edges
       for (const auto& str_edge : edges) {
-        fout_dot << str_edge << std::endl;
+        os << str_edge << std::endl;
       }
 
       // Close the graph
-      fout_dot << "}" << std::endl;
+      os << "}" << std::endl;
 
       // Close the file
-      fout_dot.close();
+      os.close();
     }
 
     /**
      * Retrieve all the nodes in the tree.
-     * @param the octree nodes.
      */
     [[nodiscard]] const std::vector<OctreeNode<T> >&
     nodes() {
@@ -731,9 +734,8 @@ class Octree {
     const IndexTupleList<4>& til_;
 
     /**
-     * Splits a node in to eight child nodes - this function will create eight
-     * new child nodes, `node`s children then refer to the indices of the eight
-     * nodes, these indices are returned.
+     * Splits a node in to eight child nodes - this function will create eight new child nodes,
+     * nodes children then refer to the indices of the eight nodes, these indices are returned.
      * @param node_index the index of the node to be split.
      * @return the indices of the new nodes (in sum-code position).
      */
@@ -741,7 +743,7 @@ class Octree {
     split(int node_index) {
       // The output of the function is a list of indices of octree nodes, the
       // position of each octree node index is the sum-code.
-      std::array<int, 8> octree_node_indices = {-1, -1, -1, -1, -1, -1, -1, -1};
+      std::array octree_node_indices = {-1, -1, -1, -1, -1, -1, -1, -1};
 
       if (nodes_[node_index].is_leaf()) {
         // If the node is a leaf, we split it in to its eight children.
@@ -771,7 +773,7 @@ class Octree {
           child_node.set_parent(nodes_[node_index].index());
 
           // Update the index of the child node in the node.
-          nodes_[node_index].set_child(OctreeSumCode(sum_code), new_node_index);
+          nodes_[node_index].set_child(static_cast<OctreeSumCode>(sum_code), new_node_index);
 
           octree_node_indices[sum_code] = new_node_index;
         }
@@ -893,5 +895,5 @@ class Octree {
       }
     }
 };
-
+} // namespace amiga
 #endif //LIBFABBRI_INCLUDE_TREES_OCTREE_HPP_

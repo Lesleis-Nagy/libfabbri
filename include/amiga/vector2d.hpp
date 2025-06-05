@@ -9,8 +9,9 @@
 #include <ostream>
 #include <utility>
 
+namespace amiga {
 /**
- * An implementation of a three dimensional cartesian vector.
+ * An implementation of a two-dimensional cartesian vector.
  * @tparam T the underlying data type for the calculation.
  */
 template <typename T>
@@ -25,8 +26,8 @@ class Vector2D {
      */
     static void set_eps(T new_eps) {
 
-      _eps = new_eps;
-      _eps_squared = new_eps * new_eps;
+      eps_ = new_eps;
+      eps_squared_ = new_eps * new_eps;
 
     }
 
@@ -36,7 +37,7 @@ class Vector2D {
      */
     static T eps() {
 
-      return _eps;
+      return eps_;
 
     }
 
@@ -46,66 +47,58 @@ class Vector2D {
      */
     static T eps_squared() {
 
-      return _eps_squared;
+      return eps_squared_;
 
     }
 
     /**
-     * Create a three dimensional zero-vector object.
+     * Create a two-dimensional zero-vector object.
      */
-    Vector2D(): _x{0.0, 0.0}, _dim(2) {}
+    Vector2D(): x_{0.0, 0.0} {}
 
     /**
-     * Create a three dimensional vector object with the given x, y & z
+     * Create a two-dimensional vector object with the given x, y & z
      * components along with a regularisation-epsilon value.
      * @param x the vector x component.
      * @param y the vector y component.
      */
-    Vector2D(T x, T y): _x{x, y} {}
+    Vector2D(T x, T y): x_{x, y} {}
 
     /**
      * Retrieve the vector's x-component.
      * @return the vector's x-component.
      */
-    [[nodiscard]] inline T x() const { return _x[0]; }
+    [[nodiscard]] T x() const { return x_[0]; }
 
     /**
      * Retrieve the vector's y-component.
      * @return the vector's y-component.
      */
-    [[nodiscard]] inline T y() const { return _x[1]; }
+    [[nodiscard]] T y() const { return x_[1]; }
 
     /**
      * Retrieve the vector's ith component.
      * @param idx the index of the component.
      * @return the vector component.
      */
-    [[nodiscard]] T operator()(size_t idx) const { return _x[idx]; }
-
-    /**
-     * Retrieve the dimension of the vector.
-     * @return the dimension of the vector.
-     */
-    [[nodiscard]] int dim() const { return _dim; }
-
+    [[nodiscard]] T operator()(size_t idx) const { return x_[idx]; }
 
   private:
 
-    std::array<T, 2> _x;
-    int _dim;
+    std::array<T, 2> x_;
 
-    [[maybe_unused]] static T _eps;
-    [[maybe_unused]] static T _eps_squared;
+    [[maybe_unused]] static T eps_;
+    [[maybe_unused]] static T eps_squared_;
 
 };
 
 // Initialize static eps & eps_squared values to defaults for double precision
 // arithmetic.
 template <typename T>
-T Vector2D<T>::_eps = 1E-7;
+T Vector2D<T>::eps_ = 1E-7;
 
 template <typename T>
-T Vector2D<T>::_eps_squared = 1E-14;
+T Vector2D<T>::eps_squared_ = 1E-14;
 
 /**
  * Redirection operator to display the vector.
@@ -287,5 +280,6 @@ template <typename T>
 T mfold(const Vector2D<T> &v) {
   return v.x() * v.y();
 }
+} // namespace amiga
 
 #endif // LIBFABBRI_VECTOR2D_HPP

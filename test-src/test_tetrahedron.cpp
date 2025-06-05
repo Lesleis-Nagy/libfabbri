@@ -7,9 +7,10 @@
 
 #include <iostream>
 
-#include "../include/amiga/tetrahedron.hpp"
+#include "amiga/tetrahedron.hpp"
 
 TEST_CASE("Test FreeTetrahedron", "[FreeTetrahedron]") {
+  using namespace amiga;
 
   Tetrahedron<double> *tet = new FreeTetrahedron<double>{
       {0.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}
@@ -29,6 +30,7 @@ TEST_CASE("Test FreeTetrahedron", "[FreeTetrahedron]") {
 }
 
 TEST_CASE("Test BoundTetrahedron", "[BoundTetrahedron]") {
+  using namespace amiga;
 
   VertexList3D<double> vcl = {
       {0.0, 0.0, 0.0},

@@ -9,8 +9,9 @@
 #include <ostream>
 #include <utility>
 
+namespace amiga {
 /**
- * An implementation of a three dimensional cartesian vector.
+ * An implementation of a three-dimensional cartesian vector.
  * @tparam T the underlying data type for the calculation - usually ‘double’ or
  *           ‘mpreal’.
  */
@@ -25,10 +26,8 @@ class Vector3D {
      * @param new_eps the new regularisation-epsilon.
      */
     static void set_eps(T new_eps) {
-
       _eps = new_eps;
       _eps_squared = new_eps * new_eps;
-
     }
 
     /**
@@ -36,9 +35,7 @@ class Vector3D {
      * @return the regularisation-epsilon.
      */
     static T eps() {
-
       return _eps;
-
     }
 
     /**
@@ -46,60 +43,46 @@ class Vector3D {
      * @return the regularisation-epsilon squared.
      */
     static T eps_squared() {
-
       return _eps_squared;
-
     }
 
     /**
-     * Create a three dimensional zero-vector object.
-     */
-    Vector3D(): _x{0.0, 0.0, 0.0}, _dim(3) {}
-
-    /**
-     * Create a three dimensional vector object with the given x, y & z
+     * Create a three-dimensional vector object with the given x, y & z
      * components along with a regularisation-epsilon value.
      * @param x the vector x component.
      * @param y the vector y component.
      * @param z the vector z component.
      */
-    Vector3D(T x, T y, T z): _x{x, y, z} {}
+    Vector3D(T x, T y, T z): x_{x, y, z} {}
 
     /**
      * Retrieve the vector's x-component.
      * @return the vector's x-component.
      */
-    [[nodiscard]] inline T x() const { return _x[0]; }
+    [[nodiscard]] T x() const { return x_[0]; }
 
     /**
      * Retrieve the vector's y-component.
      * @return the vector's y-component.
      */
-    [[nodiscard]] inline T y() const { return _x[1]; }
+    [[nodiscard]] T y() const { return x_[1]; }
 
     /**
      * Retrieve the vector's z-component.
      * @return the vector's z-component.
      */
-    [[nodiscard]] inline T z() const { return _x[2]; }
+    [[nodiscard]] T z() const { return x_[2]; }
 
     /**
      * Retrieve the vector's ith component.
      * @param idx the index of the component.
      * @return the vector component.
      */
-    [[nodiscard]] T operator()(size_t idx) const { return _x[idx]; }
-
-    /**
-     * Retrieve the dimension of the vector.
-     * @return the dimension of the vector.
-     */
-    [[nodiscard]] int dim() const { return _dim; }
+    [[nodiscard]] T operator()(size_t idx) const { return x_[idx]; }
 
   private:
 
-    std::array<T, 3> _x;
-    int _dim;
+    std::array<T, 3> x_;
 
     [[maybe_unused]] static T _eps;
     [[maybe_unused]] static T _eps_squared;
@@ -296,5 +279,6 @@ template <typename T>
 T mfold(const Vector3D<T> &v) {
   return v.x() * v.y() * v.z();
 }
+} // namespace amiga
 
 #endif // LIBFABBRI_VECTOR3D_HPP
