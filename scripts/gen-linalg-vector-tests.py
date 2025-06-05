@@ -32,25 +32,25 @@ def gen_vector_sum_test(n, data_type, prefix):
 
     code += f'{0*prefix}TEST_CASE("Test vector addition for \'{data_type}\'", "Vector") {{\n'
 
-    A = sy.Matrix([randint(1, 10) for i in range(n)])
-    B = sy.Matrix([randint(1, 10) for i in range(n)])
+    u = sy.Matrix([randint(1, 10) for i in range(n)])
+    v = sy.Matrix([randint(1, 10) for i in range(n)])
 
-    C = A + B
+    w = u + v
 
     code += f"{1*prefix}{data_type} eps(1E-7);\n"
 
-    code += f"{1*prefix}Vector<{data_type}, {n}> A, B, C;\n"
+    code += f"{1*prefix}Vector<{data_type}, {n}> u, v, w;\n"
 
     for i in range(n):
-        code += f"{1*prefix}A({i}) = {A[i]};\n"
+        code += f"{1*prefix}u({i}) = {u[i]};\n"
 
     for i in range(n):
-        code += f"{1*prefix}B({i}) = {B[i]};\n"
+        code += f"{1*prefix}v({i}) = {v[i]};\n"
 
-    code += f"{1*prefix}C = A + B;\n"
+    code += f"{1*prefix}w = u + v;\n"
 
     for i in range(n):
-        code += f"{1*prefix}REQUIRE(abs(C({i}) - {C[i]}) < eps);\n"
+        code += f"{1*prefix}REQUIRE(abs(w({i}) - {w[i]}) < eps);\n"
 
     code += f"{0*prefix}}}"
 
@@ -62,25 +62,25 @@ def gen_vector_difference_test(n, data_type, prefix):
 
     code += f'{0*prefix}TEST_CASE("Test vector difference for \'{data_type}\'", "Vector") {{\n'
 
-    A = sy.Matrix([randint(1, 10) for i in range(n)])
-    B = sy.Matrix([randint(1, 10) for i in range(n)])
+    u = sy.Matrix([randint(1, 10) for i in range(n)])
+    v = sy.Matrix([randint(1, 10) for i in range(n)])
 
-    C = A - B
+    w = u - v
 
     code += f"{1*prefix}{data_type} eps(1E-7);\n"
 
-    code += f"{1*prefix}Vector<{data_type}, {n}> A, B, C;\n"
+    code += f"{1*prefix}Vector<{data_type}, {n}> u, v, w;\n"
 
     for i in range(n):
-        code += f"{1*prefix}A({i}) = {A[i]};\n"
+        code += f"{1*prefix}u({i}) = {u[i]};\n"
 
     for i in range(n):
-        code += f"{1*prefix}B({i}) = {B[i]};\n"
+        code += f"{1*prefix}v({i}) = {v[i]};\n"
 
-    code += f"{1*prefix}C = A - B;\n"
+    code += f"{1*prefix}w = u -v;\n"
 
     for i in range(n):
-        code += f"{1*prefix}REQUIRE(abs(C({i}) - {C[i]}) < eps);\n"
+        code += f"{1*prefix}REQUIRE(abs(w({i}) - {w[i]}) < eps);\n"
 
     code += f"{0*prefix}}}"
 
@@ -92,23 +92,23 @@ def gen_vector_scalar_multiplication_test(n, data_type, prefix):
 
     code += f'{0*prefix}TEST_CASE("Test vector-scalar product for \'{data_type}\'", "Vector") {{\n'
 
-    A = sy.Matrix([randint(1, 10) for i in range(n)])
+    u = sy.Matrix([randint(1, 10) for i in range(n)])
     alpha = randint(1, 10)
 
-    B = A * alpha
+    v = u * alpha
 
     code += f"{1*prefix}{data_type} eps(1E-7);\n"
 
-    code += f"{1*prefix}Vector<{data_type}, {n}> A, B;\n"
+    code += f"{1*prefix}Vector<{data_type}, {n}> u, v;\n"
     code += f"{1*prefix}{data_type} alpha = {alpha};\n"
 
     for i in range(n):
-        code += f"{1*prefix}A({i}) = {A[i]};\n"
+        code += f"{1*prefix}u({i}) = {u[i]};\n"
 
-    code += f"{1*prefix}B = A * alpha;\n"
+    code += f"{1*prefix}v = u * alpha;\n"
 
     for i in range(n):
-        code += f"{1*prefix}REQUIRE(abs(B({i}) - {B[i]}) < eps);\n"
+        code += f"{1*prefix}REQUIRE(abs(v({i}) - {v[i]}) < eps);\n"
 
     code += f"{0*prefix}}}"
 
@@ -120,23 +120,23 @@ def gen_scalar_vector_multiplication_test(n, data_type, prefix):
 
     code += f'{0*prefix}TEST_CASE("Test scalar-vector product for \'{data_type}\'", "Vector") {{\n'
 
-    A = sy.Matrix([randint(1, 10) for i in range(n)])
+    u = sy.Matrix([randint(1, 10) for i in range(n)])
     alpha = randint(1, 10)
 
-    B = alpha * A
+    v = alpha * u
 
     code += f"{1*prefix}{data_type} eps(1E-7);\n"
 
-    code += f"{1*prefix}Vector<{data_type}, {n}> A, B;\n"
+    code += f"{1*prefix}Vector<{data_type}, {n}> u, v;\n"
     code += f"{1*prefix}{data_type} alpha = {alpha};\n"
 
     for i in range(n):
-        code += f"{1*prefix}A({i}) = {A[i]};\n"
+        code += f"{1*prefix}u({i}) = {u[i]};\n"
 
-    code += f"{1*prefix}B = alpha * A;\n"
+    code += f"{1*prefix}v = alpha * u;\n"
 
     for i in range(n):
-        code += f"{1*prefix}REQUIRE(abs(B({i}) - {B[i]}) < eps);\n"
+        code += f"{1*prefix}REQUIRE(abs(v({i}) - {v[i]}) < eps);\n"
 
     code += f"{0*prefix}}}"
 
@@ -148,23 +148,23 @@ def gen_vector_scalar_division_test(n, data_type, prefix):
 
     code += f'{0*prefix}TEST_CASE("Test vector-scalar division for \'{data_type}\'", "Vector") {{\n'
 
-    A = sy.Matrix([randint(1, 10) for i in range(n)])
+    u = sy.Matrix([randint(1, 10) for i in range(n)])
     alpha = randint(1, 10)
 
-    B = A / alpha
+    v = u / alpha
 
     code += f"{1*prefix}{data_type} eps(1E-7);\n"
 
-    code += f"{1*prefix}Vector<{data_type}, {n}> A, B;\n"
+    code += f"{1*prefix}Vector<{data_type}, {n}> u, v;\n"
     code += f"{1*prefix}{data_type} alpha = {alpha};\n"
 
     for i in range(n):
-        code += f"{1*prefix}A({i}) = {A[i]};\n"
+        code += f"{1*prefix}u({i}) = {u[i]};\n"
 
-    code += f"{1*prefix}B = A / alpha;\n"
+    code += f"{1*prefix}v = u / alpha;\n"
 
     for i in range(n):
-        code += f"{1*prefix}REQUIRE(abs(B({i}) - {B[i].evalf()}) < eps);\n"
+        code += f"{1*prefix}REQUIRE(abs(v({i}) - {v[i].evalf()}) < eps);\n"
 
     code += f"{0*prefix}}}"
 
@@ -243,10 +243,6 @@ def gen_vector_cross_product_test(n, data_type, prefix):
 
     code += f"{1*prefix}{data_type} eps(1E-7);\n"
 
-    code += f"{1*prefix}Vector<{data_type}, {n}> A, B, C;\n"
-
-    #code += f"{1*prefix}C = cross(A);\n"
-
     # Generate the vectors that will participate in the cross-product
     vars = [f"u{i}" for i in range(n-1)]
     for i in range(n-1):
@@ -258,6 +254,56 @@ def gen_vector_cross_product_test(n, data_type, prefix):
 
     for i in range(n):
         code += f"{1*prefix}REQUIRE(abs(result({i}) - {result[i]}) < eps);\n"
+
+    code += f"{0*prefix}}}"
+
+    return code
+
+
+def gen_vector_norm_test(n, data_type, prefix):
+    code = ""
+
+    code += f'{0*prefix}TEST_CASE("Test vector norm \'{data_type}\'", "Vector") {{\n'
+
+    u = sy.Matrix([randint(1, 10) for i in range(n)])
+
+    v = sy.sqrt(u.dot(u))
+
+    code += f"{1*prefix}{data_type} eps(1E-7);\n"
+
+    code += f"{1*prefix}Vector<{data_type}, {n}> u;\n"
+
+    for i in range(n):
+        code += f"{1*prefix}u({i}) = {u[i]};\n"
+
+    code += f"{1*prefix}{data_type} w = norm(u);\n"
+
+    code += f"{1*prefix}REQUIRE(abs(w - {v.evalf()}) < eps);\n"
+
+    code += f"{0*prefix}}}"
+
+    return code
+
+
+def gen_vector_rnorm_test(n, data_type, prefix):
+    code = ""
+
+    code += f'{0*prefix}TEST_CASE("Test vector rnorm \'{data_type}\'", "Vector") {{\n'
+
+    u = sy.Matrix([randint(1, 10) for i in range(n)])
+
+    v = sy.sqrt(u.dot(u) + 1E-4)
+
+    code += f"{1*prefix}{data_type} eps(1E-12);\n"
+
+    code += f"{1*prefix}Vector<{data_type}, {n}, 2> u;\n"
+
+    for i in range(n):
+        code += f"{1*prefix}u({i}) = {u[i]};\n"
+
+    code += f"{1*prefix}{data_type} w = rnorm(u);\n"
+
+    code += f"{1*prefix}REQUIRE(abs(w - {v.evalf()}) < eps);\n"
 
     code += f"{0*prefix}}}"
 
@@ -292,6 +338,14 @@ def gen_vector_tests(n, data_type, prefix="  "):
     code += "\n\n"
 
     code += gen_vector_cross_product_test(n, data_type, prefix)
+
+    code += "\n\n"
+
+    code += gen_vector_norm_test(n, data_type, prefix)
+
+    code += "\n\n"
+
+    code += gen_vector_rnorm_test(n, data_type, prefix)
 
     return code
 
