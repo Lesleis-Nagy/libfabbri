@@ -37,8 +37,8 @@ def vec_indexify(name: str) -> str:
 def gen_includes(prefix="  "):
     code = ""
 
-    code += "#include <array>\n"
-    code += "#include <cstddef>"
+    code += f"{0*prefix}#include <array>\n"
+    code += f"{0*prefix}#include <cstddef>"
 
     code += "\n\n"
 
@@ -77,8 +77,8 @@ def gen_regularization(prefix="  "):
 def gen_vector_class_primary(prefix="  "):
     code = ""
 
-    code += "template <typename T, size_t N, size_t REG_PREC=10, typename Enable = void>\n"
-    code += "class Vector;"
+    code += f"{0*prefix}template <typename T, size_t N, size_t REG_PREC=10, typename Enable = void>\n"
+    code += f"{0*prefix}class Vector;"
 
     code += "\n\n"
 
@@ -94,18 +94,18 @@ def gen_vector_default_constructor(n, arithmetic, prefix="  "):
     code = ""
 
     # The default constructor creates the unit matrix
-    code += f"/**\n"
-    code += f" * Default constructor generates the {n} component zero vector.\n"
-    code += f" */\n"
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Default constructor generates the {n} component zero vector.\n"
+    code += f"{0*prefix} */\n"
 
     if arithmetic:
-        code += f"constexpr Vector() {{\n"
+        code += f"{0*prefix}constexpr Vector() {{\n"
     else:
-        code += f"Vector() {{\n"
+        code += f"{0*prefix}Vector() {{\n"
 
     code += f"{1*prefix}for(size_t i = 0; i < {n}; ++i)\n"
     code += f"{2*prefix}data_[i] = 0;\n"
-    code += f"}}"
+    code += f"{0*prefix}}}"
 
     return code
 
@@ -113,20 +113,20 @@ def gen_vector_default_constructor(n, arithmetic, prefix="  "):
 def gen_vector_access(n, arithmetic, prefix="  "):
     code = ""
 
-    code += f"/**\n"
-    code += f" * Vector element access.\n"
-    code += f" * @param i the i-th element of the vector.\n"
-    code += f" * @return the vector element at index i.\n"
-    code += f" */\n"
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Vector element access.\n"
+    code += f"{0*prefix} * @param i the i-th element of the vector.\n"
+    code += f"{0*prefix} * @return the vector element at index i.\n"
+    code += f"{0*prefix} */\n"
 
     if arithmetic:
-        code += f"constexpr T&\n"
+        code += f"{0*prefix}constexpr T&\n"
     else:
-        code += f"T&\n"
+        code += f"{0*prefix}T&\n"
 
-    code += f"operator()(size_t i) {{\n"
-    code += f"{prefix}return data_[i];\n"
-    code += f"}}"
+    code += f"{0*prefix}operator()(size_t i) {{\n"
+    code += f"{1*prefix}return data_[i];\n"
+    code += f"{0*prefix}}}"
 
     return code
 
@@ -134,20 +134,20 @@ def gen_vector_access(n, arithmetic, prefix="  "):
 def gen_vector_const_access(n, arithmetic, prefix="  "):
     code = ""
 
-    code += f"/**\n"
-    code += f" * Vector element access.\n"
-    code += f" * @param i the i-th element of the vector.\n"
-    code += f" * @return the vector element at index i.\n"
-    code += f" */\n"
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Vector element access.\n"
+    code += f"{0*prefix} * @param i the i-th element of the vector.\n"
+    code += f"{0*prefix} * @return the vector element at index i.\n"
+    code += f"{0*prefix} */\n"
 
     if arithmetic:
-        code += f"constexpr const T&\n"
+        code += f"{0*prefix}constexpr const T&\n"
     else:
-        code += f"const T&\n"
+        code += f"{0*prefix}const T&\n"
 
-    code += f"operator()(size_t i) const {{\n"
-    code += f"{prefix}return data_[i];\n"
-    code += f"}}"
+    code += f"{0*prefix}operator()(size_t i) const {{\n"
+    code += f"{1*prefix}return data_[i];\n"
+    code += f"{0*prefix}}}"
 
     return code
 
@@ -155,24 +155,24 @@ def gen_vector_const_access(n, arithmetic, prefix="  "):
 def gen_vector_assign(n, arithmetic, prefix="  "):
     code = ""
 
-    code += f"/**\n"
-    code += f" * Vector assignment.\n"
-    code += f" * @param other the right-hand side vector of the assignment.\n"
-    code += f" * @return a constant reference to the assigned value.\n"
-    code += f" */\n"
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Vector assignment.\n"
+    code += f"{0*prefix} * @param other the right-hand side vector of the assignment.\n"
+    code += f"{0*prefix} * @return a constant reference to the assigned value.\n"
+    code += f"{0*prefix} */\n"
 
     if arithmetic:
-        code += f"constexpr Vector&\n"
+        code += f"{0*prefix}constexpr Vector&\n"
     else:
-        code += f"Vector&\n"
+        code += f"{0*prefix}Vector&\n"
 
-    code += f"operator=(const Vector& other) {{\n"
-    code += f"{prefix}if (this != &other) {{\n"
+    code += f"{0*prefix}operator=(const Vector& other) {{\n"
+    code += f"{1*prefix}if (this != &other) {{\n"
     code += f"{2*prefix}for (size_t i = 0; i < {n}; ++i)\n"
     code += f"{3*prefix}data_[i] = other(i);\n"
-    code += f"{prefix}}}\n"
-    code += f"return *this;\n"
-    code += f"}}"
+    code += f"{1*prefix}}}\n"
+    code += f"{0*prefix}return *this;\n"
+    code += f"{0*prefix}}}"
 
     return code
 
@@ -186,20 +186,20 @@ def gen_vector_vector_sum(n, arithmetic, prefix="  "):
     w = u + v
 
     # Generate C code
-    code += f"/**\n"
-    code += f" * Vector-vector sum operator.\n"
-    code += f" * @param u the vector on the left-hand side of the sum.\n"
-    code += f" * @param v the vector on the right-hand side of the sum.\n"
-    code += f" * @return the sum of vectors u + v.\n"
-    code += f" */\n"
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Vector-vector sum operator.\n"
+    code += f"{0*prefix} * @param u the vector on the left-hand side of the sum.\n"
+    code += f"{0*prefix} * @param v the vector on the right-hand side of the sum.\n"
+    code += f"{0*prefix} * @return the sum of vectors u + v.\n"
+    code += f"{0*prefix} */\n"
 
     if arithmetic:
-        code += f"friend constexpr Vector\n"
+        code += f"{0*prefix}friend constexpr Vector\n"
     else:
-        code += f"friend Vector\n"
+        code += f"{0*prefix}friend Vector\n"
 
-    code += f"operator+(const Vector& u, const Vector& v) {{\n"
-    code += f"{prefix}Vector w;\n"
+    code += f"{0*prefix}operator+(const Vector& u, const Vector& v) {{\n"
+    code += f"{1*prefix}Vector w;\n"
 
     for i in range(n):
         expr = w[i]
@@ -207,11 +207,11 @@ def gen_vector_vector_sum(n, arithmetic, prefix="  "):
         # Apply indexify to each variable
         for s in expr.free_symbols:
             c_str = c_str.replace(str(s), vec_indexify(str(s)))
-        code += f"{prefix}w({i}) = {c_str};\n"
+        code += f"{1*prefix}w({i}) = {c_str};\n"
 
-    code += f"{prefix}return w;\n"
+    code += f"{1*prefix}return w;\n"
 
-    code += f"}}"
+    code += f"{0*prefix}}}"
 
     return code
 
@@ -225,20 +225,20 @@ def gen_vector_vector_difference(n, arithmetic, prefix="  "):
     w = u - v
 
     # Generate C code
-    code += f"/**\n"
-    code += f" * Vector-vector difference operator.\n"
-    code += f" * @param u the vector on the left-hand side of the difference.\n"
-    code += f" * @param v the vector on the right-hand side of the difference.\n"
-    code += f" * @return the vector difference u - v.\n"
-    code += f" */\n"
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Vector-vector difference operator.\n"
+    code += f"{0*prefix} * @param u the vector on the left-hand side of the difference.\n"
+    code += f"{0*prefix} * @param v the vector on the right-hand side of the difference.\n"
+    code += f"{0*prefix} * @return the vector difference u - v.\n"
+    code += f"{0*prefix} */\n"
 
     if arithmetic:
-        code += f"friend constexpr Vector\n"
+        code += f"{0*prefix}friend constexpr Vector\n"
     else:
-        code += f"friend Vector\n"
+        code += f"{0*prefix}friend Vector\n"
 
-    code += f"operator-(const Vector& u, const Vector& v) {{\n"
-    code += f"{prefix}Vector w;\n"
+    code += f"{0*prefix}operator-(const Vector& u, const Vector& v) {{\n"
+    code += f"{1*prefix}Vector w;\n"
 
     for i in range(n):
         expr = w[i]
@@ -246,11 +246,11 @@ def gen_vector_vector_difference(n, arithmetic, prefix="  "):
         # Apply indexify to each variable
         for s in expr.free_symbols:
             c_str = c_str.replace(str(s), vec_indexify(str(s)))
-        code += f"{prefix}w({i}) = {c_str};\n"
+        code += f"{1*prefix}w({i}) = {c_str};\n"
 
-    code += f"{prefix}return w;\n"
+    code += f"{1*prefix}return w;\n"
 
-    code += f"}}"
+    code += f"{0*prefix}}}"
 
     return code
 
@@ -263,19 +263,19 @@ def gen_vector_negation(n, arithmetic, prefix="  "):
     v = -u
 
     # Generate C code
-    code += f"/**\n"
-    code += f" * Vector negation operator.\n"
-    code += f" * @param u the vector to negate.\n"
-    code += f" * @return the vector negation -u.\n"
-    code += f" */\n"
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Vector negation operator.\n"
+    code += f"{0*prefix} * @param u the vector to negate.\n"
+    code += f"{0*prefix} * @return the vector negation -u.\n"
+    code += f"{0*prefix} */\n"
 
     if arithmetic:
-        code += f"friend constexpr Vector\n"
+        code += f"{0*prefix}friend constexpr Vector\n"
     else:
-        code += f"friend Vector\n"
+        code += f"{0*prefix}friend Vector\n"
 
-    code += f"operator-(const Vector& u) {{\n"
-    code += f"{prefix}Vector v;\n"
+    code += f"{0*prefix}operator-(const Vector& u) {{\n"
+    code += f"{1*prefix}Vector v;\n"
 
     for i in range(n):
         expr = v[i]
@@ -283,11 +283,11 @@ def gen_vector_negation(n, arithmetic, prefix="  "):
         # Apply indexify to each variable
         for s in expr.free_symbols:
             c_str = c_str.replace(str(s), vec_indexify(str(s)))
-        code += f"{prefix}v({i}) = {c_str};\n"
+        code += f"{1*prefix}v({i}) = {c_str};\n"
 
-    code += f"{prefix}return v;\n"
+    code += f"{1*prefix}return v;\n"
 
-    code += f"}}"
+    code += f"{0*prefix}}}"
 
     return code
 
@@ -301,20 +301,20 @@ def gen_scalar_vector_prod(n, arithmetic, prefix="  "):
     v = alpha * u
 
     # Generate C code
-    code += f"/**\n"
-    code += f" * Scalar-vector product operator.\n"
-    code += f" * @param alpha the scalar on the left-hand side of the product.\n"
-    code += f" * @param u the vector on the right-hand side of the product.\n"
-    code += f" * @return the scalar-vector alpha*u.\n"
-    code += f" */\n"
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Scalar-vector product operator.\n"
+    code += f"{0*prefix} * @param alpha the scalar on the left-hand side of the product.\n"
+    code += f"{0*prefix} * @param u the vector on the right-hand side of the product.\n"
+    code += f"{0*prefix} * @return the scalar-vector alpha*u.\n"
+    code += f"{0*prefix} */\n"
 
     if arithmetic:
-        code += f"friend constexpr Vector\n"
+        code += f"{0*prefix}friend constexpr Vector\n"
     else:
-        code += f"friend Vector\n"
+        code += f"{0*prefix}friend Vector\n"
 
-    code += f"operator*(T alpha, const Vector& u) {{\n"
-    code += f"{prefix}Vector v;\n"
+    code += f"{0*prefix}operator*(T alpha, const Vector& u) {{\n"
+    code += f"{1*prefix}Vector v;\n"
 
     for i in range(n):
         expr = v[i]
@@ -322,11 +322,11 @@ def gen_scalar_vector_prod(n, arithmetic, prefix="  "):
         # Apply indexify to each variable
         for s in expr.free_symbols:
             c_str = c_str.replace(str(s), vec_indexify(str(s)))
-        code += f"{prefix}v({i}) = {c_str};\n"
+        code += f"{1*prefix}v({i}) = {c_str};\n"
 
-    code += f"{prefix}return v;\n"
+    code += f"{1*prefix}return v;\n"
 
-    code += f"}}"
+    code += f"{0*prefix}}}"
 
     return code
 
@@ -335,23 +335,23 @@ def gen_vector_scalar_prod(n, arithmetic, prefix="  "):
     code = ""
 
     # Generate C code
-    code += f"/**\n"
-    code += f" * Vector-scalar product operator.\n"
-    code += f" * @param u the vector on the left-hand side of the product.\n"
-    code += f" * @param alpha the scalar on the right-hand side of the product.\n"
-    code += f" * @return the vector-scalar product u*alpha.\n"
-    code += f" */\n"
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Vector-scalar product operator.\n"
+    code += f"{0*prefix} * @param u the vector on the left-hand side of the product.\n"
+    code += f"{0*prefix} * @param alpha the scalar on the right-hand side of the product.\n"
+    code += f"{0*prefix} * @return the vector-scalar product u*alpha.\n"
+    code += f"{0*prefix} */\n"
 
     if arithmetic:
-        code += f"friend constexpr Vector\n"
+        code += f"{0*prefix}friend constexpr Vector\n"
     else:
-        code += f"friend Vector\n"
+        code += f"{0*prefix}friend Vector\n"
 
-    code += f"operator*(const Vector& u, T alpha) {{\n"
+    code += f"{0*prefix}operator*(const Vector& u, T alpha) {{\n"
 
-    code += f"{prefix}return alpha * u;\n"
+    code += f"{1*prefix}return alpha * u;\n"
 
-    code += f"}}"
+    code += f"{0*prefix}}}"
 
     return code
 
@@ -365,20 +365,20 @@ def gen_vector_scalar_div(n, arithmetic, prefix="  "):
     v = u / alpha
 
     # Generate C code
-    code += f"/**\n"
-    code += f" * Vector-scalar division operator.\n"
-    code += f" * @param u the vector on the left-hand side of the division.\n"
-    code += f" * @param alpha the scalar on the right-hand side of the division.\n"
-    code += f" * @return the vector-scalar division u / alpha.\n"
-    code += f" */\n"
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Vector-scalar division operator.\n"
+    code += f"{0*prefix} * @param u the vector on the left-hand side of the division.\n"
+    code += f"{0*prefix} * @param alpha the scalar on the right-hand side of the division.\n"
+    code += f"{0*prefix} * @return the vector-scalar division u / alpha.\n"
+    code += f"{0*prefix} */\n"
 
     if arithmetic:
-        code += f"friend constexpr Vector\n"
+        code += f"{0*prefix}friend constexpr Vector\n"
     else:
-        code += f"friend Vector\n"
+        code += f"{0*prefix}friend Vector\n"
 
-    code += f"operator/(const Vector& u, T alpha) {{\n"
-    code += f"{prefix}Vector v;\n"
+    code += f"{0*prefix}operator/(const Vector& u, T alpha) {{\n"
+    code += f"{1*prefix}Vector v;\n"
 
     for i in range(n):
         expr = v[i]
@@ -386,11 +386,11 @@ def gen_vector_scalar_div(n, arithmetic, prefix="  "):
         # Apply indexify to each variable
         for s in expr.free_symbols:
             c_str = c_str.replace(str(s), vec_indexify(str(s)))
-        code += f"{prefix}v({i}) = {c_str};\n"
+        code += f"{1*prefix}v({i}) = {c_str};\n"
 
-    code += f"{prefix}return v;\n"
+    code += f"{1*prefix}return v;\n"
 
-    code += f"}}"
+    code += f"{0*prefix}}}"
 
     return code
 
@@ -404,35 +404,35 @@ def gen_vector_dot_prod(n, arithmetic, prefix="  "):
     w = u.dot(v)
 
     # Generate C code
-    code += f"/**\n"
-    code += f" * Vector dot product.\n"
-    code += f" * @param u the vector on the left-hand side of the dot product.\n"
-    code += f" * @param v the vector on the right-hand side of the dot product.\n"
-    code += f" * @return the vector dot product u . v\n"
-    code += f" */\n"
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Vector dot product.\n"
+    code += f"{0*prefix} * @param u the vector on the left-hand side of the dot product.\n"
+    code += f"{0*prefix} * @param v the vector on the right-hand side of the dot product.\n"
+    code += f"{0*prefix} * @return the vector dot product u . v\n"
+    code += f"{0*prefix} */\n"
 
-    code += f"template <typename T, size_t REG_PREC,\n"
-
-    if arithmetic:
-        code += f"          std::enable_if_t<std::is_arithmetic_v<T>, int> = 0>\n"
-    else:
-        code += f"          std::enable_if_t<!std::is_arithmetic_v<T>, int> = 0>\n"
+    code += f"{0*prefix}template <typename T, size_t REG_PREC,\n"
 
     if arithmetic:
-        code += f"constexpr T\n"
+        code += f"{0*prefix}          std::enable_if_t<std::is_arithmetic_v<T>, int> = 0>\n"
     else:
-        code += f"T\n"
+        code += f"{0*prefix}          std::enable_if_t<!std::is_arithmetic_v<T>, int> = 0>\n"
 
-    code += f"dot(const Vector<T, {n}, REG_PREC>& u, const Vector<T, {n}, REG_PREC>& v) {{\n"
+    if arithmetic:
+        code += f"{0*prefix}constexpr T\n"
+    else:
+        code += f"{0*prefix}T\n"
+
+    code += f"{0*prefix}dot(const Vector<T, {n}, REG_PREC>& u, const Vector<T, {n}, REG_PREC>& v) {{\n"
 
     c_str = sy.ccode(w)
     # Apply indexify to each variable
     for s in w.free_symbols:
         c_str = c_str.replace(str(s), vec_indexify(str(s)))
 
-    code += f"{prefix}return {c_str};\n"
+    code += f"{1*prefix}return {c_str};\n"
 
-    code += f"}}"
+    code += f"{0*prefix}}}"
 
     return code
 
@@ -491,37 +491,37 @@ def gen_vector_cross_prod(n, arithmetic, prefix="  "):
 
     parameters = []
     for i in range(n-1):
-        parameters.append(f"const Vector<T, {n}, REG_PREC>& u{i}")
+        parameters.append(f"{0*prefix}const Vector<T, {n}, REG_PREC>& u{i}")
 
     comments = []
     for i in range(n-1):
-        comments.append(f" * @param u{i} the {i}th vector of the cross-product.")
+        comments.append(f"{0*prefix} * @param u{i} the {i}th vector of the cross-product.")
 
     parameters_raw = []
     for i in range(n-1):
         parameters_raw.append(f"u{i}")
 
     # Generate C code
-    code += f"/**\n"
-    code += f" * Vector cross-product.\n"
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Vector cross-product.\n"
     code += "\n".join(comments) + "\n"
-    code += f" * @return the vector cross-product " + " x ".join(parameters_raw) + ".\n"
-    code += f" */\n"
+    code += f"{0*prefix} * @return the vector cross-product " + " x ".join(parameters_raw) + ".\n"
+    code += f"{0*prefix} */\n"
 
-    code += f"template <typename T, size_t REG_PREC,\n"
-
-    if arithmetic:
-        code += f"          std::enable_if_t<std::is_arithmetic_v<T>, int> = 0>\n"
-    else:
-        code += f"          std::enable_if_t<!std::is_arithmetic_v<T>, int> = 0>\n"
+    code += f"{0*prefix}template <typename T, size_t REG_PREC,\n"
 
     if arithmetic:
-        code += f"constexpr Vector<T, {n}, REG_PREC>\n"
+        code += f"{0*prefix}          std::enable_if_t<std::is_arithmetic_v<T>, int> = 0>\n"
     else:
-        code += f"Vector<T, {n}, REG_PREC>\n"
+        code += f"{0*prefix}          std::enable_if_t<!std::is_arithmetic_v<T>, int> = 0>\n"
 
-    code += f"cross({', '.join(parameters)}) {{\n"
-    code += f"{prefix}Vector<T, {n}, REG_PREC> cross;\n"
+    if arithmetic:
+        code += f"{0*prefix}constexpr Vector<T, {n}, REG_PREC>\n"
+    else:
+        code += f"{0*prefix}Vector<T, {n}, REG_PREC>\n"
+
+    code += f"{0*prefix}cross({', '.join(parameters)}) {{\n"
+    code += f"{1*prefix}Vector<T, {n}, REG_PREC> cross;\n"
 
     for i in range(n):
         expr = v[i]
@@ -529,10 +529,10 @@ def gen_vector_cross_prod(n, arithmetic, prefix="  "):
         # Apply indexify to each variable name
         for s in expr.free_symbols:
             c_str = c_str.replace(str(s), vec_indexify(str(s)))
-        code = code + f"{prefix}cross({i}) = {c_str};" + "\n"
+        code = code + f"{1*prefix}cross({i}) = {c_str};" + "\n"
 
-    code += f"{prefix}return cross;\n"
-    code += f"}}"
+    code += f"{1*prefix}return cross;\n"
+    code += f"{0*prefix}}}"
 
     return code
 
@@ -541,29 +541,29 @@ def gen_vector_norm(n, arithmetic, prefix="  "):
     code = ""
 
     # Generate C code
-    code += f"/**\n"
-    code += f" * Vector norm.\n"
-    code += f" * @param u the vector for which we seek the norm/length.\n"
-    code += f" * @return the vector norm. v\n"
-    code += f" */\n"
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Vector norm.\n"
+    code += f"{0*prefix} * @param u the vector for which we seek the norm/length.\n"
+    code += f"{0*prefix} * @return the vector norm. v\n"
+    code += f"{0*prefix} */\n"
 
-    code += f"template <typename T, size_t REG_PREC,\n"
-
-    if arithmetic:
-        code += f"          std::enable_if_t<std::is_arithmetic_v<T>, int> = 0>\n"
-    else:
-        code += f"          std::enable_if_t<!std::is_arithmetic_v<T>, int> = 0>\n"
+    code += f"{0*prefix}template <typename T, size_t REG_PREC,\n"
 
     if arithmetic:
-        code += f"constexpr T\n"
+        code += f"{0*prefix}          std::enable_if_t<std::is_arithmetic_v<T>, int> = 0>\n"
     else:
-        code += f"T\n"
+        code += f"{0*prefix}          std::enable_if_t<!std::is_arithmetic_v<T>, int> = 0>\n"
 
-    code += f"norm(const Vector<T, {n}, REG_PREC>& u) {{\n"
+    if arithmetic:
+        code += f"{0*prefix}constexpr T\n"
+    else:
+        code += f"{0*prefix}T\n"
 
-    code += f"{prefix}return sqrt(dot(u,u));\n"
+    code += f"{0*prefix}norm(const Vector<T, {n}, REG_PREC>& u) {{\n"
 
-    code += f"}}"
+    code += f"{1*prefix}return sqrt(dot(u,u));\n"
+
+    code += f"{0*prefix}}}"
 
     return code
 
@@ -572,29 +572,29 @@ def gen_vector_rnorm(n, arithmetic, prefix="  "):
     code = ""
 
     # Generate C code
-    code += f"/**\n"
-    code += f" * Regularized vector norm.\n"
-    code += f" * @param u the vector for which we seek the regularlised norm/length.\n"
-    code += f" * @return the regularised vector norm. v\n"
-    code += f" */\n"
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Regularized vector norm.\n"
+    code += f"{0*prefix} * @param u the vector for which we seek the regularlised norm/length.\n"
+    code += f"{0*prefix} * @return the regularised vector norm. v\n"
+    code += f"{0*prefix} */\n"
 
-    code += f"template <typename T, size_t REG_PREC,\n"
-
-    if arithmetic:
-        code += f"          std::enable_if_t<std::is_arithmetic_v<T>, int> = 0>\n"
-    else:
-        code += f"          std::enable_if_t<!std::is_arithmetic_v<T>, int> = 0>\n"
+    code += f"{0*prefix}template <typename T, size_t REG_PREC,\n"
 
     if arithmetic:
-        code += f"constexpr T\n"
+        code += f"{0*prefix}          std::enable_if_t<std::is_arithmetic_v<T>, int> = 0>\n"
     else:
-        code += f"T\n"
+        code += f"{0*prefix}          std::enable_if_t<!std::is_arithmetic_v<T>, int> = 0>\n"
 
-    code += f"rnorm(const Vector<T, {n}, REG_PREC>& u) {{\n"
+    if arithmetic:
+        code += f"{0*prefix}constexpr T\n"
+    else:
+        code += f"{0*prefix}T\n"
 
-    code += f"{prefix}return sqrt(dot(u,u) + u.eps_squared);\n"
+    code += f"{0*prefix}rnorm(const Vector<T, {n}, REG_PREC>& u) {{\n"
 
-    code += f"}}"
+    code += f"{1*prefix}return sqrt(dot(u,u) + u.eps_squared);\n"
+
+    code += f"{0*prefix}}}"
 
     return code
 
@@ -602,13 +602,13 @@ def gen_vector_rnorm(n, arithmetic, prefix="  "):
 def gen_vector_class(n, arithmetic=True, prefix="  "):
     code = ""
 
-    code += f"template <typename T, size_t REG_PREC>\n"
-    code += f"class Vector<T, {n}, REG_PREC, "
+    code += f"{0*prefix}template <typename T, size_t REG_PREC>\n"
+    code += f"{0*prefix}class Vector<T, {n}, REG_PREC, "
 
     if arithmetic:
-        code += f"std::enable_if_t<std::is_arithmetic_v<T>>> {{"
+        code += f"{0*prefix}std::enable_if_t<std::is_arithmetic_v<T>>> {{"
     else:
-        code += f"std::enable_if_t<!std::is_arithmetic_v<T>>> {{"
+        code += f"{0*prefix}std::enable_if_t<!std::is_arithmetic_v<T>>> {{"
 
     code += "\n\n"
 
@@ -621,7 +621,7 @@ def gen_vector_class(n, arithmetic=True, prefix="  "):
 
         code += "\n\n"
 
-    code += "public:\n"
+    code += f"{0*prefix}public:\n"
 
     code += textwrap.indent(gen_vector_default_constructor(n, arithmetic), prefix=prefix)
 
@@ -664,18 +664,18 @@ def gen_vector_class(n, arithmetic=True, prefix="  "):
     code += "\n\n"
 
     if arithmetic:
-        code += f"{prefix}const T eps = RegularizationEps<T, REG_PREC>::value();\n"
-        code += f"{prefix}const T eps_squared = eps * eps;\n"
+        code += f"{1*prefix}const T eps = RegularizationEps<T, REG_PREC>::value();\n"
+        code += f"{1*prefix}const T eps_squared = eps * eps;\n"
     else:
-        code += f"{prefix}const T eps = RegularizationEps<T, REG_PREC>::value();\n"
-        code += f"{prefix}const T eps_squared = eps * eps;\n"
+        code += f"{1*prefix}const T eps = RegularizationEps<T, REG_PREC>::value();\n"
+        code += f"{1*prefix}const T eps_squared = eps * eps;\n"
 
     code += "\n"
 
-    code += f"private:\n"
-    code += f"{prefix}std::array<T, {n}> data_{{}};\n"
+    code += f"{0*prefix}private:\n"
+    code += f"{1*prefix}std::array<T, {n}> data_{{}};\n"
 
-    code += f"}};"
+    code += f"{0*prefix}}};"
 
     code += "\n\n"
 
@@ -698,28 +698,30 @@ def gen_vector_class(n, arithmetic=True, prefix="  "):
 
 if __name__ == "__main__":
     dim = 2
+    prefix = "  "
     print(gen_includes())
 
-    print("/*" + 95*"-" + "*/")
-    print("/* Regularization class" + 74 * " " + "*/")
-    print("/*" + 95*"-" + "*/\n\n")
+    print(f"{0*prefix}/*" + 95*"-" + "*/")
+    print(f"{0*prefix}/* Regularization class" + 74 * " " + "*/")
+    print(f"{0*prefix}/*" + 95*"-" + "*/\n\n")
 
     print(gen_regularization())
 
-    print("/*" + 95*"-" + "*/")
-    print("/* Primary class declaration" + 69 * " " + "*/")
-    print("/*" + 95*"-" + "*/\n\n")
+    print(f"{0*prefix}/*" + 95*"-" + "*/")
+    print(f"{0*prefix}/* Primary class declaration" + 69 * " " + "*/")
+    print(f"{0*prefix}/*" + 95*"-" + "*/\n\n")
 
     print(gen_vector_class_primary())
 
-    print("/*" + 95*"-" + "*/")
-    print("/* Constexpr class for arithmetic types" + 58 * " " + "*/")
-    print("/*" + 95*"-" + "*/\n\n")
+    print(f"{0*prefix}/*" + 95*"-" + "*/")
+    print(f"{0*prefix}/* Constexpr class for arithmetic types" + 58 * " " + "*/")
+    print(f"{0*prefix}/*" + 95*"-" + "*/\n\n")
 
     print(gen_vector_class(dim, arithmetic=True))
 
-    print("\n\n/*" + 95*"-" + "*/")
-    print("/* Class for general types" + 71 * " " + "*/")
-    print("/*" + 95*"-" + "*/\n\n")
+    print("\n")
+    print(f"{0*prefix}/*" + 95*"-" + "*/")
+    print(f"{0*prefix}/* Class for general types" + 71 * " " + "*/")
+    print(f"{0*prefix}/*" + 95*"-" + "*/\n\n")
 
     print(gen_vector_class(dim, arithmetic=False))
