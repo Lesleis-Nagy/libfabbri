@@ -110,6 +110,35 @@ def gen_vector_default_constructor(n, arithmetic, prefix="  "):
     return code
 
 
+def gen_vector_initializer_constructor(n, arithmetic, prefix="  "):
+    code = ""
+
+    # The default initializer creates a user specified vector
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Initializer constructor generates the {n} component vector.\n"
+    code += f"{0*prefix} * @param initializer list the components of the new vector.\n"
+    code += f"{0*prefix} */\n"
+
+    if arithmetic:
+        code += f"{0*prefix}constexpr Vector(std::initializer_list<T> list) {{\n"
+    else:
+        code += f"{0*prefix}Vector(std::initializer_list<T> list) {{\n"
+
+    code += f"{1*prefix}if (list.size() != {n}) {{\n"
+    code += f"{2*prefix}throw std::invalid_argument(\"Initializer list must have exactly N elements\");\n"
+    code += f"{1*prefix}}}\n"
+
+
+    code += f"{1*prefix}size_t i = 0;\n"
+    code += f"{1*prefix}for (T value : list) {{\n"
+    code += f"{2*prefix}data_[i++] = value;\n"
+    code += f"{1*prefix}}}\n"
+
+    code += f"{0*prefix}}}"
+
+    return code
+
+
 def gen_vector_access(n, arithmetic, prefix="  "):
     code = ""
 
@@ -125,6 +154,27 @@ def gen_vector_access(n, arithmetic, prefix="  "):
         code += f"{0*prefix}T&\n"
 
     code += f"{0*prefix}operator()(size_t i) {{\n"
+    code += f"{1*prefix}return data_[i];\n"
+    code += f"{0*prefix}}}"
+
+    return code
+
+
+def gen_vector_array_access(n, arithmetic, prefix="  "):
+    code = ""
+
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Vector (array-style) element access.\n"
+    code += f"{0*prefix} * @param i the i-th element of the vector.\n"
+    code += f"{0*prefix} * @return the vector element at index i.\n"
+    code += f"{0*prefix} */\n"
+
+    if arithmetic:
+        code += f"{0*prefix}constexpr T&\n"
+    else:
+        code += f"{0*prefix}T&\n"
+
+    code += f"{0*prefix}operator[](size_t i) {{\n"
     code += f"{1*prefix}return data_[i];\n"
     code += f"{0*prefix}}}"
 
@@ -152,11 +202,32 @@ def gen_vector_const_access(n, arithmetic, prefix="  "):
     return code
 
 
+def gen_vector_array_const_access(n, arithmetic, prefix="  "):
+    code = ""
+
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Vector (array-style) element access.\n"
+    code += f"{0*prefix} * @param i the i-th element of the vector.\n"
+    code += f"{0*prefix} * @return the vector element at index i.\n"
+    code += f"{0*prefix} */\n"
+
+    if arithmetic:
+        code += f"{0*prefix}constexpr const T&\n"
+    else:
+        code += f"{0*prefix}const T&\n"
+
+    code += f"{0*prefix}operator[](size_t i) const {{\n"
+    code += f"{1*prefix}return data_[i];\n"
+    code += f"{0*prefix}}}"
+
+    return code
+
+
 def gen_vector_assign(n, arithmetic, prefix="  "):
     code = ""
 
     code += f"{0*prefix}/**\n"
-    code += f"{0*prefix} * Vector assignment.\n"
+    code += f"{0*prefix} * Vector copy-assignment.\n"
     code += f"{0*prefix} * @param other the right-hand side vector of the assignment.\n"
     code += f"{0*prefix} * @return a constant reference to the assigned value.\n"
     code += f"{0*prefix} */\n"
@@ -171,7 +242,7 @@ def gen_vector_assign(n, arithmetic, prefix="  "):
     code += f"{2*prefix}for (size_t i = 0; i < {n}; ++i)\n"
     code += f"{3*prefix}data_[i] = other(i);\n"
     code += f"{1*prefix}}}\n"
-    code += f"{0*prefix}return *this;\n"
+    code += f"{1*prefix}return *this;\n"
     code += f"{0*prefix}}}"
 
     return code
@@ -395,6 +466,102 @@ def gen_vector_scalar_div(n, arithmetic, prefix="  "):
     return code
 
 
+def gen_vector_inplace_sum(n, arithmetic, prefix="  "):
+    code = ""
+
+    # Generate c code
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * In-place vector addition.\n"
+    code += f"{0*prefix} * @param v the vector that will be added to this vector.\n"
+    code += f"{0*prefix} * @return a reference to the updated vector (*this).\n"
+    code += f"{0*prefix} */\n"
+
+    if arithmetic:
+        code += f"{0*prefix}constexpr Vector& operator+=(const Vector& v) {{\n"
+    else:
+        code += f"{0*prefix}Vector& operator+=(const Vector& v) {{\n"
+
+    for i in range(n):
+        code += f"{1*prefix}data_[{i}] += v({i});\n"
+
+    code += f"{1*prefix}return *this;\n"
+    code += f"{0*prefix}}}"
+
+    return code
+
+
+def gen_vector_inplace_difference(n, arithmetic, prefix="  "):
+    code = ""
+
+    # Generate c code
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * In-place vector difference.\n"
+    code += f"{0*prefix} * @param v the vector that will be subtracted from this vector.\n"
+    code += f"{0*prefix} * @return a reference to the updated vector (*this).\n"
+    code += f"{0*prefix} */\n"
+
+    if arithmetic:
+        code += f"{0*prefix}constexpr Vector& operator-=(const Vector& v) {{\n"
+    else:
+        code += f"{0*prefix}Vector& operator-=(const Vector& v) {{\n"
+
+    for i in range(n):
+        code += f"{1*prefix}data_[{i}] -= v({i});\n"
+
+    code += f"{1*prefix}return *this;\n"
+    code += f"{0*prefix}}}"
+
+    return code
+
+
+def gen_vector_scalar_inplace_product(n, arithmetic, prefix="  "):
+    code = ""
+
+    # Generate c code
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * In-place vector-scalar product.\n"
+    code += f"{0*prefix} * @param alpha the scalar that will multiply this vector.\n"
+    code += f"{0*prefix} * @return a reference to the updated vector (*this).\n"
+    code += f"{0*prefix} */\n"
+
+    if arithmetic:
+        code += f"{0*prefix}constexpr Vector& operator*=(T alpha) {{\n"
+    else:
+        code += f"{0*prefix}Vector& operator*=(T alpha) {{\n"
+
+    for i in range(n):
+        code += f"{1*prefix}data_[{i}] *= alpha;\n"
+
+    code += f"{1*prefix}return *this;\n"
+    code += f"{0*prefix}}}"
+
+    return code
+
+
+def gen_vector_scalar_inplace_division(n, arithmetic, prefix="  "):
+    code = ""
+
+    # Generate c code
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * In-place vector-scalar division.\n"
+    code += f"{0*prefix} * @param alpha the scalar that will divide this vector.\n"
+    code += f"{0*prefix} * @return a reference to the updated vector (*this).\n"
+    code += f"{0*prefix} */\n"
+
+    if arithmetic:
+        code += f"{0*prefix}constexpr Vector& operator/=(T alpha) {{\n"
+    else:
+        code += f"{0*prefix}Vector& operator/=(T alpha) {{\n"
+
+    for i in range(n):
+        code += f"{1*prefix}data_[{i}] /= alpha;\n"
+
+    code += f"{1*prefix}return *this;\n"
+    code += f"{0*prefix}}}"
+
+    return code
+
+
 def gen_vector_dot_prod(n, arithmetic, prefix="  "):
     code = ""
 
@@ -599,6 +766,68 @@ def gen_vector_rnorm(n, arithmetic, prefix="  "):
     return code
 
 
+def gen_vector_normalize(n, arithmetic, prefix="  "):
+    code = ""
+
+    # Generate C code
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Normalize a vector.\n"
+    code += f"{0*prefix} * @param u the vector which we seek to normalize.\n"
+    code += f"{0*prefix} * @return the normalized vector.\n"
+    code += f"{0*prefix} */\n"
+
+    code += f"{0*prefix}template <typename T, size_t REG_PREC,\n"
+
+    if arithmetic:
+        code += f"{0*prefix}          std::enable_if_t<std::is_arithmetic_v<T>, int> = 0>\n"
+    else:
+        code += f"{0*prefix}          std::enable_if_t<!std::is_arithmetic_v<T>, int> = 0>\n"
+
+    if arithmetic:
+        code += f"{0*prefix}constexpr Vector<T, {n}, REG_PREC>\n"
+    else:
+        code += f"{0*prefix}Vector<T, {n}, REG_PREC>\n"
+
+    code += f"{0*prefix}normalize(const Vector<T, {n}, REG_PREC>& u) {{\n"
+
+    code += f"{1*prefix}return u / norm(u);\n"
+
+    code += f"{0*prefix}}}"
+
+    return code
+
+
+def gen_vector_rnormalize(n, arithmetic, prefix="  "):
+    code = ""
+
+    # Generate C code
+    code += f"{0*prefix}/**\n"
+    code += f"{0*prefix} * Normalize (with regularization) a vector.\n"
+    code += f"{0*prefix} * @param u the vector which we seek to normalize.\n"
+    code += f"{0*prefix} * @return the normalized vector.\n"
+    code += f"{0*prefix} */\n"
+
+    code += f"{0*prefix}template <typename T, size_t REG_PREC,\n"
+
+    if arithmetic:
+        code += f"{0*prefix}          std::enable_if_t<std::is_arithmetic_v<T>, int> = 0>\n"
+    else:
+        code += f"{0*prefix}          std::enable_if_t<!std::is_arithmetic_v<T>, int> = 0>\n"
+
+    if arithmetic:
+        code += f"{0*prefix}constexpr Vector<T, {n}, REG_PREC>\n"
+    else:
+        code += f"{0*prefix}Vector<T, {n}, REG_PREC>\n"
+
+    code += f"{0*prefix}rnormalize(const Vector<T, {n}, REG_PREC>& u) {{\n"
+
+    code += f"{1*prefix}return u / rnorm(u);\n"
+
+    code += f"{0*prefix}}}"
+
+    return code
+
+
 def gen_vector_class(n, arithmetic=True, prefix="  "):
     code = ""
 
@@ -627,11 +856,23 @@ def gen_vector_class(n, arithmetic=True, prefix="  "):
 
     code += "\n\n"
 
+    code += textwrap.indent(gen_vector_initializer_constructor(n, arithmetic), prefix=prefix)
+
+    code += "\n\n"
+
     code += textwrap.indent(gen_vector_access(n, arithmetic), prefix=prefix)
 
     code += "\n\n"
 
     code += textwrap.indent(gen_vector_const_access(n, arithmetic), prefix=prefix)
+
+    code += "\n\n"
+
+    code += textwrap.indent(gen_vector_array_access(n, arithmetic), prefix=prefix)
+
+    code += "\n\n"
+
+    code += textwrap.indent(gen_vector_array_const_access(n, arithmetic), prefix=prefix)
 
     code += "\n\n"
 
@@ -660,6 +901,22 @@ def gen_vector_class(n, arithmetic=True, prefix="  "):
     code += "\n\n"
 
     code += textwrap.indent(gen_vector_scalar_div(n, arithmetic), prefix=prefix)
+
+    code += "\n\n"
+
+    code += textwrap.indent(gen_vector_inplace_sum(n, arithmetic), prefix=prefix)
+
+    code += "\n\n"
+
+    code += textwrap.indent(gen_vector_inplace_difference(n, arithmetic), prefix=prefix)
+
+    code += "\n\n"
+
+    code += textwrap.indent(gen_vector_scalar_inplace_product(n, arithmetic), prefix=prefix)
+
+    code += "\n\n"
+
+    code += textwrap.indent(gen_vector_scalar_inplace_division(n, arithmetic), prefix=prefix)
 
     code += "\n\n"
 
@@ -692,6 +949,14 @@ def gen_vector_class(n, arithmetic=True, prefix="  "):
     code += "\n\n"
 
     code += gen_vector_rnorm(n, arithmetic)
+
+    code += "\n\n"
+
+    code += gen_vector_normalize(n, arithmetic)
+
+    code += "\n\n"
+
+    code += gen_vector_rnormalize(n, arithmetic)
 
     return code
 

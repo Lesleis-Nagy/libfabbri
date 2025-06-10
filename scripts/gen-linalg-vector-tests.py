@@ -27,6 +27,25 @@ def gen_includes():
     return code
 
 
+def gen_initializer_list_test(n, data_type, prefix):
+    code = ""
+
+    code += f'{0*prefix}TEST_CASE("Test list initializer list \'{data_type}\'", "Vector") {{\n'
+
+    u = sy.Matrix([randint(1, 10) for i in range(n)])
+
+    code += f"{1*prefix}{data_type} eps(1E-7);\n"
+
+    code += f"{1*prefix}Vector<{data_type}, {n}> u = {{{', '.join(str(u[i]) for i in range(n))}}};\n"
+
+    for i in range(n):
+        code += f"{1*prefix}REQUIRE(abs(u({i}) - {u[i]}) < eps);\n"
+
+    code += f"{0*prefix}}}"
+
+    return code
+
+
 def gen_vector_sum_test(n, data_type, prefix):
     code = ""
 
@@ -165,6 +184,120 @@ def gen_vector_scalar_division_test(n, data_type, prefix):
 
     for i in range(n):
         code += f"{1*prefix}REQUIRE(abs(v({i}) - {v[i].evalf()}) < eps);\n"
+
+    code += f"{0*prefix}}}"
+
+    return code
+
+
+def gen_vector_scalar_inplace_sum_test(n, data_type, prefix):
+    code = ""
+
+    code += f'{0*prefix}TEST_CASE("Test vector-scalar inplace sum for \'{data_type}\'", "Vector") {{\n'
+
+    u = sy.Matrix([randint(1, 10) for i in range(n)])
+    v = sy.Matrix([randint(1, 10) for i in range(n)])
+
+    w = u + v
+
+    code += f"{1*prefix}{data_type} eps(1E-7);\n"
+
+    code += f"{1*prefix}Vector<{data_type}, {n}> u, v;\n"
+
+    for i in range(n):
+        code += f"{1*prefix}u({i}) = {u[i]};\n"
+        code += f"{1*prefix}v({i}) = {v[i]};\n"
+
+    code += f"{1*prefix}u += v;\n"
+
+    for i in range(n):
+        code += f"{1*prefix}REQUIRE(abs(u({i}) - {w[i].evalf()}) < eps);\n"
+
+    code += f"{0*prefix}}}"
+
+    return code
+
+
+def gen_vector_scalar_inplace_difference_test(n, data_type, prefix):
+    code = ""
+
+    code += f'{0*prefix}TEST_CASE("Test vector-scalar inplace difference for \'{data_type}\'", "Vector") {{\n'
+
+    u = sy.Matrix([randint(1, 10) for i in range(n)])
+    v = sy.Matrix([randint(1, 10) for i in range(n)])
+
+    w = u - v
+
+    code += f"{1*prefix}{data_type} eps(1E-7);\n"
+
+    code += f"{1*prefix}Vector<{data_type}, {n}> u, v;\n"
+
+    for i in range(n):
+        code += f"{1*prefix}u({i}) = {u[i]};\n"
+        code += f"{1*prefix}v({i}) = {v[i]};\n"
+
+    code += f"{1*prefix}u -= v;\n"
+
+    for i in range(n):
+        code += f"{1*prefix}REQUIRE(abs(u({i}) - {w[i].evalf()}) < eps);\n"
+
+    code += f"{0*prefix}}}"
+
+    return code
+
+
+def gen_vector_scalar_inplace_product_test(n, data_type, prefix):
+    code = ""
+
+    code += f'{0*prefix}TEST_CASE("Test vector-scalar inplace product for \'{data_type}\'", "Vector") {{\n'
+
+    u = sy.Matrix([randint(1, 10) for i in range(n)])
+    alpha = randint(1, 10)
+
+    w = u * alpha
+
+    code += f"{1*prefix}{data_type} eps(1E-7);\n"
+
+    code += f"{1*prefix}Vector<{data_type}, {n}> u;\n"
+
+    for i in range(n):
+        code += f"{1*prefix}u({i}) = {u[i]};\n"
+
+    code += f"{1*prefix}{data_type} alpha = {alpha};\n"
+
+    code += f"{1*prefix}u *= alpha;\n"
+
+    for i in range(n):
+        code += f"{1*prefix}REQUIRE(abs(u({i}) - {w[i].evalf()}) < eps);\n"
+
+    code += f"{0*prefix}}}"
+
+    return code
+
+
+def gen_vector_scalar_inplace_division_test(n, data_type, prefix):
+    code = ""
+
+    code += f'{0*prefix}TEST_CASE("Test vector-scalar inplace division for \'{data_type}\'", "Vector") {{\n'
+
+    u = sy.Matrix([randint(1, 10) for i in range(n)])
+    alpha = randint(1, 10)
+
+    w = u / alpha
+
+    code += f"{1*prefix}{data_type} eps(1E-7);\n"
+
+    code += f"{1*prefix}Vector<{data_type}, {n}> u;\n"
+
+    for i in range(n):
+        code += f"{1*prefix}u({i}) = {u[i]};\n"
+
+    code += f"{1*prefix}{data_type} alpha = {alpha};\n"
+
+    code += f"{1*prefix}u /= alpha;\n"
+
+    for i in range(n):
+        code += f"{1*prefix}REQUIRE(abs(u({i}) - {w[i].evalf()}) < eps);\n"
 
     code += f"{0*prefix}}}"
 
@@ -310,8 +443,64 @@ def gen_vector_rnorm_test(n, data_type, prefix):
     return code
 
 
+def gen_vector_normalize_test(n, data_type, prefix):
+    code = ""
+
+    code += f'{0*prefix}TEST_CASE("Test vector normalize \'{data_type}\'", "Vector") {{\n'
+
+    u = sy.Matrix([randint(1, 10) for i in range(n)])
+
+    v = u / sy.sqrt(u.dot(u))
+
+    code += f"{1*prefix}{data_type} eps(1E-7);\n"
+
+    code += f"{1*prefix}Vector<{data_type}, {n}> u;\n"
+
+    for i in range(n):
+        code += f"{1*prefix}u({i}) = {u[i]};\n"
+
+    code += f"{1*prefix}Vector v = normalize(u);\n"
+
+    for i in range(n):
+        code += f"{1*prefix}REQUIRE(abs(v({i}) - {v[i].evalf()}) < eps);\n"
+
+    code += f"{0*prefix}}}"
+
+    return code
+
+
+def gen_vector_rnormalize_test(n, data_type, prefix):
+    code = ""
+
+    code += f'{0*prefix}TEST_CASE("Test vector rnormalize \'{data_type}\'", "Vector") {{\n'
+
+    u = sy.Matrix([randint(1, 10) for i in range(n)])
+
+    v = u / sy.sqrt(u.dot(u) + 1e-4)
+
+    code += f"{1*prefix}{data_type} eps(1E-7);\n"
+
+    code += f"{1*prefix}Vector<{data_type}, {n}, 2> u;\n"
+
+    for i in range(n):
+        code += f"{1*prefix}u({i}) = {u[i]};\n"
+
+    code += f"{1*prefix}Vector v = rnormalize(u);\n"
+
+    for i in range(n):
+        code += f"{1*prefix}REQUIRE(abs(v({i}) - {v[i].evalf()}) < eps);\n"
+
+    code += f"{0*prefix}}}"
+
+    return code
+
+
 def gen_vector_tests(n, data_type, prefix="  "):
     code = ""
+
+    code += gen_initializer_list_test(n, data_type, prefix)
+
+    code += "\n\n"
 
     code += gen_vector_sum_test(n, data_type, prefix)
 
@@ -333,6 +522,22 @@ def gen_vector_tests(n, data_type, prefix="  "):
 
     code += "\n\n"
 
+    code += gen_vector_scalar_inplace_sum_test(n, data_type, prefix)
+
+    code += "\n\n"
+
+    code += gen_vector_scalar_inplace_difference_test(n, data_type, prefix)
+
+    code += "\n\n"
+
+    code += gen_vector_scalar_inplace_product_test(n, data_type, prefix)
+
+    code += "\n\n"
+
+    code += gen_vector_scalar_inplace_division_test(n, data_type, prefix)
+
+    code += "\n\n"
+
     code += gen_vector_dot_product_test(n, data_type, prefix)
 
     code += "\n\n"
@@ -346,6 +551,14 @@ def gen_vector_tests(n, data_type, prefix="  "):
     code += "\n\n"
 
     code += gen_vector_rnorm_test(n, data_type, prefix)
+
+    code += "\n\n"
+
+    code += gen_vector_normalize_test(n, data_type, prefix)
+
+    code += "\n\n"
+
+    code += gen_vector_rnormalize_test(n, data_type, prefix)
 
     return code
 
