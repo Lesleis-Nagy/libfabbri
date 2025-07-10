@@ -1,5 +1,5 @@
 # Introduction
-`libfabbri` is a set of `C++` routines to calculate the scalar potential, 
+`AMIGA` (Analytic Micromagnetics for Irregular Geometric Assemblies) is a set of `C++` routines to calculate the scalar potential, 
 magnetic induction field and the magnetic vector potential for uniformly 
 magetised tetrahedra. The original papers by Massimo Fabbri [1,2] outline
 the theory behind this code for uniformly magnetised [1] and linearly
